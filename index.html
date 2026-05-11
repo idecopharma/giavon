@@ -19,11 +19,11 @@
     --muted:#888888;
     --line:#E0E0E0;
     --line-soft:#EEEEEE;
-    --accent:#CC1A1A;
-    --accent-2:#E63333;
+    --accent:#1565C0;
+    --accent-2:#1E88E5;
     --gold:#B8893C;
-    --red:#CC1A1A;
-    --red-soft:#FFF0F0;
+    --red:#1565C0;
+    --red-soft:#EAF3FF;
     --green:#2F7D5B;
     --green-soft:#E6F1EA;
     --amber:#B35900;
@@ -43,11 +43,11 @@
   ::-webkit-scrollbar-thumb:hover{background:#B5A98C}
 
   /* ===== LOGIN ===== */
-  #login{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#8B0000 0%,#CC1A1A 50%,#FF3333 100%);display:flex;align-items:center;justify-content:center;padding:24px}
+  #login{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#0D47A1 0%,#1565C0 50%,#42A5F5 100%);display:flex;align-items:center;justify-content:center;padding:24px}
   #login::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(255,255,255,.12),transparent 40%),radial-gradient(circle at 80% 80%,rgba(180,0,0,.3),transparent 45%);pointer-events:none}
-  .login-card{position:relative;width:100%;max-width:440px;background:#FFFFFF;border-radius:10px;padding:44px 40px 36px;box-shadow:var(--shadow-lg);border:1px solid rgba(204,26,26,.1)}
+  .login-card{position:relative;width:100%;max-width:440px;background:#FFFFFF;border-radius:10px;padding:44px 40px 36px;box-shadow:var(--shadow-lg);border:1px solid rgba(21,101,192,.1)}
   .login-mark{display:flex;align-items:center;gap:10px;margin-bottom:28px}
-  .login-mark .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(204,26,26,.15)}
+  .login-mark .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(21,101,192,.15)}
   .login-mark .brand{font-family:'Fraunces',serif;font-weight:700;font-size:20px;letter-spacing:-.02em;color:var(--accent)}
   .login-mark .sub{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.16em;margin-left:auto}
   .login-card h1{font-family:'Fraunces',serif;font-weight:500;font-size:32px;line-height:1.1;margin:0 0 8px;letter-spacing:-.02em}
@@ -56,9 +56,9 @@
   .field{margin-bottom:18px}
   .field label{display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
   .field input{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;font-size:14px;outline:none;transition:all .15s}
-  .field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(204,26,26,.12)}
+  .field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
   .login-btn{width:100%;padding:14px;background:var(--accent);color:#FFFFFF;border-radius:var(--radius);font-weight:600;font-size:14px;letter-spacing:.02em;transition:all .15s;margin-top:6px}
-  .login-btn:hover{background:#AA0000}
+  .login-btn:hover{background:#0D47A1}
   .login-err{color:var(--red);font-size:12px;margin-top:10px;min-height:16px;font-weight:500}
   .login-footer{margin-top:24px;padding-top:20px;border-top:1px solid var(--line-soft);color:var(--muted);font-size:11px;display:flex;justify-content:space-between;align-items:center}
 
@@ -67,7 +67,7 @@
   #app.active{display:flex}
 
   /* HEADER */
-  .topbar{background:var(--accent);color:#FFFFFF;padding:12px 22px;display:flex;align-items:center;gap:18px;border-bottom:2px solid #AA0000}
+  .topbar{background:var(--accent);color:#FFFFFF;padding:12px 22px;display:flex;align-items:center;gap:18px;border-bottom:2px solid #0D47A1}
   .topbar .brand{display:flex;align-items:center;gap:10px}
   .topbar .brand .dot{width:9px;height:9px;border-radius:50%;background:#FFFFFF;opacity:.8}
   .topbar .brand .name{font-family:'Fraunces',serif;font-weight:700;font-size:18px;letter-spacing:-.01em;color:#FFFFFF;text-shadow:0 1px 3px rgba(0,0,0,.2)}
@@ -97,7 +97,7 @@
   .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;background:#FFFFFF;border:1px solid var(--line);border-radius:5px;font-size:12.5px;font-weight:500;color:var(--ink);transition:all .12s;white-space:nowrap}
   .btn:hover{background:#FAFAFA;border-color:#999;box-shadow:var(--shadow-sm)}
   .btn.primary{background:var(--accent);color:#FFFFFF;border-color:var(--accent)}
-  .btn.primary:hover{background:#AA0000;border-color:#AA0000}
+  .btn.primary:hover{background:#0D47A1;border-color:#0D47A1}
   .btn.danger{color:var(--red);border-color:#FFCCCC}
   .btn.danger:hover{background:var(--red-soft);border-color:var(--red)}
   .btn.ghost{background:transparent;border-color:transparent}
@@ -111,22 +111,22 @@
   .suggestions.active{display:block}
   .suggestions .item{padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--line-soft);font-size:12.5px;display:flex;align-items:center;gap:10px}
   .suggestions .item:last-child{border-bottom:none}
-  .suggestions .item:hover, .suggestions .item.highlight{background:#FFF0F0}
+  .suggestions .item:hover, .suggestions .item.highlight{background:#EAF3FF}
   .suggestions .item .nm{flex:1;color:var(--ink);font-weight:500}
   .suggestions .item .sub{color:var(--muted);font-size:11px}
-  .suggestions .item mark{background:#FFD6D6;color:var(--ink);padding:0 1px;border-radius:2px}
+  .suggestions .item mark{background:#BBDEFB;color:var(--ink);padding:0 1px;border-radius:2px}
 
   /* TABLE */
   .table-wrap{flex:1;overflow:auto;background:#FFFFFF;position:relative}
   .table-scroll{min-width:1600px}
   table.products{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px}
-  table.products thead th{position:sticky;top:0;background:#CC1A1A;color:#FFFFFF;font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:11px 10px;text-align:left;border-bottom:2px solid #AA0000;border-right:1px solid rgba(255,255,255,.2);z-index:5;white-space:nowrap}
+  table.products thead th{position:sticky;top:0;background:#1976D2;color:#FFFFFF;font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:11px 10px;text-align:left;border-bottom:2px solid #0D47A1;border-right:1px solid rgba(255,255,255,.2);z-index:5;white-space:nowrap}
   table.products thead th:last-child{border-right:none}
   table.products thead th.num{text-align:right}
   table.products thead th .col-num{display:inline-block;width:18px;height:18px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:3px;text-align:center;line-height:16px;font-size:9px;color:rgba(255,255,255,.9);margin-right:6px;font-weight:600;letter-spacing:0}
   table.products tbody tr{background:#FFFFFF;transition:background .12s}
-  table.products tbody tr:nth-child(even){background:#FFF8F8}
-  table.products tbody tr:hover{background:#FFE8E8 !important}
+  table.products tbody tr:nth-child(even){background:#F5F9FF}
+  table.products tbody tr:hover{background:#EAF3FF !important}
   table.products tbody tr.editing{background:#FFF0D0 !important;box-shadow:inset 0 0 0 1px var(--gold)}
   table.products tbody tr.dirty{background:#FFF5D0 !important}
   table.products tbody td{padding:10px;border-bottom:1px solid var(--line-soft);border-right:1px solid var(--line-soft);vertical-align:middle}
@@ -143,14 +143,14 @@
   td.subtle{color:var(--ink-soft)}
   td .editable{display:inline-block;width:100%;min-width:60px;padding:4px 6px;border:1px solid transparent;border-radius:3px;cursor:text;transition:.1s;font:inherit;background:transparent;color:inherit;text-align:inherit;outline:none}
   td .editable:hover{background:rgba(204,26,26,.06);border-color:rgba(204,26,26,.2)}
-  td .editable:focus{background:#fff;border-color:var(--accent);box-shadow:0 0 0 2px rgba(204,26,26,.15)}
+  td .editable:focus{background:#fff;border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.15)}
   td .pct{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
   .pct-input{width:64px;text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
   .margin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:11px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11.5px;font-variant-numeric:tabular-nums}
   .margin-badge.good{background:var(--green-soft);color:var(--green)}
   .margin-badge.mid{background:#FFF3E0;color:#B35900}
   .margin-badge.warn{background:#FFF3E0;color:#B35900;border:1px solid #FFCC80;animation:warnPulse 2s ease-in-out infinite}
-  .margin-badge.low{background:#FFEBEE;color:#CC1A1A;border:1px solid #FFCDD2;animation:alertPulse 1.5s ease-in-out infinite}
+  .margin-badge.low{background:#FFEBEE;color:#1565C0;border:1px solid #FFCDD2;animation:alertPulse 1.5s ease-in-out infinite}
   @keyframes warnPulse{0%,100%{box-shadow:0 0 0 0 rgba(179,89,0,.2)}50%{box-shadow:0 0 0 4px rgba(179,89,0,.0)}}
   @keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(204,26,26,.3)}50%{box-shadow:0 0 0 5px rgba(204,26,26,.0)}}
   .margin-badge.low::before{content:"⚠ ";font-size:10px}
@@ -189,8 +189,8 @@
   .modal-foot{padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--line-soft);background:#F8F8F8}
   .upload-zone{border:2px dashed var(--line);border-radius:8px;padding:24px;text-align:center;background:#fff;cursor:pointer;transition:.15s}
   .upload-zone:hover{border-color:var(--accent);background:#FFF5F5}
-  .upload-zone.drag{border-color:var(--accent-2);background:#FFEBEB}
-  .upload-zone .ico{width:48px;height:48px;margin:0 auto 12px;background:#FFF0F0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent)}
+  .upload-zone.drag{border-color:var(--accent-2);background:#E3F2FD}
+  .upload-zone .ico{width:48px;height:48px;margin:0 auto 12px;background:#EAF3FF;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent)}
   .upload-zone h4{margin:0 0 4px;font-size:14px;font-weight:600}
   .upload-zone p{margin:0;color:var(--muted);font-size:12px}
   .preview-img{max-width:100%;max-height:200px;border-radius:6px;border:1px solid var(--line);margin:10px auto;display:block}
@@ -221,7 +221,7 @@
   .map-controls .field{margin-bottom:0}
   .map-controls label{display:block;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
   .map-controls select, .map-controls input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:5px;background:#fff;font-size:13px;outline:none;font-family:inherit}
-  .map-controls select:focus, .map-controls input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(204,26,26,.12)}
+  .map-controls select:focus, .map-controls input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.12)}
   .map-section-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin:16px 0 10px;display:flex;align-items:center;gap:8px}
   .map-section-title::after{content:"";flex:1;height:1px;background:var(--line-soft)}
   .map-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
@@ -229,7 +229,7 @@
   .map-row .lbl{flex:0 0 140px;font-size:12.5px;color:var(--ink);font-weight:500}
   .map-row .lbl .req{color:var(--red);margin-left:2px;font-weight:700}
   .map-row select{flex:1;padding:7px 9px;border:1px solid var(--line);border-radius:5px;background:#fff;font-size:11.5px;outline:none;cursor:pointer;font-family:inherit;min-width:0;text-overflow:ellipsis}
-  .map-row select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(204,26,26,.12)}
+  .map-row select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.12)}
   .map-row select[data-empty="1"]{color:var(--muted);background:#F5F5F5}
   .map-preview{background:#FFFFFF;border:1px solid var(--line);border-radius:6px;overflow:auto;max-height:200px}
   .map-preview table{width:100%;border-collapse:collapse;font-size:11.5px}
@@ -261,14 +261,14 @@
     </div>
     <h1>Quản lý <em>danh mục</em> giá sản phẩm</h1>
     <p class="desc">Đăng nhập để truy cập hệ thống soi chiếu giá, chiết khấu và lợi nhuận sản phẩm.</p>
-    <form id="loginForm" autocomplete="off">
+    <div id="loginForm">
       <div class="field">
         <label for="pwd">Mật khẩu bảo mật</label>
-        <input type="password" id="pwd" placeholder="••••••••••" autofocus required />
+        <input type="password" id="pwd" placeholder="••••••••••" autofocus />
       </div>
-      <button type="submit" class="login-btn">Đăng nhập hệ thống →</button>
+      <button type="button" class="login-btn" id="loginBtn">Đăng nhập hệ thống →</button>
       <div class="login-err" id="loginErr"></div>
-    </form>
+    </div>
     <div class="login-footer">
       <span>© IDECO Pharma</span>
       <span>Realtime · Firebase</span>
@@ -345,6 +345,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
       Xuất Excel
     </button>
+    <button class="btn" id="btnImportDisc" style="border-color:#CC7700;color:#CC7700;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Cập nhật CK hàng loạt
+    </button>
     <button class="btn danger" id="btnClear">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m5 0V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2"/></svg>
       Xóa toàn bộ
@@ -395,7 +399,7 @@
   <!-- FOOTER -->
   <div class="footbar">
     <span class="pill" id="footRows">0 dòng</span>
-    <span id="footHint">CK IDECO · Giá bán buôn · Lợi nhuận · Tỉ suất LN <strong style="color:var(--accent)">tự tính</strong> · <span style="color:#CC1A1A;font-weight:600">⚠ &lt;10% = báo động đỏ</span> · <span style="color:#B35900;font-weight:600">△ &lt;15% = cảnh báo vàng</span></span>
+    <span id="footHint">CK IDECO · Giá bán buôn · Lợi nhuận · Tỉ suất LN <strong style="color:var(--accent)">tự tính</strong> · <span style="color:#1565C0;font-weight:600">⚠ &lt;10% = báo động đỏ</span> · <span style="color:#B35900;font-weight:600">△ &lt;15% = cảnh báo vàng</span></span>
     <span class="spacer"></span>
     <span id="footUpdated">Chưa đồng bộ</span>
   </div>
@@ -405,6 +409,85 @@
 <!-- ========== HIDDEN INPUTS ========== -->
 <input type="file" id="excelInput" accept=".xlsx,.xls" style="display:none" />
 <input type="file" id="imageInput" accept="image/*" style="display:none" />
+<input type="file" id="discExcelInput" accept=".xlsx,.xls" style="display:none" />
+
+<!-- ========== DISC IMPORT MODAL ========== -->
+<div class="modal-bg" id="discModal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-head">
+      <h3>📥 Cập nhật chiết khấu hàng loạt</h3>
+      <p>Upload file Excel có cột Tên sản phẩm, Quy cách và Chiết khấu KH (%). Hệ thống sẽ dò khớp và cập nhật tự động.</p>
+    </div>
+    <div class="modal-body">
+      <!-- Step 1: Upload -->
+      <div id="discStep1">
+        <div class="upload-zone" id="discDrop" onclick="document.getElementById('discExcelInput').click()">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3-3 3 3"/></svg></div>
+          <h4>Click để chọn file Excel chiết khấu</h4>
+          <p>File cần có: Tên sản phẩm · Quy cách · % Chiết khấu KH</p>
+        </div>
+        <div style="margin-top:14px;padding:12px 14px;background:#FFF8F0;border:1px solid #FFCC80;border-radius:6px;font-size:12px;color:#B35900;">
+          <strong>💡 Gợi ý cấu trúc file Excel:</strong><br>
+          Cột 1: Tên sản phẩm &nbsp;|&nbsp; Cột 2: Quy cách &nbsp;|&nbsp; Cột 3: Chiết khấu (%)<br>
+          <span style="color:#888">Hệ thống tự nhận dạng tên cột — không cần đặt tên chuẩn</span>
+        </div>
+      </div>
+      <!-- Step 2: Preview & confirm -->
+      <div id="discStep2" style="display:none">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+          <div id="discSummary" style="flex:1;font-size:12.5px;color:var(--ink-soft)"></div>
+          <button class="btn" style="font-size:11.5px" onclick="discResetFile()">← Chọn file khác</button>
+        </div>
+        <!-- Column mapping -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;padding:12px;background:#F8F8F8;border-radius:6px;border:1px solid var(--line)">
+          <div>
+            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Tên sản phẩm <span style="color:red">*</span></label>
+            <select id="discColName" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"></select>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Quy cách</label>
+            <select id="discColSpec" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"><option value="">(không dùng)</option></select>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Chiết khấu % <span style="color:red">*</span></label>
+            <select id="discColDisc" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"></select>
+          </div>
+        </div>
+        <button class="btn primary" style="margin-bottom:12px;width:100%;justify-content:center" onclick="runDiscMatch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          Dò khớp sản phẩm
+        </button>
+        <!-- Match results table -->
+        <div id="discMatchWrap" style="display:none">
+          <div id="discMatchStats" style="font-size:12px;margin-bottom:8px;padding:8px 12px;border-radius:5px;background:#F5F5F5"></div>
+          <div style="max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:6px">
+            <table style="width:100%;border-collapse:collapse;font-size:12px" id="discMatchTable">
+              <thead>
+                <tr style="background:#1565C0;color:#fff;position:sticky;top:0">
+                  <th style="padding:8px 10px;text-align:left;font-weight:600">✓</th>
+                  <th style="padding:8px 10px;text-align:left;font-weight:600">Tên trong file</th>
+                  <th style="padding:8px 10px;text-align:left;font-weight:600">Quy cách</th>
+                  <th style="padding:8px 10px;text-align:left;font-weight:600">Sản phẩm khớp</th>
+                  <th style="padding:8px 10px;text-align:center;font-weight:600">CK cũ</th>
+                  <th style="padding:8px 10px;text-align:center;font-weight:600">CK mới</th>
+                  <th style="padding:8px 10px;text-align:center;font-weight:600">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="discMatchBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot" id="discModalFoot">
+      <button class="btn ghost" onclick="document.getElementById('discModal').classList.remove('active')">Đóng</button>
+      <button class="btn primary" id="discApplyBtn" style="display:none" onclick="applyDiscountUpdates()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Áp dụng cập nhật
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- ========== CONFIRM MODAL ========== -->
 <div class="modal-bg" id="confirmModal">
@@ -496,8 +579,29 @@
 <div class="toasts" id="toasts"></div>
 
 <script>
-/* ==================== CONFIG ==================== */
+/* ==================== LOGIN ==================== */
 const APP_PASSWORD = 'minhtriet@2026';
+
+function doLogin(){
+  const pwdEl = document.getElementById('pwd');
+  const errEl = document.getElementById('loginErr');
+  const v = pwdEl.value;
+  if(v === APP_PASSWORD){
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').classList.add('active');
+    initFirebase();
+    setTimeout(loadFromFirebase, 500);
+  } else {
+    errEl.textContent = '✗ Mật khẩu không đúng. Vui lòng thử lại.';
+    pwdEl.value = '';
+    pwdEl.focus();
+  }
+}
+
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('pwd').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') doLogin();
+});
 const firebaseConfig = {
   apiKey: "AIzaSyCMOuhqozZdUpyeYz6AbKNI4LbGtPI_6U8",
   authDomain: "giavon-4defe.firebaseapp.com",
@@ -540,21 +644,6 @@ function initFirebase(){
 }
 
 /* ==================== LOGIN ==================== */
-document.getElementById('loginForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  const v = document.getElementById('pwd').value;
-  const err = document.getElementById('loginErr');
-  if(v === APP_PASSWORD){
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('app').classList.add('active');
-    initFirebase();
-    setTimeout(loadFromFirebase, 500);
-  } else {
-    err.textContent = '✗ Mật khẩu không đúng. Vui lòng thử lại.';
-    document.getElementById('pwd').value = '';
-    document.getElementById('pwd').focus();
-  }
-});
 
 document.getElementById('logoutBtn').addEventListener('click', ()=>{
   showConfirm('Đăng xuất khỏi hệ thống?', 'Bạn sẽ cần nhập lại mật khẩu để quay lại.', ()=>{
@@ -564,7 +653,12 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
 
 /* ==================== UTILS ==================== */
 function uid(){ return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-function fmt(n){ if(n === null || n === undefined || isNaN(n) || n === '') return '–'; return Number(n).toLocaleString('vi-VN'); }
+function fmt(n){ if(n === null || n === undefined || isNaN(n) || n === '') return '–'; return Number(n).toLocaleString('en-US'); }
+function fmtPct(n){ 
+  if(n === null || n === undefined || isNaN(n) || n === '') return '–'; 
+  const val = Number(n);
+  return Number.isInteger(val) ? `${val}%` : `${val.toFixed(1).replace(/\.0$/, '')}%`; 
+}
 function parseNum(v){ if(v === null || v === undefined || v === '') return 0; const n = parseFloat(String(v).replace(/[^\d.\-]/g,'')); return isNaN(n) ? 0 : n; }
 function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
 
@@ -1007,13 +1101,13 @@ function commitField(input){
   // Recalc visible cells in this row
   const c = computeRow(p);
   const ie = row.querySelector('.calc-ideco');
-  if(ie) ie.textContent = c.idecoDisc.toFixed(2) + '%';
+  if(ie) ie.textContent = c.fmtPct(idecoDisc);
   row.querySelector('.calc-wholesale').textContent = fmt(Math.round(c.wholesale));
   const pe = row.querySelector('.calc-profit');
   pe.textContent = fmt(Math.round(c.profit));
   pe.style.color = c.profit >= 0 ? 'var(--green)' : 'var(--red)';
   const me = row.querySelector('.calc-margin');
-  me.textContent = c.margin.toFixed(1) + '%';
+  me.textContent = c.fmtPct(margin);
   me.classList.remove('good','mid','warn','low');
   me.classList.add(c.margin >= 15 ? 'good' : c.margin >= 10 ? 'warn' : 'low');
   row.classList.add('dirty');
@@ -1460,6 +1554,236 @@ document.getElementById('btnExport').onclick = ()=>{
       toast('Lỗi xuất Excel: ' + err.message, 'error');
     }
   }, 100);
+};
+
+/* ==================== DISCOUNT BULK IMPORT ==================== */
+let discWorkbook = null;
+let discRows = [];
+let discMatchResults = []; // [{rowIdx, srcName, srcSpec, srcDisc, matchedId, matchedName, score, selected}]
+
+document.getElementById('btnImportDisc').onclick = () => {
+  if(products.length === 0){ toast('Hãy nạp danh mục sản phẩm trước', 'warn'); return; }
+  discResetFile();
+  document.getElementById('discModal').classList.add('active');
+};
+
+document.getElementById('discExcelInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  e.target.value = '';
+  showLoader('Đang đọc file chiết khấu...');
+  try {
+    const data = await file.arrayBuffer();
+    discWorkbook = XLSX.read(data, { type:'array' });
+    hideLoader();
+    loadDiscSheet();
+    document.getElementById('discStep1').style.display = 'none';
+    document.getElementById('discStep2').style.display = 'block';
+    document.getElementById('discMatchWrap').style.display = 'none';
+    document.getElementById('discApplyBtn').style.display = 'none';
+  } catch(err){
+    hideLoader();
+    toast('Lỗi đọc file: ' + err.message, 'error');
+  }
+});
+
+// Drag & drop on upload zone
+['dragover','dragenter'].forEach(ev => document.getElementById('discDrop').addEventListener(ev, e=>{e.preventDefault(); e.currentTarget.classList.add('drag');}));
+['dragleave','drop'].forEach(ev => document.getElementById('discDrop').addEventListener(ev, e=>{e.preventDefault(); e.currentTarget.classList.remove('drag');}));
+document.getElementById('discDrop').addEventListener('drop', async e => {
+  const file = e.dataTransfer.files[0];
+  if(!file) return;
+  showLoader('Đang đọc file chiết khấu...');
+  try {
+    const data = await file.arrayBuffer();
+    discWorkbook = XLSX.read(data, { type:'array' });
+    hideLoader();
+    loadDiscSheet();
+    document.getElementById('discStep1').style.display = 'none';
+    document.getElementById('discStep2').style.display = 'block';
+    document.getElementById('discMatchWrap').style.display = 'none';
+    document.getElementById('discApplyBtn').style.display = 'none';
+  } catch(err){
+    hideLoader();
+    toast('Lỗi đọc file: ' + err.message, 'error');
+  }
+});
+
+function discResetFile(){
+  discWorkbook = null; discRows = []; discMatchResults = [];
+  document.getElementById('discStep1').style.display = 'block';
+  document.getElementById('discStep2').style.display = 'none';
+  document.getElementById('discMatchWrap').style.display = 'none';
+  document.getElementById('discApplyBtn').style.display = 'none';
+}
+
+function loadDiscSheet(){
+  if(!discWorkbook) return;
+  const sheet = discWorkbook.Sheets[discWorkbook.SheetNames[0]];
+  const allRows = XLSX.utils.sheet_to_json(sheet, { header:1, defval:'' });
+  
+  // Find header row (first row with >= 2 non-empty cells)
+  let headerIdx = 0;
+  for(let i = 0; i < Math.min(allRows.length, 10); i++){
+    const nonEmpty = allRows[i].filter(c => String(c).trim() !== '').length;
+    if(nonEmpty >= 2){ headerIdx = i; break; }
+  }
+  const headers = allRows[headerIdx].map((h, i) => ({ label: String(h||'').trim() || `Cột ${i+1}`, idx: i }));
+  discRows = allRows.slice(headerIdx + 1).filter(r => r.some(c => String(c).trim() !== ''));
+
+  document.getElementById('discSummary').innerHTML =
+    `<strong>${discRows.length}</strong> dòng dữ liệu · Sheet: <strong>${discWorkbook.SheetNames[0]}</strong>`;
+
+  // Populate column selectors
+  const makeOpts = (selId, autoKeywords, required) => {
+    const sel = document.getElementById(selId);
+    const prev = required ? '' : '<option value="">(không dùng)</option>';
+    sel.innerHTML = prev + headers.map(h =>
+      `<option value="${h.idx}">${h.label}</option>`
+    ).join('');
+    // Auto-select best match
+    const best = headers.find(h => autoKeywords.some(k => normVi(h.label).includes(k)));
+    if(best) sel.value = best.idx;
+  };
+  makeOpts('discColName', ['tên sản phẩm','tên sp','product','tên thuốc','tên hàng','sản phẩm'], true);
+  makeOpts('discColSpec', ['quy cách','đóng gói','spec','packaging'], false);
+  makeOpts('discColDisc', ['chiết khấu','ck','discount','giảm giá','%','ck kh','ck khách'], true);
+}
+
+// ---- Similarity helpers ----
+function normStr(s){ return String(s||'').normalize('NFC').toLowerCase().trim().replace(/\s+/g,' '); }
+
+function similarity(a, b){
+  a = normStr(a); b = normStr(b);
+  if(a === b) return 1;
+  if(a.length === 0 || b.length === 0) return 0;
+  // Containment bonus
+  if(a.includes(b) || b.includes(a)) return 0.85;
+  // Token overlap
+  const ta = new Set(a.split(/\s+/));
+  const tb = new Set(b.split(/\s+/));
+  let common = 0;
+  ta.forEach(t => { if(tb.has(t)) common++; });
+  const tokenScore = (2 * common) / (ta.size + tb.size);
+  // Trigram
+  const trig = s => { const t = new Set(); for(let i=0;i<s.length-2;i++) t.add(s.slice(i,i+3)); return t; };
+  const ta3 = trig(a), tb3 = trig(b);
+  let c3 = 0; ta3.forEach(t => { if(tb3.has(t)) c3++; });
+  const trigScore = (2*c3) / (ta3.size + tb3.size + 0.001);
+  return Math.max(tokenScore, trigScore);
+}
+
+function bestMatch(srcName, srcSpec, threshold = 0.45){
+  let best = null, bestScore = threshold;
+  products.forEach(p => {
+    let score = similarity(srcName, p.name);
+    // Boost if spec also matches
+    if(srcSpec && p.spec){
+      const specScore = similarity(srcSpec, p.spec);
+      score = score * 0.7 + specScore * 0.3;
+    }
+    if(score > bestScore){ bestScore = score; best = p; }
+  });
+  return best ? { product: best, score: bestScore } : null;
+}
+
+window.runDiscMatch = function(){
+  const colName = document.getElementById('discColName').value;
+  const colSpec = document.getElementById('discColSpec').value;
+  const colDisc = document.getElementById('discColDisc').value;
+  if(colName === '' || colDisc === ''){ toast('Vui lòng chọn cột Tên và Chiết khấu', 'warn'); return; }
+
+  discMatchResults = discRows.map((row, i) => {
+    const srcName = String(row[colName] || '').trim();
+    const srcSpec = colSpec !== '' ? String(row[colSpec] || '').trim() : '';
+    const rawDisc = String(row[colDisc] || '').replace(/[%\s]/g,'');
+    const srcDisc = parseFloat(rawDisc);
+    if(!srcName || isNaN(srcDisc)) return null;
+    const match = bestMatch(srcName, srcSpec);
+    return {
+      rowIdx: i, srcName, srcSpec, srcDisc,
+      matchedId: match ? match.product.id : null,
+      matchedName: match ? match.product.name : null,
+      matchedSpec: match ? match.product.spec : null,
+      score: match ? match.score : 0,
+      selected: !!match
+    };
+  }).filter(Boolean);
+
+  renderDiscMatchTable();
+};
+
+function renderDiscMatchTable(){
+  const tbody = document.getElementById('discMatchBody');
+  const matched = discMatchResults.filter(r => r.matchedId);
+  const unmatched = discMatchResults.filter(r => !r.matchedId);
+  
+  document.getElementById('discMatchStats').innerHTML =
+    `<span style="color:var(--green);font-weight:600">✓ ${matched.length} khớp</span>&nbsp;&nbsp;
+     <span style="color:var(--red);font-weight:600">✗ ${unmatched.length} không khớp</span>&nbsp;&nbsp;
+     <span style="color:var(--muted)">Tổng: ${discMatchResults.length} dòng</span>&nbsp;&nbsp;
+     <label style="margin-left:8px;cursor:pointer"><input type="checkbox" id="discChkAll" checked onchange="discToggleAll(this.checked)"> Chọn tất cả</label>`;
+
+  tbody.innerHTML = discMatchResults.map((r, i) => {
+    const statusHtml = r.matchedId
+      ? `<span style="background:#E6F1EA;color:#2F7D5B;padding:2px 7px;border-radius:9px;font-size:10.5px;font-weight:600">✓ ${Math.round(r.score*100)}%</span>`
+      : `<span style="background:#FFEBEE;color:#1565C0;padding:2px 7px;border-radius:9px;font-size:10.5px;font-weight:600">✗ Không tìm thấy</span>`;
+    const oldDisc = r.matchedId ? parseNum(products.find(p=>p.id===r.matchedId)?.discCust) : '–';
+    const rowBg = !r.matchedId ? '#FFF5F5' : (i%2===0 ? '#FFFFFF' : '#F5F9FF');
+    return `<tr style="background:${rowBg}">
+      <td style="padding:7px 10px;text-align:center">
+        ${r.matchedId ? `<input type="checkbox" data-idx="${i}" ${r.selected?'checked':''} onchange="discMatchResults[${i}].selected=this.checked;discUpdateApplyBtn()">` : ''}
+      </td>
+      <td style="padding:7px 10px;font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(r.srcName)}">${escapeHtml(r.srcName)}</td>
+      <td style="padding:7px 10px;color:var(--muted);font-size:11.5px">${escapeHtml(r.srcSpec||'–')}</td>
+      <td style="padding:7px 10px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:${r.matchedId?'var(--ink)':'var(--muted)'}" title="${escapeHtml(r.matchedName||'')}">${escapeHtml(r.matchedName||'–')}<br><span style="font-size:10.5px;color:var(--muted)">${escapeHtml(r.matchedSpec||'')}</span></td>
+      <td style="padding:7px 10px;text-align:center;font-family:'JetBrains Mono',monospace;color:var(--muted)">${r.matchedId ? oldDisc+'%' : '–'}</td>
+      <td style="padding:7px 10px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent)">${r.srcDisc}%</td>
+      <td style="padding:7px 10px;text-align:center">${statusHtml}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('discMatchWrap').style.display = 'block';
+  discUpdateApplyBtn();
+}
+
+window.discToggleAll = function(checked){
+  discMatchResults.forEach((r,i) => { if(r.matchedId) r.selected = checked; });
+  document.querySelectorAll('#discMatchBody input[type=checkbox]').forEach(cb => cb.checked = checked);
+  discUpdateApplyBtn();
+};
+
+function discUpdateApplyBtn(){
+  const count = discMatchResults.filter(r => r.matchedId && r.selected).length;
+  const btn = document.getElementById('discApplyBtn');
+  btn.style.display = count > 0 ? 'inline-flex' : 'none';
+  btn.textContent = `✓ Áp dụng ${count} cập nhật`;
+}
+
+window.applyDiscountUpdates = function(){
+  const toUpdate = discMatchResults.filter(r => r.matchedId && r.selected);
+  if(toUpdate.length === 0){ toast('Không có dòng nào được chọn', 'warn'); return; }
+  
+  toUpdate.forEach(r => {
+    const p = products.find(x => x.id === r.matchedId);
+    if(p) p.discCust = r.srcDisc;
+  });
+  
+  render();
+  document.getElementById('discModal').classList.remove('active');
+  toast(`Đã cập nhật chiết khấu cho ${toUpdate.length} sản phẩm. Nhớ bấm "Lưu lên Firebase" để đồng bộ.`, 'success', 5000);
+  
+  // Auto-save to Firebase if connected
+  if(dbConnected){
+    setSync('busy', 'Đang lưu CK lên Firebase...');
+    const updates = {};
+    toUpdate.forEach(r => { updates['products/' + r.matchedId + '/discCust'] = r.srcDisc; });
+    db.ref().update(updates, err => {
+      if(err) toast('Lỗi lưu Firebase: ' + err.message, 'error');
+      else { toast('Đã đồng bộ chiết khấu lên Firebase ✓', 'success'); updateFooterTime(); }
+      setSync('ok', 'Đã kết nối Firebase');
+    });
+  }
 };
 
 </script>
