@@ -118,12 +118,28 @@
 
   /* TABLE */
   .table-wrap{flex:1;overflow:auto;background:#FFFFFF;position:relative}
-  .table-scroll{min-width:1600px}
+  .table-scroll{min-width:2400px}
   table.products{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px}
   table.products thead th{position:sticky;top:0;background:#1976D2;color:#FFFFFF;font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:11px 10px;text-align:left;border-bottom:2px solid #0D47A1;border-right:1px solid rgba(255,255,255,.2);z-index:5;white-space:nowrap}
   table.products thead th:last-child{border-right:none}
   table.products thead th.num{text-align:right}
   table.products thead th .col-num{display:inline-block;width:18px;height:18px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:3px;text-align:center;line-height:16px;font-size:9px;color:rgba(255,255,255,.9);margin-right:6px;font-weight:600;letter-spacing:0}
+
+  /* HIDE-COLUMN BUTTON ON HEADER */
+  table.products thead th{padding-right:26px;position:sticky}
+  table.products thead th .col-hide{position:absolute;top:50%;right:6px;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#FFFFFF;font-size:13px;line-height:1;display:none;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:all .15s}
+  table.products thead th:hover .col-hide{display:inline-flex}
+  table.products thead th .col-hide:hover{background:#FFFFFF;color:#1565C0;transform:translateY(-50%) scale(1.1)}
+  table.products thead th.no-hide{padding-right:10px}
+  table.products thead th.no-hide .col-hide{display:none !important}
+  /* Hidden column collapse */
+  table.products thead th.col-hidden,
+  table.products tbody td.col-hidden{display:none}
+
+  /* TOOLBAR HIDDEN-COL BADGE */
+  .btn .badge{display:inline-block;min-width:18px;height:18px;padding:0 5px;background:#FFE066;color:#1A1A1A;border-radius:9px;font-size:10.5px;font-weight:700;line-height:18px;text-align:center;margin-left:4px}
+  .btn.attn{border-color:#FFC107;background:#FFFBEB;color:#B35900}
+  .btn.attn:hover{background:#FFF3E0;border-color:#FFA000}
   table.products tbody tr{background:#FFFFFF;transition:background .12s}
   table.products tbody tr:nth-child(even){background:#F5F9FF}
   table.products tbody tr:hover{background:#EAF3FF !important}
@@ -257,7 +273,7 @@
     <div class="login-mark">
       <span class="dot"></span>
       <span class="brand">IDECO</span>
-      <span class="sub">v2.6</span>
+      <span class="sub">v2.7</span>
     </div>
     <h1>Quản lý <em>danh mục</em> giá sản phẩm</h1>
     <p class="desc">Đăng nhập để truy cập hệ thống soi chiếu giá, chiết khấu và lợi nhuận sản phẩm.</p>
@@ -337,6 +353,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       Làm mới
     </button>
+    <button class="btn attn" id="btnShowCols" style="display:none" title="Hiện lại tất cả cột đã ẩn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Hiện cột<span class="badge" id="hiddenColsBadge">0</span>
+    </button>
     <button class="btn primary" id="btnSync">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9m0 18c2.5-2.5 4-5.5 4-9s-1.5-6.5-4-9"/></svg>
       Lưu lên Firebase
@@ -366,21 +386,28 @@
       <table class="products" id="tbl">
         <thead>
           <tr>
-            <th style="width:46px"><span class="col-num">01</span>STT</th>
-            <th style="width:60px"><span class="col-num">02</span>Ảnh</th>
-            <th><span class="col-num">03</span>Tên sản phẩm</th>
-            <th><span class="col-num">04</span>Hoạt chất</th>
-            <th><span class="col-num">05</span>Hàm lượng</th>
-            <th><span class="col-num">06</span>Quy cách</th>
-            <th><span class="col-num">07</span>ĐVT</th>
-            <th class="num"><span class="col-num">08</span>Giá vốn</th>
-            <th class="num"><span class="col-num">09</span>Giá bán lẻ</th>
-            <th class="num" title="Tự tính: (Giá bán lẻ − Giá vốn) / Giá bán lẻ × 100%"><span class="col-num">10</span>CK IDECO ƒ</th>
-            <th class="num"><span class="col-num">11</span>CK Khách hàng</th>
-            <th class="num" title="Tự tính: Giá bán lẻ × (1 − CK khách hàng)"><span class="col-num">12</span>Giá bán buôn ƒ</th>
-            <th class="num" title="Tự tính: Giá bán buôn − Giá vốn"><span class="col-num">13</span>Lợi nhuận ƒ</th>
-            <th class="num" title="Tự tính: Lợi nhuận / Giá bán buôn × 100%"><span class="col-num">14</span>Tỉ suất LN ƒ</th>
-            <th style="width:90px;text-align:center"><span class="col-num">15</span>Thao tác</th>
+            <th class="no-hide" data-col="stt" style="width:46px"><span class="col-num">01</span>STT</th>
+            <th data-col="image" style="width:60px"><span class="col-num">02</span>Ảnh<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('image')">×</button></th>
+            <th data-col="code"><span class="col-num">03</span>Mã hàng<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('code')">×</button></th>
+            <th data-col="name"><span class="col-num">04</span>Tên sản phẩm<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('name')">×</button></th>
+            <th data-col="ingredient"><span class="col-num">05</span>Tên hoạt chất<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('ingredient')">×</button></th>
+            <th data-col="concentration"><span class="col-num">06</span>Nồng độ, hàm lượng<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('concentration')">×</button></th>
+            <th data-col="usage"><span class="col-num">07</span>Công dụng chính<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('usage')">×</button></th>
+            <th data-col="spec"><span class="col-num">08</span>Quy cách đóng gói<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('spec')">×</button></th>
+            <th data-col="smallestQty" class="num"><span class="col-num">09</span>SL ĐVT nhỏ nhất<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('smallestQty')">×</button></th>
+            <th data-col="expiry" class="num"><span class="col-num">10</span>Hạn dùng (tháng)<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('expiry')">×</button></th>
+            <th data-col="regNo"><span class="col-num">11</span>Số ĐK<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('regNo')">×</button></th>
+            <th data-col="manufacturer"><span class="col-num">12</span>Cơ sở SX<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('manufacturer')">×</button></th>
+            <th data-col="country"><span class="col-num">13</span>Nước SX<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('country')">×</button></th>
+            <th data-col="unitPrice" class="num"><span class="col-num">14</span>Đơn giá BL (ĐVT nhỏ nhất)<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('unitPrice')">×</button></th>
+            <th data-col="cost" class="num"><span class="col-num">15</span>Giá vốn<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('cost')">×</button></th>
+            <th data-col="retail" class="num"><span class="col-num">16</span>Giá bán lẻ<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('retail')">×</button></th>
+            <th data-col="idecoDisc" class="num" title="Tự tính: (Giá bán lẻ − Giá vốn) / Giá bán lẻ × 100%"><span class="col-num">17</span>CK IDECO ƒ<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('idecoDisc')">×</button></th>
+            <th data-col="discCust" class="num"><span class="col-num">18</span>CK Khách hàng<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('discCust')">×</button></th>
+            <th data-col="wholesale" class="num" title="Tự tính: Giá bán lẻ × (1 − CK khách hàng)"><span class="col-num">19</span>Giá bán buôn ƒ<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('wholesale')">×</button></th>
+            <th data-col="profit" class="num" title="Tự tính: Giá bán buôn − Giá vốn"><span class="col-num">20</span>Lợi nhuận ƒ<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('profit')">×</button></th>
+            <th data-col="margin" class="num" title="Tự tính: Lợi nhuận / Giá bán buôn × 100%"><span class="col-num">21</span>Tỉ suất LN ƒ<button class="col-hide" title="Ẩn cột này" onclick="hideColumn('margin')">×</button></th>
+            <th class="no-hide" data-col="actions" style="width:90px;text-align:center"><span class="col-num">22</span>Thao tác</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -416,7 +443,7 @@
   <div class="modal" style="max-width:700px">
     <div class="modal-head">
       <h3>📥 Cập nhật chiết khấu hàng loạt</h3>
-      <p>Upload file Excel có cột Tên sản phẩm, Quy cách và Chiết khấu KH (%). Hệ thống sẽ dò khớp và cập nhật tự động.</p>
+      <p>Upload file Excel có cột Tên sản phẩm và Chiết khấu KH (%). Hệ thống dò khớp thông minh dựa trên Tên, Mã hàng, Hàm lượng, Quy cách.</p>
     </div>
     <div class="modal-body">
       <!-- Step 1: Upload -->
@@ -424,11 +451,13 @@
         <div class="upload-zone" id="discDrop" onclick="document.getElementById('discExcelInput').click()">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3-3 3 3"/></svg></div>
           <h4>Click để chọn file Excel chiết khấu</h4>
-          <p>File cần có: Tên sản phẩm · Quy cách · % Chiết khấu KH</p>
+          <p>File cần có: Tên sản phẩm · % Chiết khấu KH (các cột khác là tùy chọn)</p>
         </div>
         <div style="margin-top:14px;padding:12px 14px;background:#FFF8F0;border:1px solid #FFCC80;border-radius:6px;font-size:12px;color:#B35900;">
-          <strong>💡 Gợi ý cấu trúc file Excel:</strong><br>
-          Cột 1: Tên sản phẩm &nbsp;|&nbsp; Cột 2: Quy cách &nbsp;|&nbsp; Cột 3: Chiết khấu (%)<br>
+          <strong>💡 Mẹo dò khớp chính xác hơn:</strong><br>
+          Chọn thêm <strong>Mã hàng</strong> → khớp tuyệt đối (100%)<br>
+          Chọn thêm <strong>Hàm lượng</strong> → phân biệt 20mg / 40mg / 80mg<br>
+          Chọn thêm <strong>Quy cách</strong> → phân biệt cùng tên khác đóng gói<br>
           <span style="color:#888">Hệ thống tự nhận dạng tên cột — không cần đặt tên chuẩn</span>
         </div>
       </div>
@@ -438,39 +467,52 @@
           <div id="discSummary" style="flex:1;font-size:12.5px;color:var(--ink-soft)"></div>
           <button class="btn" style="font-size:11.5px" onclick="discResetFile()">← Chọn file khác</button>
         </div>
-        <!-- Column mapping -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;padding:12px;background:#F8F8F8;border-radius:6px;border:1px solid var(--line)">
+        <!-- Column mapping (5 selectors) -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;padding:12px;background:#F8F8F8;border-radius:6px;border:1px solid var(--line)">
+          <div>
+            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Mã hàng <span style="color:#2F7D5B;font-weight:700" title="Nếu có mã, khớp tuyệt đối 100%">★ ưu tiên</span></label>
+            <select id="discColCode" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"><option value="">(không dùng)</option></select>
+          </div>
           <div>
             <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Tên sản phẩm <span style="color:red">*</span></label>
             <select id="discColName" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"></select>
           </div>
           <div>
-            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Quy cách</label>
-            <select id="discColSpec" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"><option value="">(không dùng)</option></select>
-          </div>
-          <div>
             <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Chiết khấu % <span style="color:red">*</span></label>
             <select id="discColDisc" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"></select>
           </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Nồng độ / Hàm lượng</label>
+            <select id="discColConc" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"><option value="">(không dùng)</option></select>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px">Cột Quy cách đóng gói</label>
+            <select id="discColSpec" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit"><option value="">(không dùng)</option></select>
+          </div>
+          <div style="display:flex;align-items:flex-end">
+            <label style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-soft);cursor:pointer;padding-bottom:8px">
+              <input type="checkbox" id="discStrictMode" /> Chế độ nghiêm ngặt
+              <span title="Chỉ chấp nhận khớp >= 75%" style="color:var(--muted);font-size:10px">(≥75%)</span>
+            </label>
+          </div>
         </div>
+        <div id="discColInfo" style="margin-bottom:12px;padding:10px 12px;background:#F0F7FF;border:1px solid #BBDEFB;border-radius:6px"></div>
         <button class="btn primary" style="margin-bottom:12px;width:100%;justify-content:center" onclick="runDiscMatch()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          Dò khớp sản phẩm
+          Dò khớp sản phẩm thông minh
         </button>
         <!-- Match results table -->
         <div id="discMatchWrap" style="display:none">
           <div id="discMatchStats" style="font-size:12px;margin-bottom:8px;padding:8px 12px;border-radius:5px;background:#F5F5F5"></div>
-          <div style="max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:6px">
+          <div style="max-height:360px;overflow-y:auto;border:1px solid var(--line);border-radius:6px">
             <table style="width:100%;border-collapse:collapse;font-size:12px" id="discMatchTable">
               <thead>
-                <tr style="background:#1565C0;color:#fff;position:sticky;top:0">
-                  <th style="padding:8px 10px;text-align:left;font-weight:600">✓</th>
-                  <th style="padding:8px 10px;text-align:left;font-weight:600">Tên trong file</th>
-                  <th style="padding:8px 10px;text-align:left;font-weight:600">Quy cách</th>
-                  <th style="padding:8px 10px;text-align:left;font-weight:600">Sản phẩm khớp</th>
-                  <th style="padding:8px 10px;text-align:center;font-weight:600">CK cũ</th>
-                  <th style="padding:8px 10px;text-align:center;font-weight:600">CK mới</th>
-                  <th style="padding:8px 10px;text-align:center;font-weight:600">Trạng thái</th>
+                <tr style="background:#1565C0;color:#fff;position:sticky;top:0;z-index:1">
+                  <th style="padding:8px 8px;text-align:center;font-weight:600;width:30px">✓</th>
+                  <th style="padding:8px 8px;text-align:left;font-weight:600">Nguồn (Excel)</th>
+                  <th style="padding:8px 8px;text-align:left;font-weight:600">→ Khớp với sản phẩm</th>
+                  <th style="padding:8px 8px;text-align:center;font-weight:600;width:90px">CK cũ → mới</th>
+                  <th style="padding:8px 8px;text-align:center;font-weight:600;width:110px">Độ tin cậy</th>
                 </tr>
               </thead>
               <tbody id="discMatchBody"></tbody>
@@ -720,13 +762,20 @@ function computeRow(p){
 let xlsxWorkbook = null;
 let xlsxCurrentRows = [];
 const xlsxFieldDefs = [
-  { key:'name',          label:'Tên sản phẩm',  required:true,  keywords:['tên sản phẩm','tên sp','product name','tên hàng','sản phẩm','tên thuốc'] },
-  { key:'ingredient',    label:'Hoạt chất',     required:false, keywords:['hoạt chất','tên hoạt chất','active ingredient','ingredient'] },
-  { key:'concentration', label:'Hàm lượng',     required:false, keywords:['nồng độ','hàm lượng','concentration','strength'] },
-  { key:'spec',          label:'Quy cách',      required:false, keywords:['quy cách','đóng gói','packaging','quy cách đóng gói'] },
-  { key:'unit',          label:'Đơn vị tính',   required:false, keywords:['đơn vị tính','đơn vị','đvt','unit'], avoid:['số lượng','quantity'] },
-  { key:'cost',          label:'Giá vốn',       required:true,  keywords:['giá vốn','gía vốn','cost','giá nhập','gia von'] },
-  { key:'retail',        label:'Giá bán lẻ',    required:true,  keywords:['giá bán lẻ','gía bán lẻ','retail','giá bán','gia ban le'], avoid:['đơn giá','buôn'] }
+  { key:'code',          label:'Mã hàng',                   required:false, keywords:['mã hàng','ma hang','mã sp','sku','product code','mã sản phẩm'] },
+  { key:'name',          label:'Tên sản phẩm',              required:true,  keywords:['tên sản phẩm','tên sp','product name','tên hàng','sản phẩm','tên thuốc'] },
+  { key:'ingredient',    label:'Tên hoạt chất',             required:false, keywords:['tên hoạt chất','hoạt chất','active ingredient','ingredient'] },
+  { key:'concentration', label:'Nồng độ, hàm lượng',        required:false, keywords:['nồng độ, hàm lượng','nồng độ','hàm lượng','concentration','strength'] },
+  { key:'usage',         label:'Công dụng chính',           required:false, keywords:['công dụng chính','công dụng','chỉ định','tác dụng','indication','usage'] },
+  { key:'spec',          label:'Quy cách đóng gói',         required:false, keywords:['quy cách đóng gói','quy cách','đóng gói','packaging'] },
+  { key:'smallestQty',   label:'Số lượng ĐVT nhỏ nhất',     required:false, keywords:['số lượng đvt nhỏ nhất','số lượng đvt','sl đvt','đvt nhỏ nhất','smallest qty'] },
+  { key:'expiry',        label:'Hạn dùng (tháng)',          required:false, keywords:['hạn dùng','han dung','expiry','shelf life','hạn dùng (tháng)'] },
+  { key:'regNo',         label:'Số ĐK',                     required:false, keywords:['số đk','so dk','reg no','registration','số đăng ký','sđk','sdk'] },
+  { key:'manufacturer',  label:'Cơ sở SX',                  required:false, keywords:['cơ sở sx','co so sx','nhà sản xuất','nsx','manufacturer','cơ sở sản xuất'] },
+  { key:'country',       label:'Nước SX',                   required:false, keywords:['nước sx','nuoc sx','xuất xứ','country','origin','nước sản xuất'] },
+  { key:'unitPrice',     label:'Đơn giá BL (ĐVT nhỏ nhất)', required:false, keywords:['đơn giá bán lẻ','đơn giá','đvt nhỏ nhất','unit price'], avoid:['giá vốn','gia von'] },
+  { key:'cost',          label:'Giá vốn',                   required:true,  keywords:['giá vốn','gía vốn','cost','giá nhập','gia von'] },
+  { key:'retail',        label:'Giá bán lẻ',                required:true,  keywords:['giá bán lẻ','gía bán lẻ','retail','giá bán','gia ban le'], avoid:['đơn giá','buôn','đvt nhỏ nhất'] }
 ];
 
 function colLetter(n){
@@ -963,11 +1012,18 @@ document.getElementById('mapConfirm').onclick = ()=>{
     list.push({
       id: uid(),
       image: '',
+      code:          map.code          >= 0 ? String(r[map.code]          || '').trim() : '',
       name,
       ingredient:    map.ingredient    >= 0 ? String(r[map.ingredient]    || '').trim() : '',
       concentration: map.concentration >= 0 ? String(r[map.concentration] || '').trim() : '',
+      usage:         map.usage         >= 0 ? String(r[map.usage]         || '').trim() : '',
       spec:          map.spec          >= 0 ? String(r[map.spec]          || '').trim() : '',
-      unit:          map.unit          >= 0 ? String(r[map.unit]          || '').trim() : '',
+      smallestQty:   map.smallestQty   >= 0 ? parseNum(r[map.smallestQty])              : 0,
+      expiry:        map.expiry        >= 0 ? parseNum(r[map.expiry])                   : 0,
+      regNo:         map.regNo         >= 0 ? String(r[map.regNo]         || '').trim() : '',
+      manufacturer:  map.manufacturer  >= 0 ? String(r[map.manufacturer]  || '').trim() : '',
+      country:       map.country       >= 0 ? String(r[map.country]       || '').trim() : '',
+      unitPrice:     map.unitPrice     >= 0 ? parseNum(r[map.unitPrice])                : 0,
       cost:          parseNum(r[map.cost]),
       retail:        parseNum(r[map.retail]),
       discCust:      0
@@ -1003,8 +1059,11 @@ function applyFilter(){
   const q = searchTerm.toLowerCase().trim();
   filtered = products.filter(p =>
     (p.name||'').toLowerCase().includes(q) ||
+    (p.code||'').toLowerCase().includes(q) ||
     (p.ingredient||'').toLowerCase().includes(q) ||
-    (p.concentration||'').toLowerCase().includes(q)
+    (p.concentration||'').toLowerCase().includes(q) ||
+    (p.regNo||'').toLowerCase().includes(q) ||
+    (p.manufacturer||'').toLowerCase().includes(q)
   );
 }
 
@@ -1031,21 +1090,28 @@ function render(){
       : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
     
     html += `<tr data-id="${p.id}">
-      <td class="stt">${i + 1}</td>
-      <td class="img-cell"><div class="ph" onclick="openImage('${p.id}')">${imgPart}</div></td>
-      <td class="name-cell"><input class="editable" data-field="name" value="${escapeHtml(p.name)}" /></td>
-      <td><input class="editable subtle" data-field="ingredient" value="${escapeHtml(p.ingredient||'')}" /></td>
-      <td><input class="editable subtle" data-field="concentration" value="${escapeHtml(p.concentration||'')}" /></td>
-      <td><input class="editable subtle" data-field="spec" value="${escapeHtml(p.spec||'')}" /></td>
-      <td class="center"><input class="editable subtle" style="text-align:center" data-field="unit" value="${escapeHtml(p.unit||'')}" /></td>
-      <td class="num"><input class="editable" data-field="cost" data-num="1" value="${fmt(p.cost)}" /></td>
-      <td class="num"><input class="editable" data-field="retail" data-num="1" value="${fmt(p.retail)}" /></td>
-      <td class="num"><span class="ideco-disc calc-ideco">${c.idecoDisc.toFixed(2)}%</span></td>
-      <td class="num"><input class="editable pct-input" data-field="discCust" data-num="1" value="${parseNum(p.discCust).toFixed(2)}" />%</td>
-      <td class="num"><span class="calc-wholesale">${fmt(Math.round(c.wholesale))}</span></td>
-      <td class="num"><span class="calc-profit" style="color:${c.profit>=0?'var(--green)':'var(--red)'}">${fmt(Math.round(c.profit))}</span></td>
-      <td class="num"><span class="margin-badge ${marginClass} calc-margin">${c.margin.toFixed(1)}%</span></td>
-      <td>
+      <td class="stt" data-col="stt">${i + 1}</td>
+      <td class="img-cell" data-col="image"><div class="ph" onclick="openImage('${p.id}')">${imgPart}</div></td>
+      <td data-col="code"><input class="editable subtle" data-field="code" value="${escapeHtml(p.code||'')}" /></td>
+      <td class="name-cell" data-col="name"><input class="editable" data-field="name" value="${escapeHtml(p.name)}" /></td>
+      <td data-col="ingredient"><input class="editable subtle" data-field="ingredient" value="${escapeHtml(p.ingredient||'')}" /></td>
+      <td data-col="concentration"><input class="editable subtle" data-field="concentration" value="${escapeHtml(p.concentration||'')}" /></td>
+      <td data-col="usage"><input class="editable subtle" data-field="usage" value="${escapeHtml(p.usage||'')}" /></td>
+      <td data-col="spec"><input class="editable subtle" data-field="spec" value="${escapeHtml(p.spec||'')}" /></td>
+      <td class="num" data-col="smallestQty"><input class="editable" data-field="smallestQty" data-num="1" value="${parseNum(p.smallestQty)===0?'':fmt(p.smallestQty)}" /></td>
+      <td class="num" data-col="expiry"><input class="editable" data-field="expiry" data-num="1" value="${parseNum(p.expiry)===0?'':fmt(p.expiry)}" /></td>
+      <td data-col="regNo"><input class="editable subtle" data-field="regNo" value="${escapeHtml(p.regNo||'')}" /></td>
+      <td data-col="manufacturer"><input class="editable subtle" data-field="manufacturer" value="${escapeHtml(p.manufacturer||'')}" /></td>
+      <td data-col="country"><input class="editable subtle" data-field="country" value="${escapeHtml(p.country||'')}" /></td>
+      <td class="num" data-col="unitPrice"><input class="editable" data-field="unitPrice" data-num="1" value="${parseNum(p.unitPrice)===0?'':fmt(p.unitPrice)}" /></td>
+      <td class="num" data-col="cost"><input class="editable" data-field="cost" data-num="1" value="${fmt(p.cost)}" /></td>
+      <td class="num" data-col="retail"><input class="editable" data-field="retail" data-num="1" value="${fmt(p.retail)}" /></td>
+      <td class="num" data-col="idecoDisc"><span class="ideco-disc calc-ideco">${c.idecoDisc.toFixed(2)}%</span></td>
+      <td class="num" data-col="discCust"><input class="editable pct-input" data-field="discCust" data-num="1" value="${parseNum(p.discCust).toFixed(2)}" />%</td>
+      <td class="num" data-col="wholesale"><span class="calc-wholesale">${fmt(Math.round(c.wholesale))}</span></td>
+      <td class="num" data-col="profit"><span class="calc-profit" style="color:${c.profit>=0?'var(--green)':'var(--red)'}">${fmt(Math.round(c.profit))}</span></td>
+      <td class="num" data-col="margin"><span class="margin-badge ${marginClass} calc-margin">${c.margin.toFixed(1)}%</span></td>
+      <td data-col="actions">
         <div class="row-actions">
           <button class="save" title="Cập nhật & lưu" onclick="saveRow('${p.id}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1086,6 +1152,7 @@ function render(){
   
   document.getElementById('footRows').textContent = `${filtered.length}/${products.length} dòng`;
   updateStats();
+  applyHiddenColumns();
 }
 
 function commitField(input){
@@ -1101,15 +1168,20 @@ function commitField(input){
   // Recalc visible cells in this row
   const c = computeRow(p);
   const ie = row.querySelector('.calc-ideco');
-  if(ie) ie.textContent = c.fmtPct(idecoDisc);
-  row.querySelector('.calc-wholesale').textContent = fmt(Math.round(c.wholesale));
+  if(ie) ie.textContent = c.idecoDisc.toFixed(2) + '%';
+  const we = row.querySelector('.calc-wholesale');
+  if(we) we.textContent = fmt(Math.round(c.wholesale));
   const pe = row.querySelector('.calc-profit');
-  pe.textContent = fmt(Math.round(c.profit));
-  pe.style.color = c.profit >= 0 ? 'var(--green)' : 'var(--red)';
+  if(pe){
+    pe.textContent = fmt(Math.round(c.profit));
+    pe.style.color = c.profit >= 0 ? 'var(--green)' : 'var(--red)';
+  }
   const me = row.querySelector('.calc-margin');
-  me.textContent = c.fmtPct(margin);
-  me.classList.remove('good','mid','warn','low');
-  me.classList.add(c.margin >= 15 ? 'good' : c.margin >= 10 ? 'warn' : 'low');
+  if(me){
+    me.textContent = c.margin.toFixed(1) + '%';
+    me.classList.remove('good','mid','warn','low');
+    me.classList.add(c.margin >= 15 ? 'good' : c.margin >= 10 ? 'warn' : 'low');
+  }
   row.classList.add('dirty');
   updateStats();
 }
@@ -1176,8 +1248,9 @@ function deleteRow(id){
 /* ==================== ADD ROW ==================== */
 document.getElementById('btnAdd').onclick = ()=>{
   const p = {
-    id: uid(), image:'', name:'Sản phẩm mới', ingredient:'', concentration:'',
-    spec:'', unit:'', cost:0, retail:0, discCust:0
+    id: uid(), image:'', code:'', name:'Sản phẩm mới', ingredient:'', concentration:'',
+    usage:'', spec:'', smallestQty:0, expiry:0, regNo:'', manufacturer:'', country:'',
+    unitPrice:0, cost:0, retail:0, discCust:0
   };
   products.unshift(p);
   searchTerm = ''; document.getElementById('searchInput').value = '';
@@ -1250,7 +1323,7 @@ function showSuggestions(){
   const q = searchTerm.toLowerCase().trim();
   if(!q || products.length === 0){ suggestionsEl.classList.remove('active'); return; }
   const matches = products
-    .filter(p => (p.name||'').toLowerCase().includes(q) || (p.ingredient||'').toLowerCase().includes(q))
+    .filter(p => (p.name||'').toLowerCase().includes(q) || (p.ingredient||'').toLowerCase().includes(q) || (p.code||'').toLowerCase().includes(q) || (p.manufacturer||'').toLowerCase().includes(q))
     .slice(0, 8);
   if(matches.length === 0){ suggestionsEl.classList.remove('active'); return; }
   const hl = (s) => { const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'ig'); return escapeHtml(s).replace(re,'<mark>$1</mark>'); };
@@ -1384,11 +1457,18 @@ function loadFromFirebase(){
       products = Object.values(val).map(p => ({
         id: p.id || uid(),
         image: p.image || '',
+        code: p.code || '',
         name: p.name || '',
         ingredient: p.ingredient || '',
         concentration: p.concentration || '',
+        usage: p.usage || '',
         spec: p.spec || '',
-        unit: p.unit || '',
+        smallestQty: parseNum(p.smallestQty),
+        expiry: parseNum(p.expiry),
+        regNo: p.regNo || '',
+        manufacturer: p.manufacturer || '',
+        country: p.country || '',
+        unitPrice: parseNum(p.unitPrice),
         cost: parseNum(p.cost),
         retail: parseNum(p.retail),
         discCust: parseNum(p.discCust)
@@ -1422,15 +1502,18 @@ document.getElementById('btnExport').onclick = ()=>{
   setTimeout(()=>{
     try {
       const headers = [
-        'STT','Tên sản phẩm','Hoạt chất','Hàm lượng','Quy cách','ĐVT',
-        'Giá vốn','Giá bán lẻ','CK IDECO (%)','CK Khách hàng (%)',
+        'STT','Mã hàng','Tên sản phẩm','Tên hoạt chất','Nồng độ, hàm lượng','Công dụng chính',
+        'Quy cách đóng gói','SL ĐVT nhỏ nhất','Hạn dùng (tháng)','Số ĐK','Cơ sở SX','Nước SX',
+        'Đơn giá BL (ĐVT nhỏ nhất)','Giá vốn','Giá bán lẻ','CK IDECO (%)','CK Khách hàng (%)',
         'Giá bán buôn','Lợi nhuận','Tỉ suất LN (%)'
       ];
       const dataRows = (filtered.length ? filtered : products).map((p, i)=>{
         const c = computeRow(p);
         return [
-          i + 1, p.name||'', p.ingredient||'', p.concentration||'',
-          p.spec||'', p.unit||'',
+          i + 1, p.code||'', p.name||'', p.ingredient||'', p.concentration||'', p.usage||'',
+          p.spec||'', parseNum(p.smallestQty)||'', parseNum(p.expiry)||'',
+          p.regNo||'', p.manufacturer||'', p.country||'',
+          parseNum(p.unitPrice)||'',
           parseNum(p.cost), parseNum(p.retail),
           Number(c.idecoDisc.toFixed(2)), parseNum(p.discCust),
           Math.round(c.wholesale), Math.round(c.profit),
@@ -1447,34 +1530,40 @@ document.getElementById('btnExport').onclick = ()=>{
       });
       const avgMargin = tWhole > 0 ? (tProfit/tWhole*100) : 0;
       
+      const N = headers.length; // 20 columns (index 0..19)
       const titleRow = ['IDECO – DANH MỤC GIÁ SẢN PHẨM & LỢI NHUẬN'];
       const dateRow = ['Xuất ngày: ' + new Date().toLocaleString('vi-VN')];
-      const totalRow = ['TỔNG CỘNG','','','','','',tCost,tRetail,'','',Math.round(tWhole),Math.round(tProfit),Number(avgMargin.toFixed(2))];
+      const totalRow = new Array(N).fill('');
+      totalRow[0] = 'TỔNG CỘNG';
+      totalRow[13] = tCost;       // Giá vốn
+      totalRow[14] = tRetail;     // Giá bán lẻ
+      totalRow[17] = Math.round(tWhole);   // Giá bán buôn
+      totalRow[18] = Math.round(tProfit);  // Lợi nhuận
+      totalRow[19] = Number(avgMargin.toFixed(2)); // Tỉ suất LN
       
       const sheetData = [titleRow,dateRow,[],headers,...dataRows,[],totalRow];
       const ws = XLSX.utils.aoa_to_sheet(sheetData);
       
       // Column widths
       ws['!cols'] = [
-        {wch:5},{wch:32},{wch:22},{wch:14},{wch:22},{wch:8},
-        {wch:13},{wch:13},{wch:11},{wch:13},{wch:14},{wch:14},{wch:11}
+        {wch:5},{wch:14},{wch:30},{wch:24},{wch:16},{wch:32},
+        {wch:24},{wch:10},{wch:10},{wch:14},{wch:24},{wch:14},
+        {wch:15},{wch:13},{wch:13},{wch:11},{wch:13},{wch:14},{wch:14},{wch:11}
       ];
       
       // Merge title across columns
       ws['!merges'] = [
-        {s:{r:0,c:0},e:{r:0,c:12}},
-        {s:{r:1,c:0},e:{r:1,c:12}}
+        {s:{r:0,c:0},e:{r:0,c:N-1}},
+        {s:{r:1,c:0},e:{r:1,c:N-1}}
       ];
       
       // Styles
-      const headerFill = { fgColor:{rgb:'CC1A1A'}, patternType:'solid' };
+      const headerFill = { fgColor:{rgb:'1565C0'}, patternType:'solid' };
       const headerFont = { name:'Calibri', sz:11, bold:true, color:{rgb:'FFFFFF'} };
-      const titleFont = { name:'Calibri', sz:16, bold:true, color:{rgb:'CC1A1A'} };
+      const titleFont = { name:'Calibri', sz:16, bold:true, color:{rgb:'1565C0'} };
       const totalFont = { name:'Calibri', sz:11, bold:true, color:{rgb:'1A1A1A'} };
       const totalFill = { fgColor:{rgb:'F5F5F5'}, patternType:'solid' };
       const border = { top:{style:'thin',color:{rgb:'D9D2C2'}}, bottom:{style:'thin',color:{rgb:'D9D2C2'}}, left:{style:'thin',color:{rgb:'D9D2C2'}}, right:{style:'thin',color:{rgb:'D9D2C2'}}};
-      
-      const range = XLSX.utils.decode_range(ws['!ref']);
       
       // Title row
       if(ws['A1']){ ws['A1'].s = { font:titleFont, alignment:{horizontal:'center',vertical:'center'}, fill:{fgColor:{rgb:'F6F4EE'},patternType:'solid'} }; }
@@ -1482,41 +1571,48 @@ document.getElementById('btnExport').onclick = ()=>{
       
       // Header row at index 3 (row 4)
       const headerRowIdx = 3;
-      for(let c = 0; c <= 12; c++){
+      for(let c = 0; c < N; c++){
         const addr = XLSX.utils.encode_cell({r:headerRowIdx, c});
         if(!ws[addr]) ws[addr] = { v:'' };
         ws[addr].s = { fill:headerFill, font:headerFont, alignment:{horizontal:'center',vertical:'center',wrapText:true}, border };
       }
       
       // Data rows
+      // Column indices for special handling:
+      //   text: 0..12 (STT có align center)
+      //   numeric currency/qty: 7,8,12,13,14,17,18 -> format #,##0
+      //   percent: 15,16,19 -> format 0.00%
+      //   profit color: 18; margin color: 19
+      const numericCurrencyCols = new Set([12,13,14,17,18]);
+      const numericQtyCols = new Set([7,8]);
+      const percentCols = new Set([15,16,19]);
       const dataStartRow = 4;
       const dataEndRow = dataStartRow + dataRows.length - 1;
       for(let r = dataStartRow; r <= dataEndRow; r++){
-        for(let c = 0; c <= 12; c++){
+        for(let c = 0; c < N; c++){
           const addr = XLSX.utils.encode_cell({r, c});
           if(!ws[addr]) continue;
           const isAlt = (r - dataStartRow) % 2 === 1;
           const baseStyle = {
             font:{name:'Calibri',sz:10,color:{rgb:'0B1F2A'}},
-            alignment:{vertical:'center',wrapText:c<=5},
+            alignment:{vertical:'center',wrapText:c<=11},
             border,
-            fill: isAlt ? {fgColor:{rgb:'FFF8F8'},patternType:'solid'} : {fgColor:{rgb:'FFFFFF'},patternType:'solid'}
+            fill: isAlt ? {fgColor:{rgb:'F7FBFF'},patternType:'solid'} : {fgColor:{rgb:'FFFFFF'},patternType:'solid'}
           };
           if(c === 0) baseStyle.alignment.horizontal = 'center';
-          if(c >= 6){
+          if(numericCurrencyCols.has(c) || numericQtyCols.has(c) || percentCols.has(c)){
             baseStyle.alignment.horizontal = 'right';
-            baseStyle.font.name = 'Calibri';
-            // Currency format for prices
-            if(c === 6 || c === 7 || c === 10 || c === 11) ws[addr].z = '#,##0';
-            if(c === 8 || c === 9 || c === 12) ws[addr].z = '0.00"%"';
+            if(numericCurrencyCols.has(c)) ws[addr].z = '#,##0';
+            else if(numericQtyCols.has(c)) ws[addr].z = '#,##0';
+            else if(percentCols.has(c)) ws[addr].z = '0.00"%"';
           }
-          // Color profit
-          if(c === 11 && typeof ws[addr].v === 'number'){
+          // Color profit (col 18)
+          if(c === 18 && typeof ws[addr].v === 'number'){
             baseStyle.font.color = { rgb: ws[addr].v >= 0 ? '2F7D5B' : 'B43A2B' };
             baseStyle.font.bold = true;
           }
-          // Color margin
-          if(c === 12 && typeof ws[addr].v === 'number'){
+          // Color margin (col 19)
+          if(c === 19 && typeof ws[addr].v === 'number'){
             const m = ws[addr].v;
             baseStyle.font.color = { rgb: m >= 15 ? '2F7D5B' : m >= 10 ? 'B35900' : 'CC1A1A' };
             baseStyle.font.bold = true;
@@ -1527,12 +1623,12 @@ document.getElementById('btnExport').onclick = ()=>{
       
       // Total row
       const totalRowIdx = dataEndRow + 2;
-      for(let c = 0; c <= 12; c++){
+      for(let c = 0; c < N; c++){
         const addr = XLSX.utils.encode_cell({r:totalRowIdx, c});
         if(!ws[addr]) ws[addr] = { v:'' };
         ws[addr].s = { fill:totalFill, font:totalFont, alignment:{horizontal:c===0?'left':'right',vertical:'center'}, border };
-        if(c === 6 || c === 7 || c === 10 || c === 11) ws[addr].z = '#,##0';
-        if(c === 12) ws[addr].z = '0.00"%"';
+        if(numericCurrencyCols.has(c) || numericQtyCols.has(c)) ws[addr].z = '#,##0';
+        if(percentCols.has(c)) ws[addr].z = '0.00"%"';
       }
       
       // Row heights
@@ -1622,124 +1718,464 @@ function loadDiscSheet(){
   const sheet = discWorkbook.Sheets[discWorkbook.SheetNames[0]];
   const allRows = XLSX.utils.sheet_to_json(sheet, { header:1, defval:'' });
   
-  // Find header row (first row with >= 2 non-empty cells)
-  let headerIdx = 0;
-  for(let i = 0; i < Math.min(allRows.length, 10); i++){
-    const nonEmpty = allRows[i].filter(c => String(c).trim() !== '').length;
-    if(nonEmpty >= 2){ headerIdx = i; break; }
+  // Find the BEST header row by scoring keyword matches in first 15 rows
+  // (handles files with title/date rows above headers, like our own export)
+  const keywordBank = ['tên sản phẩm','tên sp','product','tên thuốc','tên hàng','sản phẩm',
+                       'mã hàng','ma hang','sku','quy cách','đóng gói','spec',
+                       'hoạt chất','hàm lượng','nồng độ','chiết khấu','ck','discount','giá vốn','giá bán'];
+  let headerIdx = 0, bestScore = 0;
+  for(let i = 0; i < Math.min(allRows.length, 15); i++){
+    const r = allRows[i] || [];
+    const nonEmpty = r.filter(c => String(c).trim() !== '').length;
+    if(nonEmpty < 2) continue;
+    let score = 0;
+    r.forEach(c => {
+      const n = normVi(c);
+      if(!n) return;
+      keywordBank.forEach(k => { if(n.includes(k)) score++; });
+    });
+    if(score > bestScore){ bestScore = score; headerIdx = i; }
   }
+  
   const headers = allRows[headerIdx].map((h, i) => ({ label: String(h||'').trim() || `Cột ${i+1}`, idx: i }));
   discRows = allRows.slice(headerIdx + 1).filter(r => r.some(c => String(c).trim() !== ''));
 
   document.getElementById('discSummary').innerHTML =
-    `<strong>${discRows.length}</strong> dòng dữ liệu · Sheet: <strong>${discWorkbook.SheetNames[0]}</strong>`;
+    `<strong>${discRows.length}</strong> dòng dữ liệu · Sheet: <strong>${discWorkbook.SheetNames[0]}</strong> · Dòng tiêu đề: ${headerIdx + 1}`;
 
-  // Populate column selectors
-  const makeOpts = (selId, autoKeywords, required) => {
-    const sel = document.getElementById(selId);
-    const prev = required ? '' : '<option value="">(không dùng)</option>';
-    sel.innerHTML = prev + headers.map(h =>
-      `<option value="${h.idx}">${h.label}</option>`
-    ).join('');
-    // Auto-select best match
-    const best = headers.find(h => autoKeywords.some(k => normVi(h.label).includes(k)));
-    if(best) sel.value = best.idx;
+  // Populate column selectors with intelligent auto-select
+  // Each selector tries to find best match, avoiding already-used columns
+  const used = new Set();
+  const pickBest = (keywords, avoid) => {
+    const norm = (s) => normVi(s);
+    let best = -1, bestRank = 999;
+    headers.forEach(h => {
+      if(used.has(h.idx)) return;
+      const lbl = norm(h.label);
+      if(!lbl) return;
+      if(avoid && avoid.some(a => lbl.includes(a))) return;
+      // Find earliest matching keyword (priority order)
+      for(let k = 0; k < keywords.length; k++){
+        if(lbl.includes(keywords[k])){
+          if(k < bestRank){ bestRank = k; best = h.idx; }
+          break;
+        }
+      }
+    });
+    if(best >= 0) used.add(best);
+    return best;
   };
-  makeOpts('discColName', ['tên sản phẩm','tên sp','product','tên thuốc','tên hàng','sản phẩm'], true);
-  makeOpts('discColSpec', ['quy cách','đóng gói','spec','packaging'], false);
-  makeOpts('discColDisc', ['chiết khấu','ck','discount','giảm giá','%','ck kh','ck khách'], true);
-}
-
-// ---- Similarity helpers ----
-function normStr(s){ return String(s||'').normalize('NFC').toLowerCase().trim().replace(/\s+/g,' '); }
-
-function similarity(a, b){
-  a = normStr(a); b = normStr(b);
-  if(a === b) return 1;
-  if(a.length === 0 || b.length === 0) return 0;
-  // Containment bonus
-  if(a.includes(b) || b.includes(a)) return 0.85;
-  // Token overlap
-  const ta = new Set(a.split(/\s+/));
-  const tb = new Set(b.split(/\s+/));
-  let common = 0;
-  ta.forEach(t => { if(tb.has(t)) common++; });
-  const tokenScore = (2 * common) / (ta.size + tb.size);
-  // Trigram
-  const trig = s => { const t = new Set(); for(let i=0;i<s.length-2;i++) t.add(s.slice(i,i+3)); return t; };
-  const ta3 = trig(a), tb3 = trig(b);
-  let c3 = 0; ta3.forEach(t => { if(tb3.has(t)) c3++; });
-  const trigScore = (2*c3) / (ta3.size + tb3.size + 0.001);
-  return Math.max(tokenScore, trigScore);
-}
-
-function bestMatch(srcName, srcSpec, threshold = 0.45){
-  let best = null, bestScore = threshold;
-  products.forEach(p => {
-    let score = similarity(srcName, p.name);
-    // Boost if spec also matches
-    if(srcSpec && p.spec){
-      const specScore = similarity(srcSpec, p.spec);
-      score = score * 0.7 + specScore * 0.3;
-    }
-    if(score > bestScore){ bestScore = score; best = p; }
+  
+  const makeOpts = (selId, optional, autoIdx) => {
+    const sel = document.getElementById(selId);
+    const prev = optional ? '<option value="">(không dùng)</option>' : '';
+    sel.innerHTML = prev + headers.map(h =>
+      `<option value="${h.idx}">${escapeHtml(h.label)}</option>`
+    ).join('');
+    if(autoIdx >= 0) sel.value = autoIdx;
+    else if(optional) sel.value = '';
+  };
+  
+  // Order matters - priority: required first, then optional in order of identifying power
+  // Code is most distinctive, so let it claim first dibs on "mã hàng" headers
+  const idxCode = pickBest(['mã hàng','ma hang','sku','mã sp','product code','mã sản phẩm'], ['giá','price']);
+  const idxName = pickBest(['tên sản phẩm','tên sp','product name','tên thuốc','tên hàng','sản phẩm'], ['hoạt chất']);
+  const idxDisc = pickBest(['ck khách hàng','ck khach hang','chiết khấu kh','ck kh','chiết khấu','ck','discount','%'], ['ideco','giá']);
+  const idxConc = pickBest(['nồng độ, hàm lượng','nồng độ','hàm lượng','strength','concentration','dosage'], ['giá']);
+  const idxSpec = pickBest(['quy cách đóng gói','quy cách','đóng gói','packaging','spec'], ['giá']);
+  
+  makeOpts('discColCode', true,  idxCode);
+  makeOpts('discColName', false, idxName);
+  makeOpts('discColDisc', false, idxDisc);
+  makeOpts('discColConc', true,  idxConc);
+  makeOpts('discColSpec', true,  idxSpec);
+  
+  // Update summary banner showing what was auto-detected
+  updateDiscColInfoBanner();
+  
+  // Attach change listeners to dropdowns so banner refreshes
+  ['discColCode','discColName','discColDisc','discColConc','discColSpec'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.onchange = updateDiscColInfoBanner;
   });
-  return best ? { product: best, score: bestScore } : null;
+}
+
+function updateDiscColInfoBanner(){
+  const banner = document.getElementById('discColInfo');
+  if(!banner) return;
+  const get = id => {
+    const v = document.getElementById(id).value;
+    if(v === '' || v === '-1') return null;
+    const opt = document.getElementById(id).options[document.getElementById(id).selectedIndex];
+    return opt ? opt.textContent : null;
+  };
+  const code = get('discColCode');
+  const name = get('discColName');
+  const disc = get('discColDisc');
+  const conc = get('discColConc');
+  const spec = get('discColSpec');
+  
+  const parts = [];
+  if(code) parts.push(`<span style="background:#1B5E20;color:#fff;padding:2px 7px;border-radius:9px;font-size:10.5px"><strong>Mã:</strong> ${escapeHtml(code)}</span>`);
+  if(name) parts.push(`<span style="background:#1565C0;color:#fff;padding:2px 7px;border-radius:9px;font-size:10.5px"><strong>Tên:</strong> ${escapeHtml(name)}</span>`);
+  if(conc) parts.push(`<span style="background:#7B1FA2;color:#fff;padding:2px 7px;border-radius:9px;font-size:10.5px"><strong>Hàm lượng:</strong> ${escapeHtml(conc)}</span>`);
+  if(spec) parts.push(`<span style="background:#6A1B9A;color:#fff;padding:2px 7px;border-radius:9px;font-size:10.5px"><strong>Quy cách:</strong> ${escapeHtml(spec)}</span>`);
+  if(disc) parts.push(`<span style="background:#C62828;color:#fff;padding:2px 7px;border-radius:9px;font-size:10.5px"><strong>CK%:</strong> ${escapeHtml(disc)}</span>`);
+  
+  const dbCount = products.length;
+  banner.innerHTML = `
+    <div style="font-size:11px;color:var(--ink-soft);margin-bottom:6px"><strong>🤖 Cột đã tự nhận:</strong> <span style="color:var(--muted)">(có thể chỉnh lại ở trên)</span></div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">${parts.length ? parts.join('') : '<span style="color:var(--red);font-size:11.5px">⚠ Chưa nhận được cột — vui lòng chọn thủ công</span>'}</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">Sẽ dò khớp với <strong style="color:var(--accent)">${dbCount}</strong> sản phẩm trong danh mục</div>
+  `;
+}
+
+/* ==================== SMART MATCHING ENGINE ==================== */
+
+// Aggressive normalization: handles Excel artifacts, line breaks, punctuation
+function normStr(s){
+  return String(s||'')
+    .normalize('NFC')
+    .toLowerCase()
+    .replace(/_x000d_/gi, ' ')   // Excel CR encoding
+    .replace(/_x000a_/gi, ' ')   // Excel LF encoding
+    .replace(/[\r\n\t]/g, ' ')   // real newlines/tabs
+    .replace(/[\u00a0\u200b-\u200d\ufeff]/g, ' ') // zero-width / nbsp
+    .replace(/[“”„‟]/g, '"').replace(/[‘’‚‛]/g, "'")
+    .replace(/[.,;:!?()\[\]{}<>«»"'/\\|]/g, ' ')  // punctuation -> space
+    .replace(/[-–—_]+/g, ' ')    // dashes & underscores -> space
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Strip Vietnamese diacritics for typo tolerance (e.g. 'Vilouric' vs 'vilouric')
+function stripDia(s){
+  return String(s||'')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd').replace(/Đ/g, 'd');
+}
+
+// Extract numeric tokens with optional units (e.g. "40mg", "1.5g", "200ml", "8400ui", "500/62.5mg")
+// These are CRITICAL for pharma - they distinguish dose variants of same drug.
+function extractNumbers(s){
+  const n = normStr(s);
+  if(!n) return [];
+  // Match: digits[.,digits][/digits[.,digits]][unit]
+  // Units: mg, mcg, µg, ug, g, ml, l, ui, iu, usp, %, mm, cm
+  const re = /(\d+(?:[.,]\d+)?(?:\/\d+(?:[.,]\d+)?)?)(\s*(?:mg|mcg|µg|ug|g|ml|kg|l|ui|iu|usp|cm|mm|%)?)/gi;
+  const out = [];
+  let m;
+  while((m = re.exec(n)) !== null){
+    const num = m[1].replace(',', '.');
+    const unit = (m[2] || '').replace(/\s+/g,'').toLowerCase();
+    // Skip standalone small numbers without unit if they look like counts (1, 2, 3...)
+    // Actually keep them - "Hộp 3 vỉ" matters for spec matching
+    out.push(num + unit);
+  }
+  return out;
+}
+
+// Compare numeric content. Returns 1 if perfect, <1 if some mismatch, 0.3 if total mismatch.
+function numberCompat(a, b){
+  const na = extractNumbers(a);
+  const nb = extractNumbers(b);
+  if(na.length === 0 && nb.length === 0) return 1;        // neither has numbers
+  if(na.length === 0 || nb.length === 0) return 0.85;     // one-sided -> mild penalty
+  const sa = new Set(na), sb = new Set(nb);
+  let common = 0;
+  sa.forEach(x => { if(sb.has(x)) common++; });
+  if(common === 0) return 0.3;                            // total mismatch -> strong penalty
+  // Dice coefficient on number sets
+  return (2 * common) / (sa.size + sb.size);
+}
+
+// Set-based Dice
+function diceFromSet(sa, sb){
+  if(sa.size === 0 || sb.size === 0) return 0;
+  let common = 0;
+  sa.forEach(t => { if(sb.has(t)) common++; });
+  return (2 * common) / (sa.size + sb.size);
+}
+
+// Trigrams
+function trigrams(s){
+  const t = new Set();
+  if(s.length < 3) { t.add(s); return t; }
+  for(let i = 0; i <= s.length - 3; i++) t.add(s.slice(i, i + 3));
+  return t;
+}
+
+// Composite fuzzy similarity 0..1 between two strings
+function similarity(a, b){
+  if(!a || !b) return 0;
+  const na = normStr(a), nb = normStr(b);
+  if(!na || !nb) return 0;
+  if(na === nb) return 1;
+  
+  // Diacritic-stripped exact
+  const da = stripDia(na), db = stripDia(nb);
+  if(da === db) return 0.97;
+  
+  // Containment (one is prefix/substring of other)
+  if(na.includes(nb) || nb.includes(na)){
+    const shortL = Math.min(na.length, nb.length);
+    const longL  = Math.max(na.length, nb.length);
+    return 0.72 + 0.23 * (shortL / longL); // 0.72-0.95
+  }
+  if(da.includes(db) || db.includes(da)){
+    const shortL = Math.min(da.length, db.length);
+    const longL  = Math.max(da.length, db.length);
+    return 0.68 + 0.22 * (shortL / longL);
+  }
+  
+  // Token Dice (on diacritic-stripped form - better for typo tolerance)
+  const tokA = new Set(da.split(' ').filter(t => t.length > 0));
+  const tokB = new Set(db.split(' ').filter(t => t.length > 0));
+  const tokScore = diceFromSet(tokA, tokB);
+  
+  // Trigram Dice (on diacritic-stripped form)
+  const triA = trigrams(da), triB = trigrams(db);
+  const triScore = diceFromSet(triA, triB);
+  
+  return Math.max(tokScore, triScore);
+}
+
+// Composite source object → product best-match
+// srcCode: optional code; if matches exactly, returns 1.0 immediately
+// Returns { product, score, nameScore, specScore, concScore, reason } or null
+function bestMatch(srcName, srcConc, srcSpec, srcCode, threshold = 0.5){
+  // ===== TIER 1: Exact code match =====
+  if(srcCode){
+    const codeNorm = normStr(srcCode);
+    if(codeNorm){
+      const exact = products.find(p => p.code && normStr(p.code) === codeNorm);
+      if(exact){
+        return {
+          product: exact, score: 1.0,
+          nameScore: similarity(srcName, exact.name),
+          specScore: srcSpec ? similarity(srcSpec, exact.spec) : 1,
+          concScore: srcConc ? similarity(srcConc, exact.concentration) : 1,
+          reason: 'code'
+        };
+      }
+    }
+  }
+  
+  if(!srcName) return null;
+  
+  let best = null, bestScore = threshold;
+  let bestBreakdown = null;
+  
+  // Pre-compute source variants for combined matching
+  const srcWithConc = srcConc ? (srcName + ' ' + srcConc) : srcName;
+  
+  products.forEach(p => {
+    if(!p.name) return;
+    
+    // 1. Name similarity (base layer)
+    const nameSim = similarity(srcName, p.name);
+    
+    // 1b. Combined "name + concentration" similarity (handles cases like
+    //     source "Stomazol 20mg" matching DB "Stomazol -Cap 20" + concentration "20mg")
+    const pWithConc = p.concentration ? (p.name + ' ' + p.concentration) : p.name;
+    const combinedSim = similarity(srcWithConc, pWithConc);
+    
+    let nameScore = Math.max(nameSim, combinedSim);
+    
+    // 2. CRITICAL: Number compatibility on names — penalizes "Vilouric 40" vs "Vilouric 80"
+    const numNameCompat = numberCompat(srcName, p.name);
+    nameScore *= numNameCompat;
+    
+    // 3. Concentration matching (strong disambiguator)
+    let concScore = 1; // neutral if no source conc
+    if(srcConc){
+      if(p.concentration){
+        const concSim = similarity(srcConc, p.concentration);
+        const concNumCompat = numberCompat(srcConc, p.concentration);
+        concScore = Math.min(concSim, concNumCompat);
+      } else {
+        concScore = 0.7; // source has conc, target doesn't — uncertain
+      }
+    }
+    
+    // 4. Spec matching (weaker disambiguator)
+    let specScore = 1; // neutral
+    if(srcSpec){
+      if(p.spec){
+        const specSim = similarity(srcSpec, p.spec);
+        const specNumCompat = numberCompat(srcSpec, p.spec);
+        specScore = Math.min(specSim, specNumCompat * 0.7 + 0.3); // softer number penalty for spec
+      } else {
+        specScore = 0.75;
+      }
+    }
+    
+    // 5. Composite score
+    // Weights: name 60% / conc 25% / spec 15% — name dominates, conc is strong tiebreaker
+    // If source has neither conc nor spec, name carries 100%
+    let weights, sum;
+    if(srcConc && srcSpec){ weights = [0.60, 0.25, 0.15]; }
+    else if(srcConc){       weights = [0.65, 0.35, 0.00]; }
+    else if(srcSpec){       weights = [0.75, 0.00, 0.25]; }
+    else {                  weights = [1.00, 0.00, 0.00]; }
+    
+    const composite = nameScore * weights[0] + concScore * weights[1] + specScore * weights[2];
+    
+    // 6. Hard reject if name score is too low after number penalty (different drug entirely)
+    if(nameScore < 0.35) return;
+    
+    if(composite > bestScore){
+      bestScore = composite;
+      best = p;
+      bestBreakdown = { nameScore, concScore, specScore };
+    }
+  });
+  
+  if(!best) return null;
+  return {
+    product: best, score: bestScore,
+    nameScore: bestBreakdown.nameScore,
+    specScore: bestBreakdown.specScore,
+    concScore: bestBreakdown.concScore,
+    reason: 'fuzzy'
+  };
 }
 
 window.runDiscMatch = function(){
   const colName = document.getElementById('discColName').value;
-  const colSpec = document.getElementById('discColSpec').value;
   const colDisc = document.getElementById('discColDisc').value;
+  const colCode = document.getElementById('discColCode').value;
+  const colConc = document.getElementById('discColConc').value;
+  const colSpec = document.getElementById('discColSpec').value;
+  const strict  = document.getElementById('discStrictMode').checked;
+  
   if(colName === '' || colDisc === ''){ toast('Vui lòng chọn cột Tên và Chiết khấu', 'warn'); return; }
-
+  
+  const threshold = strict ? 0.75 : 0.50;
+  
   discMatchResults = discRows.map((row, i) => {
     const srcName = String(row[colName] || '').trim();
+    const srcCode = colCode !== '' ? String(row[colCode] || '').trim() : '';
+    const srcConc = colConc !== '' ? String(row[colConc] || '').trim() : '';
     const srcSpec = colSpec !== '' ? String(row[colSpec] || '').trim() : '';
-    const rawDisc = String(row[colDisc] || '').replace(/[%\s]/g,'');
+    const rawDisc = String(row[colDisc] || '').replace(/[%\s]/g,'').replace(',', '.');
     const srcDisc = parseFloat(rawDisc);
     if(!srcName || isNaN(srcDisc)) return null;
-    const match = bestMatch(srcName, srcSpec);
+    
+    const match = bestMatch(srcName, srcConc, srcSpec, srcCode, threshold);
     return {
-      rowIdx: i, srcName, srcSpec, srcDisc,
+      rowIdx: i, srcName, srcCode, srcConc, srcSpec, srcDisc,
       matchedId: match ? match.product.id : null,
       matchedName: match ? match.product.name : null,
+      matchedCode: match ? match.product.code : null,
+      matchedConc: match ? match.product.concentration : null,
       matchedSpec: match ? match.product.spec : null,
       score: match ? match.score : 0,
-      selected: !!match
+      nameScore: match ? match.nameScore : 0,
+      concScore: match ? match.concScore : 0,
+      specScore: match ? match.specScore : 0,
+      reason: match ? match.reason : null,
+      // Auto-select only confident matches (>= 0.72) by default; user can manually enable others
+      selected: !!match && match.score >= 0.72
     };
   }).filter(Boolean);
-
+  
+  // Sort: matched (by score desc) first, then unmatched
+  discMatchResults.sort((a, b) => {
+    if(!!a.matchedId !== !!b.matchedId) return a.matchedId ? -1 : 1;
+    return b.score - a.score;
+  });
+  
   renderDiscMatchTable();
 };
+
+function tierBadge(score, reason){
+  if(reason === 'code') return '<span style="background:#1B5E20;color:#fff;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:700">★ MÃ CHÍNH XÁC 100%</span>';
+  const pct = Math.round(score * 100);
+  if(score >= 0.92) return `<span style="background:#1B5E20;color:#fff;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:700">✓ ${pct}%</span>`;
+  if(score >= 0.75) return `<span style="background:#2F7D5B;color:#fff;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:600">✓ ${pct}%</span>`;
+  if(score >= 0.55) return `<span style="background:#FFE082;color:#5D4000;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:600">⚠ ${pct}%</span>`;
+  return `<span style="background:#FFCDD2;color:#7B1010;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:600">! ${pct}%</span>`;
+}
+
+function subScoreDot(label, score, hasSrc){
+  if(!hasSrc) return '';
+  const pct = Math.round(score * 100);
+  const color = score >= 0.85 ? '#2F7D5B' : score >= 0.6 ? '#B35900' : '#C62828';
+  return `<span style="font-size:9.5px;color:${color};margin-right:6px" title="${label}: ${pct}%">${label[0]}:${pct}%</span>`;
+}
 
 function renderDiscMatchTable(){
   const tbody = document.getElementById('discMatchBody');
   const matched = discMatchResults.filter(r => r.matchedId);
   const unmatched = discMatchResults.filter(r => !r.matchedId);
+  const highConf = matched.filter(r => r.score >= 0.75).length;
+  const midConf = matched.filter(r => r.score >= 0.55 && r.score < 0.75).length;
+  const lowConf = matched.filter(r => r.score < 0.55).length;
   
   document.getElementById('discMatchStats').innerHTML =
-    `<span style="color:var(--green);font-weight:600">✓ ${matched.length} khớp</span>&nbsp;&nbsp;
-     <span style="color:var(--red);font-weight:600">✗ ${unmatched.length} không khớp</span>&nbsp;&nbsp;
-     <span style="color:var(--muted)">Tổng: ${discMatchResults.length} dòng</span>&nbsp;&nbsp;
-     <label style="margin-left:8px;cursor:pointer"><input type="checkbox" id="discChkAll" checked onchange="discToggleAll(this.checked)"> Chọn tất cả</label>`;
+    `<span style="color:#1B5E20;font-weight:700">✓ ${highConf} chắc chắn (≥75%)</span>&nbsp;·&nbsp;
+     <span style="color:#B35900;font-weight:600">⚠ ${midConf} cần xem (55–74%)</span>&nbsp;·&nbsp;
+     <span style="color:#C62828;font-weight:600">! ${lowConf} yếu (<55%)</span>&nbsp;·&nbsp;
+     <span style="color:var(--red);font-weight:600">✗ ${unmatched.length} không tìm thấy</span>&nbsp;·&nbsp;
+     <span style="color:var(--muted)">Tổng: ${discMatchResults.length}</span>
+     <label style="margin-left:8px;cursor:pointer;font-weight:500"><input type="checkbox" id="discChkAll" onchange="discToggleAll(this.checked)"> Chọn tất cả khớp</label>`;
 
   tbody.innerHTML = discMatchResults.map((r, i) => {
-    const statusHtml = r.matchedId
-      ? `<span style="background:#E6F1EA;color:#2F7D5B;padding:2px 7px;border-radius:9px;font-size:10.5px;font-weight:600">✓ ${Math.round(r.score*100)}%</span>`
-      : `<span style="background:#FFEBEE;color:#1565C0;padding:2px 7px;border-radius:9px;font-size:10.5px;font-weight:600">✗ Không tìm thấy</span>`;
-    const oldDisc = r.matchedId ? parseNum(products.find(p=>p.id===r.matchedId)?.discCust) : '–';
-    const rowBg = !r.matchedId ? '#FFF5F5' : (i%2===0 ? '#FFFFFF' : '#F5F9FF');
-    return `<tr style="background:${rowBg}">
-      <td style="padding:7px 10px;text-align:center">
-        ${r.matchedId ? `<input type="checkbox" data-idx="${i}" ${r.selected?'checked':''} onchange="discMatchResults[${i}].selected=this.checked;discUpdateApplyBtn()">` : ''}
+    const matched = !!r.matchedId;
+    const rowBg = !matched ? '#FFF5F5' : r.score >= 0.92 ? '#F1F8E9' : r.score >= 0.75 ? '#FFFFFF' : r.score >= 0.55 ? '#FFFBF0' : '#FFF3E0';
+    const altShade = (i % 2 === 1) ? 'background:' + rowBg + ';filter:brightness(0.985)' : 'background:' + rowBg;
+    const oldDisc = matched ? parseNum(products.find(p=>p.id===r.matchedId)?.discCust) : null;
+    
+    // SOURCE cell - show name + sub info
+    const srcLines = [`<div style="font-weight:600;color:var(--ink)">${escapeHtml(r.srcName)}</div>`];
+    if(r.srcCode) srcLines.push(`<div style="font-size:10.5px;color:#1565C0"><strong>Mã:</strong> ${escapeHtml(r.srcCode)}</div>`);
+    if(r.srcConc) srcLines.push(`<div style="font-size:10.5px;color:var(--muted)"><strong>Hàm lượng:</strong> ${escapeHtml(r.srcConc)}</div>`);
+    if(r.srcSpec) srcLines.push(`<div style="font-size:10.5px;color:var(--muted)"><strong>QC:</strong> ${escapeHtml(r.srcSpec)}</div>`);
+    
+    // MATCH cell
+    let matchCell;
+    if(matched){
+      const lines = [`<div style="font-weight:600;color:var(--ink)">${escapeHtml(r.matchedName)}</div>`];
+      if(r.matchedCode) lines.push(`<div style="font-size:10.5px;color:#1565C0"><strong>Mã:</strong> ${escapeHtml(r.matchedCode)}</div>`);
+      if(r.matchedConc) lines.push(`<div style="font-size:10.5px;color:var(--muted)"><strong>Hàm lượng:</strong> ${escapeHtml(r.matchedConc)}</div>`);
+      if(r.matchedSpec) lines.push(`<div style="font-size:10.5px;color:var(--muted)"><strong>QC:</strong> ${escapeHtml(r.matchedSpec)}</div>`);
+      const subs = subScoreDot('Tên', r.nameScore, !!r.srcName) +
+                   subScoreDot('Conc', r.concScore, !!r.srcConc) +
+                   subScoreDot('QC', r.specScore, !!r.srcSpec);
+      if(subs) lines.push(`<div style="margin-top:3px">${subs}</div>`);
+      matchCell = lines.join('');
+    } else {
+      matchCell = '<div style="color:var(--muted);font-style:italic">Không tìm thấy sản phẩm phù hợp</div>';
+    }
+    
+    // CK cell with arrow
+    let ckCell;
+    if(matched){
+      const changed = oldDisc !== r.srcDisc;
+      ckCell = `<div style="font-family:'JetBrains Mono',monospace;font-size:11.5px">
+        <span style="color:var(--muted)">${oldDisc}%</span>
+        <span style="color:var(--accent);margin:0 4px">→</span>
+        <span style="color:${changed?'var(--accent)':'var(--muted)'};font-weight:${changed?'700':'500'}">${r.srcDisc}%</span>
+        ${!changed ? '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">(không đổi)</div>' : ''}
+      </div>`;
+    } else {
+      ckCell = `<div style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent)">${r.srcDisc}%</div>`;
+    }
+    
+    const statusCell = matched
+      ? tierBadge(r.score, r.reason)
+      : `<span style="background:#FFEBEE;color:#1565C0;padding:3px 8px;border-radius:10px;font-size:10.5px;font-weight:600">✗ Không khớp</span>`;
+    
+    return `<tr style="${altShade};border-bottom:1px solid var(--line-soft)">
+      <td style="padding:8px 8px;text-align:center;vertical-align:top">
+        ${matched ? `<input type="checkbox" data-idx="${i}" ${r.selected?'checked':''} onchange="discMatchResults[${i}].selected=this.checked;discUpdateApplyBtn()">` : ''}
       </td>
-      <td style="padding:7px 10px;font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(r.srcName)}">${escapeHtml(r.srcName)}</td>
-      <td style="padding:7px 10px;color:var(--muted);font-size:11.5px">${escapeHtml(r.srcSpec||'–')}</td>
-      <td style="padding:7px 10px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:${r.matchedId?'var(--ink)':'var(--muted)'}" title="${escapeHtml(r.matchedName||'')}">${escapeHtml(r.matchedName||'–')}<br><span style="font-size:10.5px;color:var(--muted)">${escapeHtml(r.matchedSpec||'')}</span></td>
-      <td style="padding:7px 10px;text-align:center;font-family:'JetBrains Mono',monospace;color:var(--muted)">${r.matchedId ? oldDisc+'%' : '–'}</td>
-      <td style="padding:7px 10px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent)">${r.srcDisc}%</td>
-      <td style="padding:7px 10px;text-align:center">${statusHtml}</td>
+      <td style="padding:8px 8px;vertical-align:top;max-width:230px">${srcLines.join('')}</td>
+      <td style="padding:8px 8px;vertical-align:top;max-width:260px">${matchCell}</td>
+      <td style="padding:8px 8px;text-align:center;vertical-align:top">${ckCell}</td>
+      <td style="padding:8px 8px;text-align:center;vertical-align:top">${statusCell}</td>
     </tr>`;
   }).join('');
 
@@ -1748,7 +2184,7 @@ function renderDiscMatchTable(){
 }
 
 window.discToggleAll = function(checked){
-  discMatchResults.forEach((r,i) => { if(r.matchedId) r.selected = checked; });
+  discMatchResults.forEach(r => { if(r.matchedId) r.selected = checked; });
   document.querySelectorAll('#discMatchBody input[type=checkbox]').forEach(cb => cb.checked = checked);
   discUpdateApplyBtn();
 };
@@ -1785,6 +2221,74 @@ window.applyDiscountUpdates = function(){
     });
   }
 };
+
+/* ==================== COLUMN VISIBILITY (HIDE / SHOW) ==================== */
+const HIDDEN_COLS_KEY = 'ideco_hidden_cols_v1';
+let hiddenCols = new Set();
+
+// Load saved state
+try {
+  const raw = localStorage.getItem(HIDDEN_COLS_KEY);
+  if(raw){ const arr = JSON.parse(raw); if(Array.isArray(arr)) hiddenCols = new Set(arr); }
+} catch(_){}
+
+function saveHiddenCols(){
+  try { localStorage.setItem(HIDDEN_COLS_KEY, JSON.stringify(Array.from(hiddenCols))); } catch(_){}
+}
+
+function applyHiddenColumns(){
+  // Apply to thead
+  document.querySelectorAll('table.products thead th[data-col]').forEach(th => {
+    const c = th.dataset.col;
+    if(hiddenCols.has(c)) th.classList.add('col-hidden');
+    else th.classList.remove('col-hidden');
+  });
+  // Apply to all tbody cells
+  document.querySelectorAll('table.products tbody td[data-col]').forEach(td => {
+    const c = td.dataset.col;
+    if(hiddenCols.has(c)) td.classList.add('col-hidden');
+    else td.classList.remove('col-hidden');
+  });
+  // Update toolbar badge / button visibility
+  const btn = document.getElementById('btnShowCols');
+  const badge = document.getElementById('hiddenColsBadge');
+  if(hiddenCols.size > 0){
+    btn.style.display = 'inline-flex';
+    badge.textContent = hiddenCols.size;
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+window.hideColumn = function(col){
+  if(!col) return;
+  // Prevent hiding all data columns
+  const allCols = Array.from(document.querySelectorAll('table.products thead th[data-col]:not(.no-hide)')).map(th=>th.dataset.col);
+  const remaining = allCols.filter(c => !hiddenCols.has(c) && c !== col);
+  if(remaining.length === 0){
+    toast('Phải giữ lại ít nhất 1 cột dữ liệu', 'warn');
+    return;
+  }
+  hiddenCols.add(col);
+  saveHiddenCols();
+  applyHiddenColumns();
+  // Get column label for toast
+  const th = document.querySelector(`table.products thead th[data-col="${col}"]`);
+  const label = th ? th.textContent.replace(/^\d+/,'').replace('×','').trim() : col;
+  toast(`Đã ẩn cột: ${label} · Bấm "Hiện cột" để khôi phục`, 'info', 3000);
+};
+
+document.getElementById('btnShowCols').addEventListener('click', ()=>{
+  if(hiddenCols.size === 0){ toast('Không có cột nào đang ẩn', 'info'); return; }
+  const n = hiddenCols.size;
+  hiddenCols.clear();
+  saveHiddenCols();
+  applyHiddenColumns();
+  toast(`Đã hiện lại ${n} cột`, 'success');
+});
+
+// Apply on first paint (in case render was called before script loaded fully)
+setTimeout(applyHiddenColumns, 0);
 
 </script>
 </body>
