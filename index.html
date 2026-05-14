@@ -257,6 +257,22 @@
   .map-stats{font-size:11.5px;color:var(--muted);margin-top:10px}
   .map-stats strong{color:var(--accent);font-weight:600}
 
+  /* ===== APPEND MODE INDICATORS ===== */
+  .append-banner{background:linear-gradient(90deg,#E6F1EA,#F0F8F4);border-left:3px solid var(--green);padding:10px 14px;border-radius:5px;font-size:12px;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .append-banner .ico{width:24px;height:24px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+  .append-banner strong{color:var(--green);font-weight:700}
+  .append-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+  .append-summary .card{padding:10px 12px;border-radius:6px;border:1px solid var(--line);background:#FFFFFF;display:flex;flex-direction:column;gap:2px}
+  .append-summary .card.new{border-color:#A8D5BA;background:#F0F8F4}
+  .append-summary .card.upd{border-color:#FFCC80;background:#FFF7E6}
+  .append-summary .card.skip{border-color:#E0E0E0;background:#FAFAFA}
+  .append-summary .card .num{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .append-summary .card.new .num{color:var(--green)}
+  .append-summary .card.upd .num{color:#B35900}
+  .append-summary .card.skip .num{color:var(--muted)}
+  .append-summary .card .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
+  .append-summary .card .desc{font-size:10.5px;color:var(--ink-soft);margin-top:1px;line-height:1.3}
+
   @media (max-width: 900px){
     .stats{grid-template-columns:repeat(2,1fr)}
     .stat:nth-child(3n){border-right:1px solid var(--line-soft)}
@@ -344,6 +360,10 @@
     <button class="btn" id="btnImport">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3-3 3 3"/></svg>
       Nạp file Excel
+    </button>
+    <button class="btn" id="btnAppend" style="border-color:#2F7D5B;color:#2F7D5B;background:#F0F8F4;" title="Bổ sung sản phẩm mới vào danh sách hiện có, tự động khớp & cập nhật dòng trùng (không xóa dữ liệu cũ)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 13v6M9 16h6"/></svg>
+      Cập nhật danh sách
     </button>
     <button class="btn" id="btnAdd">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
@@ -437,6 +457,7 @@
 <input type="file" id="excelInput" accept=".xlsx,.xls" style="display:none" />
 <input type="file" id="imageInput" accept="image/*" style="display:none" />
 <input type="file" id="discExcelInput" accept=".xlsx,.xls" style="display:none" />
+<input type="file" id="appendExcelInput" accept=".xlsx,.xls" style="display:none" />
 
 <!-- ========== DISC IMPORT MODAL ========== -->
 <div class="modal-bg" id="discModal">
@@ -552,10 +573,16 @@
 <div class="modal-bg" id="mapModal">
   <div class="modal map-modal">
     <div class="modal-head">
-      <h3>Soi chiếu cột từ file Excel</h3>
-      <p>Chọn cột Excel tương ứng với mỗi trường dữ liệu của ứng dụng. Hệ thống đã tự gợi ý — bạn có thể điều chỉnh.</p>
+      <h3 id="mapModalTitle">Soi chiếu cột từ file Excel</h3>
+      <p id="mapModalDesc">Chọn cột Excel tương ứng với mỗi trường dữ liệu của ứng dụng. Hệ thống đã tự gợi ý — bạn có thể điều chỉnh.</p>
     </div>
     <div class="modal-body">
+      <div class="append-banner" id="appendBanner" style="display:none">
+        <span class="ico">+</span>
+        <div>
+          <strong>Chế độ Bổ sung danh sách</strong> · Dữ liệu mới sẽ <strong>thêm tiếp</strong> vào bảng hiện có (không xóa dữ liệu cũ). Sản phẩm <strong>trùng Mã hàng</strong> hoặc <strong>trùng Tên + Hàm lượng</strong> sẽ được tự động cập nhật (giữ nguyên ảnh, CK khách hàng).
+        </div>
+      </div>
       <div class="map-controls">
         <div class="field">
           <label>Sheet trong file</label>
@@ -578,6 +605,12 @@
       <div class="map-preview" id="mapPreview"></div>
       
       <div class="map-stats" id="mapStats"></div>
+
+      <!-- Thống kê khi ở chế độ bổ sung -->
+      <div id="appendSummaryWrap" style="display:none">
+        <div class="map-section-title">Phân tích đối chiếu với dữ liệu hiện có</div>
+        <div class="append-summary" id="appendSummary"></div>
+      </div>
     </div>
     <div class="modal-foot">
       <button class="btn ghost" id="mapCancel">Hủy</button>
@@ -761,6 +794,7 @@ function computeRow(p){
 /* ==================== EXCEL IMPORT (with column mapping) ==================== */
 let xlsxWorkbook = null;
 let xlsxCurrentRows = [];
+let xlsxAppendMode = false;   // true = bổ sung vào DS hiện có; false = thay thế toàn bộ
 const xlsxFieldDefs = [
   { key:'code',          label:'Mã hàng',                   required:false, keywords:['mã hàng','ma hang','mã sp','sku','product code','mã sản phẩm'] },
   { key:'name',          label:'Tên sản phẩm',              required:true,  keywords:['tên sản phẩm','tên sp','product name','tên hàng','sản phẩm','tên thuốc'] },
@@ -795,6 +829,7 @@ document.getElementById('excelInput').addEventListener('change', async e=>{
   const file = e.target.files[0];
   if(!file) return;
   e.target.value = '';
+  xlsxAppendMode = false;
   showLoader('Đang đọc file Excel...');
   try {
     const data = await file.arrayBuffer();
@@ -809,11 +844,55 @@ document.getElementById('excelInput').addEventListener('change', async e=>{
   }
 });
 
+/* ====== APPEND / UPDATE LIST FROM EXCEL ====== */
+document.getElementById('btnAppend').onclick = ()=> document.getElementById('appendExcelInput').click();
+
+document.getElementById('appendExcelInput').addEventListener('change', async e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  e.target.value = '';
+  xlsxAppendMode = true;
+  showLoader('Đang đọc file Excel để bổ sung...');
+  try {
+    const data = await file.arrayBuffer();
+    xlsxWorkbook = XLSX.read(data, { type:'array' });
+    if(!xlsxWorkbook.SheetNames.length) throw new Error('File không có sheet nào');
+    hideLoader();
+    openMappingModal();
+  } catch(err){
+    hideLoader();
+    xlsxAppendMode = false;
+    console.error(err);
+    toast('Lỗi đọc file Excel: ' + err.message, 'error', 5000);
+  }
+});
+
 function openMappingModal(){
   const sheetSel = document.getElementById('mapSheet');
   sheetSel.innerHTML = xlsxWorkbook.SheetNames
     .map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
   sheetSel.value = xlsxWorkbook.SheetNames[0];
+
+  // Toggle UI theo chế độ
+  const banner = document.getElementById('appendBanner');
+  const title  = document.getElementById('mapModalTitle');
+  const desc   = document.getElementById('mapModalDesc');
+  const btn    = document.getElementById('mapConfirm');
+  const sumWrap= document.getElementById('appendSummaryWrap');
+  if(xlsxAppendMode){
+    banner.style.display = 'flex';
+    title.textContent = 'Cập nhật / Bổ sung danh sách từ Excel';
+    desc.textContent  = 'Soi chiếu cột Excel với trường dữ liệu — sau đó hệ thống sẽ tự đối chiếu để bổ sung dòng mới và cập nhật dòng trùng.';
+    btn.textContent   = 'Bổ sung vào danh sách →';
+    sumWrap.style.display = '';
+  } else {
+    banner.style.display = 'none';
+    title.textContent = 'Soi chiếu cột từ file Excel';
+    desc.textContent  = 'Chọn cột Excel tương ứng với mỗi trường dữ liệu của ứng dụng. Hệ thống đã tự gợi ý — bạn có thể điều chỉnh.';
+    btn.textContent   = 'Nạp dữ liệu →';
+    sumWrap.style.display = 'none';
+  }
+
   loadSheetIntoMapper();
   document.getElementById('mapModal').classList.add('active');
 }
@@ -967,6 +1046,80 @@ function updatePreview(){
   
   document.getElementById('mapStats').innerHTML =
     `Phát hiện <strong>${totalValid}</strong> dòng dữ liệu hợp lệ trong sheet hiện tại`;
+
+  if(xlsxAppendMode) updateAppendSummary();
+}
+
+/* Phân tích đối chiếu với danh sách hiện có (chỉ chạy trong append mode) */
+function buildExistingIndex(){
+  // Index theo mã hàng (uppercase trimmed) và theo key (name+concentration normalized)
+  const byCode = new Map();
+  const byKey  = new Map();
+  products.forEach((p, idx) => {
+    const code = String(p.code || '').trim().toUpperCase();
+    if(code) byCode.set(code, idx);
+    const key = (normVi(p.name) + '|' + normVi(p.concentration)).trim();
+    if(normVi(p.name)) byKey.set(key, idx);
+  });
+  return { byCode, byKey };
+}
+
+function classifyAppendRows(){
+  const map = getCurrentMapping();
+  const dataStart = parseInt(document.getElementById('mapDataStart').value) - 1;
+  if(map.name < 0 || isNaN(dataStart) || dataStart < 0){
+    return { newRows: [], updRows: [], invalid: 0, total: 0 };
+  }
+  const idx = buildExistingIndex();
+  const newRows = [];
+  const updRows = []; // [{row, existingIdx}]
+  let invalid = 0, total = 0;
+  for(let i = dataStart; i < xlsxCurrentRows.length; i++){
+    const r = xlsxCurrentRows[i] || [];
+    const name = String(r[map.name] || '').trim();
+    if(!name || normVi(name).includes('luôn chọn')) continue;
+    total++;
+
+    const code = map.code >= 0 ? String(r[map.code] || '').trim().toUpperCase() : '';
+    const conc = map.concentration >= 0 ? String(r[map.concentration] || '').trim() : '';
+    const key  = (normVi(name) + '|' + normVi(conc)).trim();
+
+    let foundIdx = -1;
+    if(code && idx.byCode.has(code)) foundIdx = idx.byCode.get(code);
+    else if(idx.byKey.has(key))      foundIdx = idx.byKey.get(key);
+
+    if(foundIdx >= 0) updRows.push({ row: r, existingIdx: foundIdx });
+    else              newRows.push(r);
+  }
+  return { newRows, updRows, invalid, total };
+}
+
+function updateAppendSummary(){
+  const wrap = document.getElementById('appendSummary');
+  if(!wrap) return;
+  const { newRows, updRows, total } = classifyAppendRows();
+  const startNo = products.length + 1;
+  const endNo   = products.length + newRows.length;
+  const rangeTxt = newRows.length
+    ? `STT mới: ${startNo}${newRows.length > 1 ? ' → ' + endNo : ''}`
+    : 'Không có STT mới';
+  wrap.innerHTML = `
+    <div class="card new">
+      <span class="lbl">Thêm mới</span>
+      <span class="num">${newRows.length}</span>
+      <span class="desc">${rangeTxt}</span>
+    </div>
+    <div class="card upd">
+      <span class="lbl">Cập nhật (trùng)</span>
+      <span class="num">${updRows.length}</span>
+      <span class="desc">Khớp Mã hàng hoặc Tên + Hàm lượng — giữ ảnh, CKKH</span>
+    </div>
+    <div class="card skip">
+      <span class="lbl">Tổng đối chiếu</span>
+      <span class="num">${total}</span>
+      <span class="desc">Hiện có ${products.length} sản phẩm trong bảng</span>
+    </div>
+  `;
 }
 
 document.getElementById('mapSheet').addEventListener('change', loadSheetIntoMapper);
@@ -984,6 +1137,7 @@ document.getElementById('mapCancel').onclick = ()=>{
   document.getElementById('mapModal').classList.remove('active');
   xlsxWorkbook = null;
   xlsxCurrentRows = [];
+  xlsxAppendMode = false;
 };
 
 document.getElementById('mapModal').addEventListener('click', e=>{
@@ -1036,7 +1190,70 @@ document.getElementById('mapConfirm').onclick = ()=>{
   }
   
   document.getElementById('mapModal').classList.remove('active');
-  
+
+  // =================== APPEND MODE — bổ sung & cập nhật ===================
+  if(xlsxAppendMode){
+    const idx = buildExistingIndex();
+    let added = 0, updated = 0;
+    const updatedNames = [];
+
+    list.forEach(item => {
+      const code = String(item.code || '').trim().toUpperCase();
+      const key  = (normVi(item.name) + '|' + normVi(item.concentration)).trim();
+      let foundIdx = -1;
+      if(code && idx.byCode.has(code))       foundIdx = idx.byCode.get(code);
+      else if(idx.byKey.has(key))            foundIdx = idx.byKey.get(key);
+
+      if(foundIdx >= 0){
+        // Cập nhật — giữ id, image, discCust của bản cũ
+        const old = products[foundIdx];
+        products[foundIdx] = {
+          ...old,
+          code:          item.code          || old.code,
+          name:          item.name          || old.name,
+          ingredient:    item.ingredient    || old.ingredient,
+          concentration: item.concentration || old.concentration,
+          usage:         item.usage         || old.usage,
+          spec:          item.spec          || old.spec,
+          smallestQty:   item.smallestQty   || old.smallestQty,
+          expiry:        item.expiry        || old.expiry,
+          regNo:         item.regNo         || old.regNo,
+          manufacturer:  item.manufacturer  || old.manufacturer,
+          country:       item.country       || old.country,
+          unitPrice:     item.unitPrice     || old.unitPrice,
+          cost:          item.cost          || old.cost,
+          retail:        item.retail        || old.retail
+          // image, discCust, id giữ nguyên từ `old`
+        };
+        updated++;
+        if(updatedNames.length < 3) updatedNames.push(item.name);
+      } else {
+        // Bổ sung mới — đẩy vào cuối mảng (STT tự tăng theo vị trí)
+        products.push(item);
+        added++;
+      }
+    });
+
+    xlsxAppendMode = false;
+    xlsxWorkbook = null;
+    xlsxCurrentRows = [];
+    render();
+
+    let msg;
+    if(added > 0 && updated > 0){
+      msg = `✓ Đã bổ sung ${added} sản phẩm mới · Cập nhật ${updated} sản phẩm trùng`;
+    } else if(added > 0){
+      msg = `✓ Đã bổ sung ${added} sản phẩm mới vào cuối danh sách (STT ${products.length - added + 1} → ${products.length})`;
+    } else if(updated > 0){
+      msg = `✓ Đã cập nhật ${updated} sản phẩm trùng (giữ nguyên ảnh, CK khách hàng)`;
+    } else {
+      msg = 'Không có thay đổi nào được áp dụng';
+    }
+    toast(msg + ' · Bấm "Lưu lên Firebase" để đồng bộ', 'success', 5500);
+    return;
+  }
+
+  // =================== REPLACE MODE (giữ nguyên hành vi cũ) ===================
   if(products.length === 0){
     products = list; render();
     toast(`Đã nạp ${list.length} sản phẩm từ Excel · Bấm "Lưu lên Firebase" để đồng bộ`, 'success', 4500);
