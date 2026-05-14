@@ -63,7 +63,7 @@
   .login-footer{margin-top:24px;padding-top:20px;border-top:1px solid var(--line-soft);color:var(--muted);font-size:11px;display:flex;justify-content:space-between;align-items:center}
 
   /* ===== APP ===== */
-  #app{display:none;min-height:100vh;flex-direction:column}
+  #app{display:none;height:100vh;flex-direction:column;overflow:hidden}
   #app.active{display:flex}
 
   /* HEADER */
@@ -117,13 +117,59 @@
   .suggestions .item mark{background:#BBDEFB;color:var(--ink);padding:0 1px;border-radius:2px}
 
   /* TABLE */
-  .table-wrap{flex:1;overflow:auto;background:#FFFFFF;position:relative}
+  /* ===== TABLE — STICKY HEADER + STICKY LEFT COLUMNS ===== */
+  .table-wrap{flex:1;overflow:auto;background:#FFFFFF;position:relative;contain:paint;min-height:0;scroll-behavior:auto;overscroll-behavior:contain}
   .table-scroll{min-width:2400px}
   table.products{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px}
-  table.products thead th{position:sticky;top:0;background:#1976D2;color:#FFFFFF;font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:11px 10px;text-align:left;border-bottom:2px solid #0D47A1;border-right:1px solid rgba(255,255,255,.2);z-index:5;white-space:nowrap}
+
+  /* Header sticky top */
+  table.products thead th{
+    position:sticky;top:0;
+    background:#1976D2;color:#FFFFFF;font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    padding:11px 10px;text-align:left;
+    border-bottom:2px solid #0D47A1;border-right:1px solid rgba(255,255,255,.2);
+    z-index:20;white-space:nowrap;
+    box-shadow:0 2px 0 #0D47A1, 0 6px 12px rgba(13,71,161,.18);
+    /* GPU layer + cô lập paint để chống flicker khi scroll */
+    will-change:transform;transform:translateZ(0);backface-visibility:hidden
+  }
   table.products thead th:last-child{border-right:none}
   table.products thead th.num{text-align:right}
   table.products thead th .col-num{display:inline-block;width:18px;height:18px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:3px;text-align:center;line-height:16px;font-size:9px;color:rgba(255,255,255,.9);margin-right:6px;font-weight:600;letter-spacing:0}
+
+  /* Header: chỉ định kích thước cho các cột sticky bên trái (phải khớp với tbody) */
+  table.products thead th[data-col="stt"]   {width:46px; min-width:46px; max-width:46px; left:0;   z-index:30}
+  table.products thead th[data-col="image"] {width:60px; min-width:60px; max-width:60px; left:46px;z-index:30}
+  table.products thead th[data-col="code"]  {width:140px;min-width:140px;max-width:140px;left:106px;z-index:30}
+  table.products thead th[data-col="name"]  {width:260px;min-width:260px;max-width:260px;left:246px;z-index:30; box-shadow:2px 0 0 rgba(0,0,0,.06), 0 2px 0 #0D47A1, 0 6px 12px rgba(13,71,161,.18)}
+
+  /* Body: các cột sticky bên trái — width PHẢI khớp với thead để không lệch khi scroll ngang */
+  table.products tbody td[data-col="stt"]   {position:sticky;left:0;     z-index:5; background:inherit; width:46px; min-width:46px; max-width:46px}
+  table.products tbody td[data-col="image"] {position:sticky;left:46px;  z-index:5; background:inherit; width:60px; min-width:60px; max-width:60px}
+  table.products tbody td[data-col="code"]  {position:sticky;left:106px; z-index:5; background:inherit; width:140px;min-width:140px;max-width:140px}
+  table.products tbody td[data-col="name"]  {position:sticky;left:246px; z-index:5; background:inherit; width:260px;min-width:260px;max-width:260px; box-shadow:2px 0 0 rgba(0,0,0,.06)}
+
+  /* Background đặc cho các cell sticky (vì position:sticky cần nền không trong suốt để đè lên cell phía sau) */
+  table.products tbody tr           td[data-col="stt"],
+  table.products tbody tr           td[data-col="image"],
+  table.products tbody tr           td[data-col="code"],
+  table.products tbody tr           td[data-col="name"]   {background:#FFFFFF}
+  table.products tbody tr:nth-child(even) td[data-col="stt"],
+  table.products tbody tr:nth-child(even) td[data-col="image"],
+  table.products tbody tr:nth-child(even) td[data-col="code"],
+  table.products tbody tr:nth-child(even) td[data-col="name"] {background:#F5F9FF}
+  table.products tbody tr:hover     td[data-col="stt"],
+  table.products tbody tr:hover     td[data-col="image"],
+  table.products tbody tr:hover     td[data-col="code"],
+  table.products tbody tr:hover     td[data-col="name"]   {background:#EAF3FF}
+  table.products tbody tr.editing   td[data-col="stt"],
+  table.products tbody tr.editing   td[data-col="image"],
+  table.products tbody tr.editing   td[data-col="code"],
+  table.products tbody tr.editing   td[data-col="name"]   {background:#FFF0D0}
+  table.products tbody tr.dirty     td[data-col="stt"],
+  table.products tbody tr.dirty     td[data-col="image"],
+  table.products tbody tr.dirty     td[data-col="code"],
+  table.products tbody tr.dirty     td[data-col="name"]   {background:#FFF5D0}
 
   /* HIDE-COLUMN BUTTON ON HEADER */
   table.products thead th{padding-right:26px;position:sticky}
@@ -140,8 +186,11 @@
   .btn .badge{display:inline-block;min-width:18px;height:18px;padding:0 5px;background:#FFE066;color:#1A1A1A;border-radius:9px;font-size:10.5px;font-weight:700;line-height:18px;text-align:center;margin-left:4px}
   .btn.attn{border-color:#FFC107;background:#FFFBEB;color:#B35900}
   .btn.attn:hover{background:#FFF3E0;border-color:#FFA000}
-  table.products tbody tr{background:#FFFFFF;transition:background .12s}
+  table.products tbody tr{background:#FFFFFF;transition:background .12s; contain:layout paint style}
   table.products tbody tr:nth-child(even){background:#F5F9FF}
+  /* Khi đang có dòng nào focus, không hover các dòng khác để chống flicker */
+  table.products.is-typing tbody tr:hover{background:initial}
+  table.products.is-typing tbody tr:nth-child(even):hover{background:#F5F9FF}
   table.products tbody tr:hover{background:#EAF3FF !important}
   table.products tbody tr.editing{background:#FFF0D0 !important;box-shadow:inset 0 0 0 1px var(--gold)}
   table.products tbody tr.dirty{background:#FFF5D0 !important}
@@ -157,9 +206,10 @@
   td.img-cell .ph svg{width:18px;height:18px}
   td.name-cell{min-width:200px;max-width:280px;font-weight:600;color:var(--ink)}
   td.subtle{color:var(--ink-soft)}
-  td .editable{display:inline-block;width:100%;min-width:60px;padding:4px 6px;border:1px solid transparent;border-radius:3px;cursor:text;transition:.1s;font:inherit;background:transparent;color:inherit;text-align:inherit;outline:none}
-  td .editable:hover{background:rgba(204,26,26,.06);border-color:rgba(204,26,26,.2)}
-  td .editable:focus{background:#fff;border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.15)}
+  td .editable{display:inline-block;width:100%;min-width:60px;padding:5px 7px;border:1px solid transparent;border-radius:4px;cursor:text;font:inherit;background:transparent;color:inherit;text-align:inherit;outline:none;transition:border-color .08s,background-color .08s,box-shadow .08s;caret-color:var(--accent)}
+  td .editable:hover{background:rgba(21,101,192,.05);border-color:rgba(21,101,192,.18)}
+  td .editable:focus{background:#FFFFFF;border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.18);position:relative;z-index:6}
+  td .editable.live-typing{background:#FFFBEA !important;border-color:var(--gold) !important;box-shadow:0 0 0 2px rgba(184,137,60,.18) !important}
   td .pct{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
   .pct-input{width:64px;text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
   .margin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:11px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11.5px;font-variant-numeric:tabular-nums}
@@ -1315,16 +1365,16 @@ function render(){
       <td data-col="concentration"><input class="editable subtle" data-field="concentration" value="${escapeHtml(p.concentration||'')}" /></td>
       <td data-col="usage"><input class="editable subtle" data-field="usage" value="${escapeHtml(p.usage||'')}" /></td>
       <td data-col="spec"><input class="editable subtle" data-field="spec" value="${escapeHtml(p.spec||'')}" /></td>
-      <td class="num" data-col="smallestQty"><input class="editable" data-field="smallestQty" data-num="1" value="${parseNum(p.smallestQty)===0?'':fmt(p.smallestQty)}" /></td>
-      <td class="num" data-col="expiry"><input class="editable" data-field="expiry" data-num="1" value="${parseNum(p.expiry)===0?'':fmt(p.expiry)}" /></td>
+      <td class="num" data-col="smallestQty"><input class="editable" data-field="smallestQty" data-num="1" inputmode="decimal" value="${parseNum(p.smallestQty)===0?'':fmt(p.smallestQty)}" /></td>
+      <td class="num" data-col="expiry"><input class="editable" data-field="expiry" data-num="1" inputmode="decimal" value="${parseNum(p.expiry)===0?'':fmt(p.expiry)}" /></td>
       <td data-col="regNo"><input class="editable subtle" data-field="regNo" value="${escapeHtml(p.regNo||'')}" /></td>
       <td data-col="manufacturer"><input class="editable subtle" data-field="manufacturer" value="${escapeHtml(p.manufacturer||'')}" /></td>
       <td data-col="country"><input class="editable subtle" data-field="country" value="${escapeHtml(p.country||'')}" /></td>
-      <td class="num" data-col="unitPrice"><input class="editable" data-field="unitPrice" data-num="1" value="${parseNum(p.unitPrice)===0?'':fmt(p.unitPrice)}" /></td>
-      <td class="num" data-col="cost"><input class="editable" data-field="cost" data-num="1" value="${fmt(p.cost)}" /></td>
-      <td class="num" data-col="retail"><input class="editable" data-field="retail" data-num="1" value="${fmt(p.retail)}" /></td>
+      <td class="num" data-col="unitPrice"><input class="editable" data-field="unitPrice" data-num="1" inputmode="decimal" value="${parseNum(p.unitPrice)===0?'':fmt(p.unitPrice)}" /></td>
+      <td class="num" data-col="cost"><input class="editable" data-field="cost" data-num="1" inputmode="decimal" value="${fmt(p.cost)}" /></td>
+      <td class="num" data-col="retail"><input class="editable" data-field="retail" data-num="1" inputmode="decimal" value="${fmt(p.retail)}" /></td>
       <td class="num" data-col="idecoDisc"><span class="ideco-disc calc-ideco">${c.idecoDisc.toFixed(2)}%</span></td>
-      <td class="num" data-col="discCust"><input class="editable pct-input" data-field="discCust" data-num="1" value="${parseNum(p.discCust).toFixed(2)}" />%</td>
+      <td class="num" data-col="discCust"><input class="editable pct-input" data-field="discCust" data-num="1" inputmode="decimal" value="${parseNum(p.discCust).toFixed(2)}" />%</td>
       <td class="num" data-col="wholesale"><span class="calc-wholesale">${fmt(Math.round(c.wholesale))}</span></td>
       <td class="num" data-col="profit"><span class="calc-profit" style="color:${c.profit>=0?'var(--green)':'var(--red)'}">${fmt(Math.round(c.profit))}</span></td>
       <td class="num" data-col="margin"><span class="margin-badge ${marginClass} calc-margin">${c.margin.toFixed(1)}%</span></td>
@@ -1343,23 +1393,53 @@ function render(){
   tbody.innerHTML = html;
   
   // Attach edit listeners
+  // Một debouncer cho updateStats — tránh recalc footer/stats quá nhiều lần khi gõ liên tục
+  let statsTimer = null;
+  const scheduleStats = ()=>{
+    if(statsTimer) cancelAnimationFrame(statsTimer);
+    statsTimer = requestAnimationFrame(()=>{ updateStats(); statsTimer = null; });
+  };
+
+  // Các field ảnh hưởng đến công thức tự tính (CK IDECO, Giá bán buôn, Lợi nhuận, Tỉ suất LN)
+  const RECALC_FIELDS = new Set(['cost','retail','discCust']);
+
   tbody.querySelectorAll('input.editable').forEach(inp => {
     const isNum = inp.dataset.num === '1';
-    if(isNum){
-      inp.addEventListener('focus', e => {
+
+    // Live typing — cập nhật giá trị products[*] + recalc cells phụ thuộc TRONG CÙNG dòng, không re-render bảng
+    inp.addEventListener('input', e => {
+      e.target.classList.add('live-typing');
+      liveUpdateField(e.target);
+      // Stats chỉ cập nhật khi field có ảnh hưởng tới lợi nhuận/giá → giảm 80% công việc khi gõ tên/mô tả
+      if(RECALC_FIELDS.has(e.target.dataset.field)) scheduleStats();
+    });
+
+    inp.addEventListener('focus', e => {
+      // Cờ giúp CSS tắt hover toàn bảng → không flicker dòng khác khi gõ
+      document.getElementById('tbl').classList.add('is-typing');
+      if(isNum){
         const v = parseNum(e.target.value);
         e.target.value = v === 0 ? '' : v;
         e.target.select();
-      });
+      }
+    });
+
+    if(isNum){
       inp.addEventListener('blur', e => {
         const v = parseNum(e.target.value);
         const f = e.target.dataset.field;
         if(f === 'discIdeco' || f === 'discCust') e.target.value = v.toFixed(2);
         else e.target.value = fmt(v);
+        e.target.classList.remove('live-typing');
         commitField(e.target);
+        document.getElementById('tbl').classList.remove('is-typing');
       });
     } else {
-      inp.addEventListener('blur', e => commitField(e.target));
+      inp.addEventListener('blur', e => {
+        e.target.classList.remove('live-typing');
+        commitField(e.target);
+        document.getElementById('tbl').classList.remove('is-typing');
+      });
     }
     inp.addEventListener('keydown', e => {
       if(e.key === 'Enter'){ e.preventDefault(); e.target.blur(); }
@@ -1372,17 +1452,8 @@ function render(){
   applyHiddenColumns();
 }
 
-function commitField(input){
-  const row = input.closest('tr');
-  const id = row.dataset.id;
-  const p = products.find(x => x.id === id);
-  if(!p) return;
-  const field = input.dataset.field;
-  const isNum = input.dataset.num === '1';
-  const newVal = isNum ? parseNum(input.value) : input.value.trim();
-  if(p[field] === newVal) return;
-  p[field] = newVal;
-  // Recalc visible cells in this row
+/* Cập nhật cell tính toán trong cùng dòng cho 1 sản phẩm (không recalc cả bảng) */
+function refreshComputedCells(row, p){
   const c = computeRow(p);
   const ie = row.querySelector('.calc-ideco');
   if(ie) ie.textContent = c.idecoDisc.toFixed(2) + '%';
@@ -1399,8 +1470,45 @@ function commitField(input){
     me.classList.remove('good','mid','warn','low');
     me.classList.add(c.margin >= 15 ? 'good' : c.margin >= 10 ? 'warn' : 'low');
   }
+}
+
+/* Live-update giá trị product trong khi user còn gõ (không format lại input để khỏi gián đoạn caret) */
+function liveUpdateField(input){
+  const row = input.closest('tr');
+  if(!row) return;
+  const id = row.dataset.id;
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  const field = input.dataset.field;
+  const isNum = input.dataset.num === '1';
+  const newVal = isNum ? parseNum(input.value) : input.value;
+  if(p[field] === newVal) return;
+  p[field] = newVal;
+  // Chỉ tính lại các cell phụ thuộc khi field có trong công thức (cost/retail/discCust)
+  // → gõ Tên/Hoạt chất/Mô tả KHÔNG còn chạy lại DOM update các badge LN/CK/Tỉ suất
+  if(field === 'cost' || field === 'retail' || field === 'discCust'){
+    refreshComputedCells(row, p);
+  }
   row.classList.add('dirty');
-  updateStats();
+}
+
+function commitField(input){
+  const row = input.closest('tr');
+  const id = row.dataset.id;
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  const field = input.dataset.field;
+  const isNum = input.dataset.num === '1';
+  const newVal = isNum ? parseNum(input.value) : input.value.trim();
+  if(p[field] === newVal){
+    return; // không đổi → bỏ qua
+  }
+  p[field] = newVal;
+  if(field === 'cost' || field === 'retail' || field === 'discCust'){
+    refreshComputedCells(row, p);
+    updateStats();
+  }
+  row.classList.add('dirty');
 }
 
 function updateStats(){
