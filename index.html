@@ -323,7 +323,75 @@
   .append-summary .card .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
   .append-summary .card .desc{font-size:10.5px;color:var(--ink-soft);margin-top:1px;line-height:1.3}
 
+  /* ===== FILTER & EXPORT MODAL ===== */
+  .modal.fx-modal{max-width:880px;max-height:92vh;display:flex;flex-direction:column}
+  .modal.fx-modal .modal-body{overflow-y:auto;flex:1}
+  .fx-controls{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;padding:14px;background:#F8FAFD;border:1px solid var(--line);border-radius:8px;margin-bottom:14px}
+  .fx-block label.fx-lbl{display:block;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px}
+  .fx-search-wrap{position:relative}
+  .fx-search-wrap input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:13px;outline:none;transition:.15s}
+  .fx-search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
+  .fx-search-wrap .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
+  .fx-suggest{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-md);max-height:240px;overflow-y:auto;z-index:60;display:none}
+  .fx-suggest.active{display:block}
+  .fx-suggest .item{padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--line-soft);font-size:12.5px;display:flex;align-items:center;gap:8px}
+  .fx-suggest .item:last-child{border-bottom:none}
+  .fx-suggest .item:hover,.fx-suggest .item.hl{background:#EAF3FF}
+  .fx-suggest .item .nm{flex:1;color:var(--ink);font-weight:500}
+  .fx-suggest .item .ct{color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace}
+  .fx-suggest .item .sc{font-size:10px;color:#1565C0;background:#E3F0FF;border-radius:10px;padding:1px 7px;font-weight:600}
+  .fx-suggest .item mark{background:#BBDEFB;color:var(--ink);padding:0 1px;border-radius:2px}
+  .fx-suggest .head{padding:7px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:#F5F5F5;font-weight:600;position:sticky;top:0}
+  .fx-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;min-height:4px}
+  .fx-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 7px 4px 10px;background:#1565C0;color:#fff;border-radius:14px;font-size:11.5px;font-weight:500;max-width:240px}
+  .fx-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fx-chip b{font-size:9px;background:rgba(255,255,255,.25);border-radius:8px;padding:1px 5px;font-weight:600}
+  .fx-chip button{width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;flex-shrink:0}
+  .fx-chip button:hover{background:rgba(255,255,255,.45)}
+  .fx-chip.all{background:#E0E0E0;color:var(--ink-soft)}
+  .fx-range{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+  .fx-range input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:13px;outline:none;text-align:right;font-family:'JetBrains Mono',monospace}
+  .fx-range input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
+  .fx-range .dash{color:var(--muted);font-weight:600}
+  .fx-disc-type{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:12.5px;outline:none;font-family:inherit;margin-bottom:9px;cursor:pointer}
+  .fx-disc-type:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.12)}
+  .fx-hint{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+  .fx-actionbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .fx-actionbar .count{font-size:13px;color:var(--ink-soft)}
+  .fx-actionbar .count b{color:var(--accent);font-weight:700;font-family:'Fraunces',serif;font-size:16px}
+  .fx-actionbar .count .sel{color:var(--green);font-weight:700}
+  .fx-actionbar .spacer{flex:1}
+  .fx-mini{padding:6px 11px;font-size:11.5px;font-weight:500;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);transition:.12s;white-space:nowrap}
+  .fx-mini:hover{border-color:#999;background:#FAFAFA}
+  .fx-mini.on{background:#1565C0;color:#fff;border-color:#1565C0}
+  .fx-results{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .fx-results .scroll{max-height:340px;overflow-y:auto}
+  .fx-results table{width:100%;border-collapse:collapse;font-size:12px}
+  .fx-results thead th{position:sticky;top:0;background:#1565C0;color:#fff;font-weight:600;padding:9px 10px;text-align:left;font-size:11px;letter-spacing:.04em;white-space:nowrap;z-index:2}
+  .fx-results thead th.num{text-align:right}
+  .fx-results thead th.ck{text-align:center}
+  .fx-results thead th.chk{width:40px;text-align:center;padding:9px 6px}
+  .fx-results tbody td{padding:8px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+  .fx-results tbody td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+  .fx-results tbody td.ck{text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600}
+  .fx-results tbody td.chk{text-align:center;width:40px}
+  .fx-results tbody tr:nth-child(even){background:#F5F9FF}
+  .fx-results tbody tr:hover{background:#EAF3FF}
+  .fx-results tbody tr.off{opacity:.42}
+  .fx-results tbody tr.off:hover{opacity:.7}
+  .fx-results td .pname{font-weight:600;color:var(--ink);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fx-results td .pmeta{font-size:10.5px;color:var(--muted);margin-top:1px}
+  .fx-results td .mfg{font-size:11.5px;color:var(--ink-soft);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fx-results input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#1565C0}
+  .fx-results .ck-badge{display:inline-block;min-width:54px;padding:2px 6px;border-radius:5px;font-size:11px}
+  .fx-results .ck-badge.g{background:#E6F1EA;color:#2F7D5B}
+  .fx-results .ck-badge.a{background:#FFF3E0;color:#B35900}
+  .fx-results .ck-badge.r{background:#FDECEA;color:#CC1A1A}
+  .fx-empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px}
+  .fx-empty svg{width:30px;height:30px;opacity:.4;margin-bottom:10px}
+
   @media (max-width: 900px){
+    .fx-controls{grid-template-columns:1fr}
     .stats{grid-template-columns:repeat(2,1fr)}
     .stat:nth-child(3n){border-right:1px solid var(--line-soft)}
     .search-wrap{margin-left:0;width:100%}
@@ -434,6 +502,10 @@
     <button class="btn" id="btnExport">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
       Xuất Excel
+    </button>
+    <button class="btn" id="btnFilterExport" style="border-color:#1565C0;color:#1565C0;background:#EAF3FF;" title="Lọc theo Cơ sở sản xuất & khung tỉ lệ chiết khấu rồi xuất Excel đúng dữ liệu đã lọc">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      Lọc &amp; Xuất Excel
     </button>
     <button class="btn" id="btnImportDisc" style="border-color:#CC7700;color:#CC7700;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
@@ -597,6 +669,80 @@
       <button class="btn primary" id="discApplyBtn" style="display:none" onclick="applyDiscountUpdates()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
         Áp dụng cập nhật
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FILTER & EXPORT MODAL ========== -->
+<div class="modal-bg" id="fxModal">
+  <div class="modal fx-modal">
+    <div class="modal-head">
+      <h3>🧮 Lọc dữ liệu &amp; Xuất Excel</h3>
+      <p>Lọc theo <strong>Cơ sở sản xuất</strong> (gợi ý cả tên gần giống) và <strong>khung tỉ lệ chiết khấu</strong>. Bấm <strong>Chọn tất cả</strong> rồi <strong>Xuất Excel</strong> đúng dữ liệu đã lọc.</p>
+    </div>
+    <div class="modal-body">
+      <div class="fx-controls">
+        <!-- Manufacturer filter -->
+        <div class="fx-block">
+          <label class="fx-lbl">Cơ sở sản xuất</label>
+          <div class="fx-search-wrap">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="fxMfgInput" placeholder="Gõ tên cơ sở SX (gợi ý cả từ gần giống)…" autocomplete="off" />
+            <div class="fx-suggest" id="fxMfgSuggest"></div>
+          </div>
+          <div class="fx-chips" id="fxMfgChips"></div>
+          <div class="fx-hint">Không chọn cơ sở nào = lấy tất cả cơ sở. Có thể thêm nhiều cơ sở cùng lúc.</div>
+        </div>
+        <!-- Discount range filter -->
+        <div class="fx-block">
+          <label class="fx-lbl">Khung tỉ lệ chiết khấu</label>
+          <select class="fx-disc-type" id="fxDiscType">
+            <option value="discCust">CK Khách hàng (%)</option>
+            <option value="idecoDisc">CK IDECO ƒ (%)</option>
+          </select>
+          <div class="fx-range">
+            <input type="number" id="fxDiscMin" placeholder="Từ" inputmode="decimal" step="0.01" />
+            <span class="dash">→</span>
+            <input type="number" id="fxDiscMax" placeholder="Đến" inputmode="decimal" step="0.01" />
+          </div>
+          <div class="fx-hint">Để trống = không giới hạn. VD: từ <b>10</b> đến <b>30</b> = lấy sản phẩm có CK trong khoảng 10–30%.</div>
+        </div>
+      </div>
+
+      <div class="fx-actionbar">
+        <div class="count">Tìm thấy <b id="fxFoundCount">0</b> · đã chọn <span class="sel" id="fxSelCount">0</span></div>
+        <div class="spacer"></div>
+        <button class="fx-mini" id="fxSelectAll" title="Chọn hết toàn bộ danh sách đã lọc">✓ Chọn tất cả</button>
+        <button class="fx-mini" id="fxClearSel" title="Bỏ chọn tất cả">✕ Bỏ chọn</button>
+        <button class="fx-mini" id="fxResetFilter" title="Xóa toàn bộ điều kiện lọc">↺ Đặt lại bộ lọc</button>
+      </div>
+
+      <div class="fx-results">
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th class="chk"><input type="checkbox" id="fxHeadChk" title="Chọn/bỏ tất cả" /></th>
+                <th style="width:46px">STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Cơ sở SX</th>
+                <th class="num">Giá vốn</th>
+                <th class="num">Giá bán lẻ</th>
+                <th class="ck">CK IDECO</th>
+                <th class="ck">CK KH</th>
+              </tr>
+            </thead>
+            <tbody id="fxResultsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="document.getElementById('fxModal').classList.remove('active')">Đóng</button>
+      <button class="btn primary" id="fxExportBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Xuất Excel <span id="fxExportCount" style="margin-left:2px;opacity:.85"></span>
       </button>
     </div>
   </div>
@@ -1821,7 +1967,18 @@ function updateFooterTime(){
 
 /* ==================== EXCEL EXPORT ==================== */
 document.getElementById('btnExport').onclick = ()=>{
-  if(products.length === 0){ toast('Không có dữ liệu để xuất', 'warn'); return; }
+  exportProductsToExcel(filtered.length ? filtered : products);
+};
+
+/**
+ * Xuất danh sách sản phẩm ra file Excel có định dạng đầy đủ.
+ * @param {Array} exportList  Danh sách sản phẩm cần xuất.
+ * @param {Object} [opts]     { fnameSuffix, titleNote } – chú thích thêm cho tiêu đề & tên file.
+ */
+function exportProductsToExcel(exportList, opts){
+  opts = opts || {};
+  const list = Array.isArray(exportList) ? exportList : [];
+  if(list.length === 0){ toast('Không có dữ liệu để xuất', 'warn'); return; }
   showLoader('Đang tạo file Excel...');
   
   setTimeout(()=>{
@@ -1832,7 +1989,7 @@ document.getElementById('btnExport').onclick = ()=>{
         'Đơn giá BL (ĐVT nhỏ nhất)','Giá vốn','Giá bán lẻ','CK IDECO (%)','CK Khách hàng (%)',
         'Giá bán buôn','Lợi nhuận','Tỉ suất LN (%)'
       ];
-      const dataRows = (filtered.length ? filtered : products).map((p, i)=>{
+      const dataRows = list.map((p, i)=>{
         const c = computeRow(p);
         return [
           i + 1, p.code||'', p.name||'', p.ingredient||'', p.concentration||'', p.usage||'',
@@ -1848,7 +2005,7 @@ document.getElementById('btnExport').onclick = ()=>{
       
       // Compute totals
       let tCost=0,tRetail=0,tWhole=0,tProfit=0;
-      (filtered.length?filtered:products).forEach(p=>{
+      list.forEach(p=>{
         const c = computeRow(p);
         tCost += parseNum(p.cost); tRetail += parseNum(p.retail);
         tWhole += c.wholesale; tProfit += c.profit;
@@ -1857,7 +2014,11 @@ document.getElementById('btnExport').onclick = ()=>{
       
       const N = headers.length; // 20 columns (index 0..19)
       const titleRow = ['IDECO – DANH MỤC GIÁ SẢN PHẨM & LỢI NHUẬN'];
-      const dateRow = ['Xuất ngày: ' + new Date().toLocaleString('vi-VN')];
+      const dateRow = [
+        'Xuất ngày: ' + new Date().toLocaleString('vi-VN') +
+        (opts.titleNote ? '   ·   ' + opts.titleNote : '') +
+        '   ·   ' + list.length + ' sản phẩm'
+      ];
       const totalRow = new Array(N).fill('');
       totalRow[0] = 'TỔNG CỘNG';
       totalRow[13] = tCost;       // Giá vốn
@@ -1964,7 +2125,8 @@ document.getElementById('btnExport').onclick = ()=>{
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Danh mục giá');
       
-      const fname = `IDECO_DanhMucGia_${new Date().toISOString().slice(0,10)}.xlsx`;
+      const suffix = opts.fnameSuffix ? ('_' + opts.fnameSuffix) : '';
+      const fname = `IDECO_DanhMucGia${suffix}_${new Date().toISOString().slice(0,10)}.xlsx`;
       XLSX.writeFile(wb, fname);
       
       hideLoader();
@@ -1975,7 +2137,325 @@ document.getElementById('btnExport').onclick = ()=>{
       toast('Lỗi xuất Excel: ' + err.message, 'error');
     }
   }, 100);
+}
+
+/* ==================== FILTER & EXPORT (LỌC & XUẤT EXCEL) ==================== */
+const fxState = {
+  mfgChips: [],          // [{key, label, norm, type:'exact'|'contains', count}]
+  deselected: new Set(), // product ids người dùng bỏ chọn thủ công
+  hlIndex: -1            // chỉ số gợi ý đang highlight
 };
+
+/* Gom nhóm cơ sở SX (chuẩn hoá) kèm số lượng sản phẩm */
+function fxManufacturerGroups(){
+  const map = new Map();
+  products.forEach(p=>{
+    const raw = (p.manufacturer||'').trim();
+    if(!raw) return;
+    const norm = normStr(raw);
+    if(!norm) return;
+    if(!map.has(norm)) map.set(norm, { label: raw, norm, count: 0 });
+    map.get(norm).count++;
+  });
+  return [...map.values()].sort((a,b)=> b.count - a.count || a.label.localeCompare(b.label,'vi'));
+}
+
+/* Highlight phần khớp (không phân biệt dấu/hoa thường) — best effort */
+function fxHighlight(label, q){
+  const safe = escapeHtml(label);
+  if(!q) return safe;
+  const i = stripDia(label.toLowerCase()).indexOf(stripDia(q.toLowerCase()));
+  if(i < 0) return safe;
+  const a = escapeHtml(label.slice(0, i));
+  const b = escapeHtml(label.slice(i, i + q.length));
+  const c = escapeHtml(label.slice(i + q.length));
+  return `${a}<mark>${b}</mark>${c}`;
+}
+
+/* Vẽ danh sách gợi ý cơ sở SX (fuzzy, gợi ý cả từ gần giống) */
+function fxRenderSuggest(){
+  const box = document.getElementById('fxMfgSuggest');
+  const q = document.getElementById('fxMfgInput').value.trim();
+  const chosen = new Set(fxState.mfgChips.filter(c=>c.type==='exact').map(c=>c.norm));
+  let groups = fxManufacturerGroups().filter(g => !chosen.has(g.norm));
+
+  let html = '';
+  if(!q){
+    if(groups.length === 0){ box.classList.remove('active'); return; }
+    html += `<div class="head">Tất cả cơ sở SX · ${groups.length} nhóm (gõ để tìm)</div>`;
+    groups.slice(0, 30).forEach((g,idx)=>{
+      html += `<div class="item" data-idx="${idx}" data-norm="${escapeHtml(g.norm)}" data-label="${escapeHtml(g.label)}">
+        <span class="nm">${escapeHtml(g.label)}</span><span class="ct">${g.count} SP</span></div>`;
+    });
+  } else {
+    const scored = groups.map(g=>{
+      const sim = similarity(q, g.label);
+      const contains = stripDia(g.norm).includes(stripDia(normStr(q)));
+      const score = contains ? Math.max(sim, 0.9) : sim;
+      return { g, score, contains };
+    }).filter(x => x.score >= 0.34)
+      .sort((a,b)=> b.score - a.score || b.g.count - a.g.count)
+      .slice(0, 14);
+
+    if(scored.length === 0){
+      box.innerHTML = `<div class="head">Không tìm thấy cơ sở khớp với “${escapeHtml(q)}”</div>
+        <div class="item" data-contains="1"><span class="nm">Lọc theo “chứa”: <strong>${escapeHtml(q)}</strong></span><span class="sc">chứa</span></div>`;
+      box.classList.add('active'); fxState.hlIndex = -1; return;
+    }
+    html += `<div class="head">Gợi ý · ${scored.length} kết quả (gồm cả tên gần giống)</div>`;
+    scored.forEach((x,idx)=>{
+      const pct = Math.round(x.score*100);
+      html += `<div class="item" data-idx="${idx}" data-norm="${escapeHtml(x.g.norm)}" data-label="${escapeHtml(x.g.label)}">
+        <span class="nm">${fxHighlight(x.g.label, q)}</span>
+        <span class="ct">${x.g.count} SP</span>
+        ${x.contains?'':`<span class="sc">${pct}%</span>`}</div>`;
+    });
+    html += `<div class="item" data-contains="1"><span class="nm">+ Lọc mọi cơ sở <strong>chứa “${escapeHtml(q)}”</strong></span><span class="sc">chứa</span></div>`;
+  }
+  box.innerHTML = html;
+  box.classList.add('active');
+  fxState.hlIndex = -1;
+
+  box.querySelectorAll('.item').forEach(el=>{
+    el.addEventListener('mousedown', ev=>{
+      ev.preventDefault();
+      if(el.dataset.contains === '1'){
+        fxAddContainsChip(document.getElementById('fxMfgInput').value.trim());
+      } else {
+        fxAddExactChip(el.dataset.norm, el.dataset.label);
+      }
+    });
+  });
+}
+
+function fxAddExactChip(norm, label){
+  if(!norm) return;
+  if(fxState.mfgChips.some(c=>c.type==='exact' && c.norm===norm)) return;
+  const grp = fxManufacturerGroups().find(g=>g.norm===norm);
+  fxState.mfgChips.push({ key:'e:'+norm, type:'exact', norm, label, count: grp?grp.count:0 });
+  fxAfterFilterChange(true);
+}
+function fxAddContainsChip(text){
+  const t = normStr(text);
+  if(!t) return;
+  if(fxState.mfgChips.some(c=>c.type==='contains' && c.norm===t)) return;
+  const cnt = products.filter(p => stripDia(normStr(p.manufacturer)).includes(stripDia(t))).length;
+  fxState.mfgChips.push({ key:'c:'+t, type:'contains', norm:t, label:text, count:cnt });
+  fxAfterFilterChange(true);
+}
+function fxRemoveChip(key){
+  fxState.mfgChips = fxState.mfgChips.filter(c=>c.key!==key);
+  fxAfterFilterChange();
+}
+
+function fxRenderChips(){
+  const box = document.getElementById('fxMfgChips');
+  if(fxState.mfgChips.length === 0){
+    box.innerHTML = '<span class="fx-chip all">Tất cả cơ sở sản xuất</span>';
+    return;
+  }
+  box.innerHTML = fxState.mfgChips.map(c=>{
+    const tag = c.type==='contains' ? 'chứa' : `${c.count} SP`;
+    return `<span class="fx-chip" title="${escapeHtml(c.label)}">
+      <span>${escapeHtml(c.label)}</span><b>${tag}</b>
+      <button onclick="fxRemoveChip('${c.key.replace(/'/g,"\\'")}')" title="Bỏ">×</button></span>`;
+  }).join('');
+}
+
+/* Một sản phẩm có khớp bộ lọc cơ sở SX không */
+function fxMatchMfg(p){
+  if(fxState.mfgChips.length === 0) return true;
+  const norm = normStr(p.manufacturer);
+  const strip = stripDia(norm);
+  return fxState.mfgChips.some(c=>{
+    if(c.type==='exact') return norm === c.norm;
+    return strip.includes(stripDia(c.norm)); // contains
+  });
+}
+
+/* Khung tỉ lệ chiết khấu */
+function fxDiscValue(p){
+  const type = document.getElementById('fxDiscType').value;
+  return type === 'idecoDisc' ? computeRow(p).idecoDisc : parseNum(p.discCust);
+}
+function fxMatchDisc(p){
+  const minRaw = document.getElementById('fxDiscMin').value.trim();
+  const maxRaw = document.getElementById('fxDiscMax').value.trim();
+  if(minRaw === '' && maxRaw === '') return true;
+  const v = fxDiscValue(p);
+  const min = minRaw === '' ? -Infinity : parseFloat(minRaw);
+  const max = maxRaw === '' ? Infinity  : parseFloat(maxRaw);
+  return v >= min - 1e-9 && v <= max + 1e-9;
+}
+
+/* Danh sách sản phẩm thoả toàn bộ điều kiện lọc */
+function fxMatched(){
+  return products.filter(p => fxMatchMfg(p) && fxMatchDisc(p));
+}
+/* Danh sách đang được chọn (đã trừ các dòng bỏ chọn thủ công) */
+function fxSelected(){
+  return fxMatched().filter(p => !fxState.deselected.has(p.id));
+}
+
+function fxBadgeCls(v){ return v >= 15 ? 'g' : v >= 10 ? 'a' : 'r'; }
+
+/* Vẽ bảng kết quả + cập nhật bộ đếm */
+function fxRender(){
+  fxRenderChips();
+  const matched = fxMatched();
+  const body = document.getElementById('fxResultsBody');
+
+  if(products.length === 0){
+    body.innerHTML = `<tr><td colspan="8"><div class="fx-empty">Chưa có dữ liệu sản phẩm.</div></td></tr>`;
+  } else if(matched.length === 0){
+    body.innerHTML = `<tr><td colspan="8"><div class="fx-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <div>Không có sản phẩm nào khớp bộ lọc hiện tại.</div></div></td></tr>`;
+  } else {
+    let html = '';
+    matched.forEach((p, i)=>{
+      const c = computeRow(p);
+      const sel = !fxState.deselected.has(p.id);
+      html += `<tr class="${sel?'':'off'}" data-id="${p.id}">
+        <td class="chk"><input type="checkbox" class="fx-row-chk" data-id="${p.id}" ${sel?'checked':''}></td>
+        <td class="num">${i+1}</td>
+        <td><div class="pname">${escapeHtml(p.name||'(không tên)')}</div>
+            <div class="pmeta">${escapeHtml(p.code||'')}${p.concentration?' · '+escapeHtml(p.concentration):''}</div></td>
+        <td><div class="mfg" title="${escapeHtml(p.manufacturer||'')}">${escapeHtml(p.manufacturer||'—')}</div></td>
+        <td class="num">${fmt(parseNum(p.cost))}</td>
+        <td class="num">${fmt(parseNum(p.retail))}</td>
+        <td class="ck"><span class="ck-badge ${fxBadgeCls(c.idecoDisc)}">${c.idecoDisc.toFixed(1)}%</span></td>
+        <td class="ck"><span class="ck-badge ${fxBadgeCls(parseNum(p.discCust))}">${parseNum(p.discCust).toFixed(1)}%</span></td>
+      </tr>`;
+    });
+    body.innerHTML = html;
+    body.querySelectorAll('.fx-row-chk').forEach(chk=>{
+      chk.addEventListener('change', e=>{
+        const id = e.target.dataset.id;
+        if(e.target.checked) fxState.deselected.delete(id);
+        else fxState.deselected.add(id);
+        e.target.closest('tr').classList.toggle('off', !e.target.checked);
+        fxUpdateCounts(matched);
+      });
+    });
+  }
+  fxUpdateCounts(matched);
+}
+
+function fxUpdateCounts(matched){
+  matched = matched || fxMatched();
+  const sel = matched.filter(p=>!fxState.deselected.has(p.id)).length;
+  document.getElementById('fxFoundCount').textContent = matched.length;
+  document.getElementById('fxSelCount').textContent = sel;
+  document.getElementById('fxExportCount').textContent = sel ? `(${sel})` : '';
+  const head = document.getElementById('fxHeadChk');
+  head.checked = matched.length > 0 && sel === matched.length;
+  head.indeterminate = sel > 0 && sel < matched.length;
+  const btn = document.getElementById('fxExportBtn');
+  btn.disabled = sel === 0;
+  btn.style.opacity = sel === 0 ? .5 : 1;
+  btn.style.pointerEvents = sel === 0 ? 'none' : 'auto';
+}
+
+/* Gọi sau khi điều kiện lọc đổi: dọn input gợi ý nếu cần rồi render lại */
+function fxAfterFilterChange(clearInput){
+  if(clearInput){
+    document.getElementById('fxMfgInput').value = '';
+    document.getElementById('fxMfgSuggest').classList.remove('active');
+  }
+  fxRender();
+}
+
+function fxOpenModal(){
+  if(products.length === 0){ toast('Hãy nạp danh mục sản phẩm trước', 'warn'); return; }
+  fxState.mfgChips = [];
+  fxState.deselected = new Set();
+  document.getElementById('fxMfgInput').value = '';
+  document.getElementById('fxDiscMin').value = '';
+  document.getElementById('fxDiscMax').value = '';
+  document.getElementById('fxDiscType').value = 'discCust';
+  document.getElementById('fxMfgSuggest').classList.remove('active');
+  fxRender();
+  document.getElementById('fxModal').classList.add('active');
+}
+
+/* ----- Bindings ----- */
+document.getElementById('btnFilterExport').onclick = fxOpenModal;
+
+document.getElementById('fxMfgInput').addEventListener('input', fxRenderSuggest);
+document.getElementById('fxMfgInput').addEventListener('focus', fxRenderSuggest);
+document.getElementById('fxMfgInput').addEventListener('blur', ()=>{
+  setTimeout(()=> document.getElementById('fxMfgSuggest').classList.remove('active'), 150);
+});
+document.getElementById('fxMfgInput').addEventListener('keydown', e=>{
+  const box = document.getElementById('fxMfgSuggest');
+  const items = [...box.querySelectorAll('.item')];
+  if(e.key === 'ArrowDown' && items.length){ e.preventDefault(); fxState.hlIndex = Math.min(fxState.hlIndex+1, items.length-1); }
+  else if(e.key === 'ArrowUp' && items.length){ e.preventDefault(); fxState.hlIndex = Math.max(fxState.hlIndex-1, 0); }
+  else if(e.key === 'Enter'){
+    e.preventDefault();
+    if(fxState.hlIndex >= 0 && items[fxState.hlIndex]){
+      const el = items[fxState.hlIndex];
+      if(el.dataset.contains === '1') fxAddContainsChip(document.getElementById('fxMfgInput').value.trim());
+      else fxAddExactChip(el.dataset.norm, el.dataset.label);
+    } else {
+      const v = document.getElementById('fxMfgInput').value.trim();
+      if(v) fxAddContainsChip(v);
+    }
+    return;
+  } else if(e.key === 'Escape'){ box.classList.remove('active'); return; }
+  else return;
+  items.forEach((el,i)=> el.classList.toggle('hl', i===fxState.hlIndex));
+  if(items[fxState.hlIndex]) items[fxState.hlIndex].scrollIntoView({block:'nearest'});
+});
+
+['fxDiscMin','fxDiscMax','fxDiscType'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{ fxRender(); });
+  document.getElementById(id).addEventListener('change', ()=>{ fxRender(); });
+});
+
+document.getElementById('fxSelectAll').onclick = ()=>{ fxState.deselected = new Set(); fxRender(); };
+document.getElementById('fxClearSel').onclick = ()=>{
+  fxState.deselected = new Set(fxMatched().map(p=>p.id)); fxRender();
+};
+document.getElementById('fxResetFilter').onclick = ()=>{
+  fxState.mfgChips = []; fxState.deselected = new Set();
+  document.getElementById('fxMfgInput').value = '';
+  document.getElementById('fxDiscMin').value = '';
+  document.getElementById('fxDiscMax').value = '';
+  document.getElementById('fxDiscType').value = 'discCust';
+  document.getElementById('fxMfgSuggest').classList.remove('active');
+  fxRender();
+};
+document.getElementById('fxHeadChk').addEventListener('change', e=>{
+  if(e.target.checked) fxState.deselected = new Set();
+  else fxState.deselected = new Set(fxMatched().map(p=>p.id));
+  fxRender();
+});
+
+document.getElementById('fxExportBtn').onclick = ()=>{
+  const sel = fxSelected();
+  if(sel.length === 0){ toast('Chưa chọn sản phẩm nào để xuất', 'warn'); return; }
+  // Ghi chú điều kiện lọc vào tiêu đề + tên file
+  const parts = [];
+  if(fxState.mfgChips.length){
+    const names = fxState.mfgChips.map(c=>c.label).join(', ');
+    parts.push('Cơ sở SX: ' + (names.length > 60 ? names.slice(0,60)+'…' : names));
+  }
+  const minR = document.getElementById('fxDiscMin').value.trim();
+  const maxR = document.getElementById('fxDiscMax').value.trim();
+  if(minR !== '' || maxR !== ''){
+    const tlabel = document.getElementById('fxDiscType').selectedOptions[0].text.replace(/\s*\(%\)/,'');
+    parts.push(`${tlabel}: ${minR===''?'0':minR}–${maxR===''?'∞':maxR}%`);
+  }
+  const titleNote = parts.length ? ('Lọc — ' + parts.join('  ·  ')) : 'Đã lọc';
+  document.getElementById('fxModal').classList.remove('active');
+  exportProductsToExcel(sel, { fnameSuffix: 'DaLoc', titleNote });
+};
+
+document.getElementById('fxModal').addEventListener('click', e=>{
+  if(e.target.id === 'fxModal') document.getElementById('fxModal').classList.remove('active');
+});
 
 /* ==================== DISCOUNT BULK IMPORT ==================== */
 let discWorkbook = null;
