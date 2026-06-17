@@ -433,7 +433,31 @@
     }
     .fn-group .btn .badge{margin-left:auto}
     /* bảng dữ liệu chiếm phần còn lại của màn hình */
-    .table-wrap{flex:1;min-height:50vh}
+    .table-wrap{flex:1;min-height:50vh;-webkit-overflow-scrolling:touch}
+    /* MOBILE: bỏ dính cột trái để cuộn ngang xem được HẾT các cột.
+       Giữ nguyên header dính trên cùng. */
+    .table-scroll{min-width:0;width:max-content}
+    table.products tbody td[data-col="stt"],
+    table.products tbody td[data-col="image"],
+    table.products tbody td[data-col="code"],
+    table.products tbody td[data-col="name"]{
+      position:static !important;left:auto !important;box-shadow:none !important
+    }
+    table.products thead th[data-col="stt"],
+    table.products thead th[data-col="image"],
+    table.products thead th[data-col="code"],
+    table.products thead th[data-col="name"]{
+      left:auto !important;z-index:20;box-shadow:0 2px 0 #0D47A1 !important
+    }
+    /* thu gọn độ rộng cột Tên để các cột sau lộ ra sớm hơn */
+    table.products thead th[data-col="name"],
+    table.products tbody td[data-col="name"]{
+      width:170px !important;min-width:170px !important;max-width:170px !important
+    }
+    table.products thead th[data-col="code"],
+    table.products tbody td[data-col="code"]{
+      width:110px !important;min-width:110px !important;max-width:110px !important
+    }
   }
 </style>
 </head>
