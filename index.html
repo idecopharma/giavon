@@ -107,6 +107,9 @@
   .search-wrap input{width:100%;padding:9px 14px 9px 36px;border:1px solid var(--line);border-radius:5px;background:#FFFFFF;font-size:13px;outline:none;transition:.15s}
   .search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(204,26,26,.1);background:#fff}
   .search-wrap .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
+  /* desktop: toggle hidden, fn-group transparent to flex layout */
+  .mobile-fn-toggle{display:none}
+  .fn-group{display:contents}
   .suggestions{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-md);max-height:280px;overflow-y:auto;z-index:50;display:none}
   .suggestions.active{display:block}
   .suggestions .item{padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--line-soft);font-size:12.5px;display:flex;align-items:center;gap:10px}
@@ -397,6 +400,41 @@
     .search-wrap{margin-left:0;width:100%}
     .toolbar{padding:10px 14px}
   }
+
+  /* ===== MOBILE: ƯU TIÊN TÌM KIẾM & DỮ LIỆU ===== */
+  @media (max-width: 768px){
+    .stats{display:none}                 /* thu gọn: ẩn dải thống kê chiếm chỗ */
+    .toolbar{
+      flex-direction:column;align-items:stretch;gap:8px;
+      padding:8px 12px;position:sticky;top:0;z-index:40;
+      background:#F8F8F8;box-shadow:0 2px 6px rgba(0,0,0,.06)
+    }
+    /* ô tìm kiếm lên đầu tiên, luôn thấy */
+    .search-wrap{order:-1;margin:0;width:100%;min-width:0}
+    .search-wrap input{padding:11px 14px 11px 38px;font-size:15px}
+    .search-wrap .ico{width:16px;height:16px}
+    /* nút Chức năng hiển thị, bung/thu nhóm nút */
+    .mobile-fn-toggle{
+      display:flex;width:100%;justify-content:space-between;align-items:center;
+      padding:10px 14px;font-size:14px;font-weight:600;
+      background:#fff;border:1px solid var(--line)
+    }
+    .mobile-fn-toggle .chev{width:16px;height:16px;transition:transform .2s;margin-left:auto}
+    .mobile-fn-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    .mobile-fn-toggle svg:first-child{width:16px;height:16px}
+    /* nhóm nút: mặc định thu gọn, bung khi mở */
+    .fn-group{
+      display:none;flex-direction:column;gap:7px;width:100%;
+      padding-top:2px
+    }
+    .toolbar.fn-open .fn-group{display:flex}
+    .fn-group .btn{
+      width:100%;justify-content:flex-start;padding:11px 14px;font-size:13.5px
+    }
+    .fn-group .btn .badge{margin-left:auto}
+    /* bảng dữ liệu chiếm phần còn lại của màn hình */
+    .table-wrap{flex:1;min-height:50vh}
+  }
 </style>
 </head>
 <body>
@@ -474,7 +512,13 @@
   </div>
 
   <!-- TOOLBAR -->
-  <div class="toolbar">
+  <div class="toolbar" id="toolbar">
+    <button class="btn mobile-fn-toggle" id="mobileFnToggle" type="button" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span class="lbl">Chức năng</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="fn-group" id="fnGroup">
     <button class="btn" id="btnImport">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15l3-3 3 3"/></svg>
       Nạp file Excel
@@ -515,6 +559,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m5 0V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2"/></svg>
       Xóa toàn bộ
     </button>
+    </div>
     <div class="search-wrap">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" id="searchInput" placeholder="Tìm theo tên sản phẩm, hoạt chất..." autocomplete="off" />
@@ -3095,6 +3140,25 @@ document.getElementById('btnShowCols').addEventListener('click', ()=>{
 // Apply on first paint (in case render was called before script loaded fully)
 setTimeout(applyHiddenColumns, 0);
 
+</script>
+<script>
+/* Mobile: bung/thu nhóm nút chức năng (không ảnh hưởng logic chính) */
+(function(){
+  var tb = document.getElementById('toolbar');
+  var btn = document.getElementById('mobileFnToggle');
+  if(!tb || !btn) return;
+  btn.addEventListener('click', function(){
+    var open = tb.classList.toggle('fn-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  /* Sau khi chọn 1 chức năng thì tự thu gọn lại để thấy dữ liệu */
+  document.getElementById('fnGroup').addEventListener('click', function(e){
+    if(e.target.closest('.btn') && window.matchMedia('(max-width:768px)').matches){
+      tb.classList.remove('fn-open');
+      btn.setAttribute('aria-expanded','false');
+    }
+  });
+})();
 </script>
 </body>
 </html>
