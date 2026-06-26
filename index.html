@@ -6,7 +6,7 @@
 <title>IDECO – Quản Lý Danh Mục Giá Sản Phẩm</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -35,6 +35,14 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  /* Số dùng IBM Plex Mono + số 0 gạch chéo cho dễ phân biệt */
+  td.num, td.stt, td .pct, .pct-input, .margin-badge, .ideco-disc,
+  .stat .value, .append-summary .card .num, .map-preview td.num,
+  .fx-suggest .item .ct, .fx-range input, .fx-results tbody td.num,
+  .fx-results tbody td.ck, .fx-actionbar .count b{
+    font-feature-settings:"zero" 1, "ss01" 1;
+    font-variant-numeric:slashed-zero tabular-nums;
+  }
   button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
   input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
   ::-webkit-scrollbar{width:10px;height:10px}
@@ -86,7 +94,7 @@
   .stat{padding:14px 20px;border-right:1px solid var(--line-soft);display:flex;flex-direction:column;gap:4px}
   .stat:last-child{border-right:none}
   .stat .label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600}
-  .stat .value{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+  .stat .value{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:21px;letter-spacing:-.01em;color:var(--ink);font-variant-numeric:slashed-zero tabular-nums}
   .stat .value .unit{font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:11px;color:var(--muted);margin-left:3px;letter-spacing:0}
   .stat .delta{font-size:11px;color:var(--muted)}
   .stat .delta.up{color:var(--green)}
@@ -104,6 +112,12 @@
   .btn.ghost:hover{background:rgba(0,0,0,.05)}
   .btn svg{width:14px;height:14px}
   .search-wrap{position:relative;margin-left:auto;min-width:280px}
+  .mfr-wrap{margin-left:8px;min-width:240px}
+  .mfr-wrap input{border-color:#1565C0}
+  .mfr-wrap input:focus{border-color:#1565C0;box-shadow:0 0 0 3px rgba(21,101,192,.12)}
+  .mfr-wrap.active input{background:#EAF3FF;border-color:#1565C0}
+  .mfr-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:20px;height:20px;border:none;background:#1565C0;color:#fff;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+  .mfr-clear:hover{background:#0d47a1}
   .search-wrap input{width:100%;padding:9px 14px 9px 36px;border:1px solid var(--line);border-radius:5px;background:#FFFFFF;font-size:13px;outline:none;transition:.15s}
   .search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(204,26,26,.1);background:#fff}
   .search-wrap .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
@@ -199,7 +213,7 @@
   table.products tbody tr.dirty{background:#FFF5D0 !important}
   table.products tbody td{padding:10px;border-bottom:1px solid var(--line-soft);border-right:1px solid var(--line-soft);vertical-align:middle}
   table.products tbody td:last-child{border-right:none}
-  table.products tbody td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:500}
+  table.products tbody td.num{text-align:right;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:500}
   table.products tbody td.center{text-align:center}
   td.stt{font-weight:600;color:var(--muted);text-align:center;width:46px;font-variant-numeric:tabular-nums}
   td.img-cell{width:60px;text-align:center}
@@ -213,9 +227,9 @@
   td .editable:hover{background:rgba(21,101,192,.05);border-color:rgba(21,101,192,.18)}
   td .editable:focus{background:#FFFFFF;border-color:var(--accent);box-shadow:0 0 0 2px rgba(21,101,192,.18);position:relative;z-index:6}
   td .editable.live-typing{background:#FFFBEA !important;border-color:var(--gold) !important;box-shadow:0 0 0 2px rgba(184,137,60,.18) !important}
-  td .pct{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
-  .pct-input{width:64px;text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
-  .margin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:11px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11.5px;font-variant-numeric:tabular-nums}
+  td .pct{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
+  .pct-input{width:64px;text-align:right;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+  .margin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:11px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11.5px;font-variant-numeric:tabular-nums}
   .margin-badge.good{background:var(--green-soft);color:var(--green)}
   .margin-badge.mid{background:#FFF3E0;color:#B35900}
   .margin-badge.warn{background:#FFF3E0;color:#B35900;border:1px solid #FFCC80;animation:warnPulse 2s ease-in-out infinite}
@@ -224,7 +238,7 @@
   @keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(204,26,26,.3)}50%{box-shadow:0 0 0 5px rgba(204,26,26,.0)}}
   .margin-badge.low::before{content:"⚠ ";font-size:10px}
   .margin-badge.warn::before{content:"△ ";font-size:10px}
-  .ideco-disc{display:inline-block;padding:2px 8px;background:rgba(204,26,26,.08);color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11.5px;border-radius:11px;font-variant-numeric:tabular-nums;border:1px solid rgba(204,26,26,.2)}
+  .ideco-disc{display:inline-block;padding:2px 8px;background:rgba(204,26,26,.08);color:var(--accent);font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11.5px;border-radius:11px;font-variant-numeric:tabular-nums;border:1px solid rgba(204,26,26,.2)}
   .row-actions{display:flex;gap:4px;justify-content:flex-end}
   .row-actions button{width:28px;height:28px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:#FFFFFF;transition:.12s;color:var(--ink-soft)}
   .row-actions button:hover{background:#fff;border-color:#999;color:var(--ink)}
@@ -304,7 +318,7 @@
   .map-preview table{width:100%;border-collapse:collapse;font-size:11.5px}
   .map-preview th{position:sticky;top:0;background:#F5F5F5;font-weight:600;padding:7px 9px;text-align:left;border-bottom:1px solid var(--line);color:var(--ink-soft);font-size:10px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;z-index:1}
   .map-preview td{padding:6px 9px;border-bottom:1px solid var(--line-soft);background:#FFFFFF;white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
-  .map-preview td.num{text-align:right;font-family:'JetBrains Mono',monospace;color:var(--accent);font-weight:500}
+  .map-preview td.num{text-align:right;font-family:'IBM Plex Mono',monospace;color:var(--accent);font-weight:500}
   .map-preview tr:last-child td{border-bottom:none}
   .empty-prev{padding:24px;text-align:center;color:var(--muted);font-size:12px}
   .map-stats{font-size:11.5px;color:var(--muted);margin-top:10px}
@@ -319,7 +333,7 @@
   .append-summary .card.new{border-color:#A8D5BA;background:#F0F8F4}
   .append-summary .card.upd{border-color:#FFCC80;background:#FFF7E6}
   .append-summary .card.skip{border-color:#E0E0E0;background:#FAFAFA}
-  .append-summary .card .num{font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .append-summary .card .num{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:21px;letter-spacing:-.01em;font-variant-numeric:slashed-zero tabular-nums}
   .append-summary .card.new .num{color:var(--green)}
   .append-summary .card.upd .num{color:#B35900}
   .append-summary .card.skip .num{color:var(--muted)}
@@ -341,7 +355,7 @@
   .fx-suggest .item:last-child{border-bottom:none}
   .fx-suggest .item:hover,.fx-suggest .item.hl{background:#EAF3FF}
   .fx-suggest .item .nm{flex:1;color:var(--ink);font-weight:500}
-  .fx-suggest .item .ct{color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace}
+  .fx-suggest .item .ct{color:var(--muted);font-size:11px;font-family:'IBM Plex Mono',monospace}
   .fx-suggest .item .sc{font-size:10px;color:#1565C0;background:#E3F0FF;border-radius:10px;padding:1px 7px;font-weight:600}
   .fx-suggest .item mark{background:#BBDEFB;color:var(--ink);padding:0 1px;border-radius:2px}
   .fx-suggest .head{padding:7px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:#F5F5F5;font-weight:600;position:sticky;top:0}
@@ -353,7 +367,7 @@
   .fx-chip button:hover{background:rgba(255,255,255,.45)}
   .fx-chip.all{background:#E0E0E0;color:var(--ink-soft)}
   .fx-range{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
-  .fx-range input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:13px;outline:none;text-align:right;font-family:'JetBrains Mono',monospace}
+  .fx-range input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:13px;outline:none;text-align:right;font-family:'IBM Plex Mono',monospace}
   .fx-range input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
   .fx-range .dash{color:var(--muted);font-weight:600}
   .fx-disc-type{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:12.5px;outline:none;font-family:inherit;margin-bottom:9px;cursor:pointer}
@@ -361,7 +375,7 @@
   .fx-hint{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.4}
   .fx-actionbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
   .fx-actionbar .count{font-size:13px;color:var(--ink-soft)}
-  .fx-actionbar .count b{color:var(--accent);font-weight:700;font-family:'Fraunces',serif;font-size:16px}
+  .fx-actionbar .count b{color:var(--accent);font-weight:700;font-family:'IBM Plex Mono',monospace;font-size:15px;font-variant-numeric:slashed-zero tabular-nums}
   .fx-actionbar .count .sel{color:var(--green);font-weight:700}
   .fx-actionbar .spacer{flex:1}
   .fx-mini{padding:6px 11px;font-size:11.5px;font-weight:500;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);transition:.12s;white-space:nowrap}
@@ -375,8 +389,8 @@
   .fx-results thead th.ck{text-align:center}
   .fx-results thead th.chk{width:40px;text-align:center;padding:9px 6px}
   .fx-results tbody td{padding:8px 10px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
-  .fx-results tbody td.num{text-align:right;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
-  .fx-results tbody td.ck{text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600}
+  .fx-results tbody td.num{text-align:right;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+  .fx-results tbody td.ck{text-align:center;font-family:'IBM Plex Mono',monospace;font-weight:600}
   .fx-results tbody td.chk{text-align:center;width:40px}
   .fx-results tbody tr:nth-child(even){background:#F5F9FF}
   .fx-results tbody tr:hover{background:#EAF3FF}
@@ -411,6 +425,7 @@
     }
     /* ô tìm kiếm lên đầu tiên, luôn thấy */
     .search-wrap{order:-1;margin:0;width:100%;min-width:0}
+    .mfr-wrap{order:-1;margin:8px 0 0 0;width:100%}
     .search-wrap input{padding:11px 14px 11px 38px;font-size:15px}
     .search-wrap .ico{width:16px;height:16px}
     /* nút Chức năng hiển thị, bung/thu nhóm nút */
@@ -588,6 +603,12 @@
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" id="searchInput" placeholder="Tìm theo tên sản phẩm, hoạt chất..." autocomplete="off" />
       <div class="suggestions" id="suggestions"></div>
+    </div>
+    <div class="search-wrap mfr-wrap">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>
+      <input type="text" id="mfrSearchInput" placeholder="Lọc Cơ sở SX (vd: CPC1, Singapoor...)" autocomplete="off" />
+      <button type="button" id="mfrClearBtn" class="mfr-clear" title="Xóa lọc Cơ sở SX" style="display:none">×</button>
+      <div class="suggestions" id="mfrSuggestions"></div>
     </div>
   </div>
 
@@ -957,6 +978,7 @@ const firebaseConfig = {
 let products = [];          // master list
 let filtered = [];          // filtered view
 let searchTerm = '';
+let mfrSearchTerm = '';
 let editingImageId = null;
 let pendingImageData = null;
 let confirmCallback = null;
@@ -1086,6 +1108,12 @@ function colLetter(n){
 // Normalize Vietnamese text for comparison (handle NFD/NFC unicode forms)
 function normVi(s){
   return String(s == null ? '' : s).normalize('NFC').toLowerCase().trim();
+}
+function normVN(s){
+  return String(s == null ? '' : s)
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/g,'d').replace(/Đ/g,'d')
+    .toLowerCase().trim();
 }
 
 document.getElementById('btnImport').onclick = ()=> document.getElementById('excelInput').click();
@@ -1537,9 +1565,21 @@ document.getElementById('mapConfirm').onclick = ()=>{
 
 /* ==================== RENDER ==================== */
 function applyFilter(){
-  if(!searchTerm){ filtered = products.slice(); return; }
+  let base = products;
+  // Lọc theo nhiều Cơ sở SX (nhập cách nhau bởi dấu phẩy, logic OR, bỏ dấu)
+  const mfrTerms = (mfrSearchTerm||'')
+    .split(',')
+    .map(t => normVN(t.trim()))
+    .filter(Boolean);
+  if(mfrTerms.length){
+    base = base.filter(p => {
+      const m = normVN(p.manufacturer||'');
+      return mfrTerms.some(t => m.includes(t));
+    });
+  }
+  if(!searchTerm){ filtered = base.slice(); return; }
   const q = searchTerm.toLowerCase().trim();
-  filtered = products.filter(p =>
+  filtered = base.filter(p =>
     (p.name||'').toLowerCase().includes(q) ||
     (p.code||'').toLowerCase().includes(q) ||
     (p.ingredient||'').toLowerCase().includes(q) ||
@@ -1808,6 +1848,8 @@ document.getElementById('btnRefresh').onclick = ()=>{
   searchTerm = '';
   document.getElementById('searchInput').value = '';
   document.getElementById('suggestions').classList.remove('active');
+  mfrSearchTerm = '';
+  if(mfrSearchInput){ mfrSearchInput.value = ''; refreshMfrUI(); mfrSuggestionsEl.classList.remove('active'); }
   loadFromFirebase();
 };
 
@@ -1853,10 +1895,101 @@ searchInput.addEventListener('keydown', e=>{
   else if(e.key === 'Escape'){ suggestionsEl.classList.remove('active'); searchInput.blur(); }
 });
 
+/* ==================== LỌC CƠ SỞ SẢN XUẤT (nhiều tên) ==================== */
 function updateSuggestionHighlight(){
   suggestionsEl.querySelectorAll('.item').forEach((el,i)=> el.classList.toggle('highlight', i === suggestionIndex));
   const hi = suggestionsEl.querySelector('.item.highlight');
   if(hi) hi.scrollIntoView({ block:'nearest' });
+}
+
+const mfrSearchInput = document.getElementById('mfrSearchInput');
+const mfrSuggestionsEl = document.getElementById('mfrSuggestions');
+const mfrClearBtn = document.getElementById('mfrClearBtn');
+const mfrWrap = mfrSearchInput.closest('.search-wrap');
+let mfrSuggestionIndex = -1;
+
+function refreshMfrUI(){
+  const has = !!mfrSearchTerm.trim();
+  mfrClearBtn.style.display = has ? 'flex' : 'none';
+  mfrWrap.classList.toggle('active', has);
+}
+
+mfrSearchInput.addEventListener('input', e=>{
+  mfrSearchTerm = e.target.value;
+  refreshMfrUI();
+  render();
+  showMfrSuggestions();
+});
+mfrSearchInput.addEventListener('focus', showMfrSuggestions);
+mfrSearchInput.addEventListener('blur', ()=> setTimeout(()=> mfrSuggestionsEl.classList.remove('active'), 200));
+mfrSearchInput.addEventListener('keydown', e=>{
+  const items = mfrSuggestionsEl.querySelectorAll('.item');
+  if(e.key === 'ArrowDown'){ e.preventDefault(); mfrSuggestionIndex = Math.min(mfrSuggestionIndex + 1, items.length - 1); updateMfrHighlight(); }
+  else if(e.key === 'ArrowUp'){ e.preventDefault(); mfrSuggestionIndex = Math.max(mfrSuggestionIndex - 1, -1); updateMfrHighlight(); }
+  else if(e.key === 'Enter'){ if(mfrSuggestionIndex >= 0 && items[mfrSuggestionIndex]){ e.preventDefault(); items[mfrSuggestionIndex].click(); } }
+  else if(e.key === 'Escape'){ mfrSuggestionsEl.classList.remove('active'); mfrSearchInput.blur(); }
+});
+mfrClearBtn.addEventListener('click', ()=>{
+  mfrSearchTerm = '';
+  mfrSearchInput.value = '';
+  refreshMfrUI();
+  mfrSuggestionsEl.classList.remove('active');
+  render();
+  mfrSearchInput.focus();
+});
+
+function updateMfrHighlight(){
+  mfrSuggestionsEl.querySelectorAll('.item').forEach((el,i)=> el.classList.toggle('highlight', i === mfrSuggestionIndex));
+  const hi = mfrSuggestionsEl.querySelector('.item.highlight');
+  if(hi) hi.scrollIntoView({ block:'nearest' });
+}
+
+function showMfrSuggestions(){
+  // gợi ý dựa trên đoạn đang gõ SAU dấu phẩy cuối cùng
+  const raw = mfrSearchInput.value;
+  const parts = raw.split(',');
+  const cur = normVN(parts[parts.length - 1].trim());
+  if(!cur || products.length === 0){ mfrSuggestionsEl.classList.remove('active'); return; }
+  // các tên đơn vị đã nhập trước đó (để loại trùng)
+  const chosen = parts.slice(0, -1).map(t => normVN(t.trim())).filter(Boolean);
+  // tập hợp danh sách cơ sở SX duy nhất
+  const seen = new Map();
+  products.forEach(p=>{
+    const name = (p.manufacturer||'').trim();
+    if(!name) return;
+    const key = normVN(name);
+    if(!seen.has(key)) seen.set(key, name);
+  });
+  const matches = [...seen.entries()]
+    .filter(([key]) => key.includes(cur) && !chosen.includes(key))
+    .map(([,name]) => name)
+    .sort((a,b)=> a.localeCompare(b,'vi'))
+    .slice(0, 8);
+  if(matches.length === 0){ mfrSuggestionsEl.classList.remove('active'); return; }
+  const safe = cur.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  mfrSuggestionsEl.innerHTML = matches.map(name=>{
+    // đếm số sản phẩm của cơ sở này
+    const cnt = products.filter(p => normVN(p.manufacturer||'') === normVN(name)).length;
+    return `<div class="item" data-name="${escapeHtml(name)}">
+      <span class="nm">${escapeHtml(name)}</span>
+      <span class="sub">${cnt} sản phẩm</span>
+    </div>`;
+  }).join('');
+  mfrSuggestionsEl.querySelectorAll('.item').forEach(el=>{
+    el.onclick = ()=>{
+      const prev = parts.slice(0, -1).map(t=>t.trim()).filter(Boolean);
+      prev.push(el.dataset.name);
+      const val = prev.join(', ') + ', ';
+      mfrSearchInput.value = val;
+      mfrSearchTerm = val;
+      refreshMfrUI();
+      mfrSuggestionsEl.classList.remove('active');
+      render();
+      mfrSearchInput.focus();
+    };
+  });
+  mfrSuggestionIndex = -1;
+  mfrSuggestionsEl.classList.add('active');
 }
 
 function showSuggestions(){
@@ -3028,14 +3161,14 @@ function renderDiscMatchTable(){
     let ckCell;
     if(matched){
       const changed = oldDisc !== r.srcDisc;
-      ckCell = `<div style="font-family:'JetBrains Mono',monospace;font-size:11.5px">
+      ckCell = `<div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px">
         <span style="color:var(--muted)">${oldDisc}%</span>
         <span style="color:var(--accent);margin:0 4px">→</span>
         <span style="color:${changed?'var(--accent)':'var(--muted)'};font-weight:${changed?'700':'500'}">${r.srcDisc}%</span>
         ${!changed ? '<div style="font-size:9.5px;color:var(--muted);margin-top:2px">(không đổi)</div>' : ''}
       </div>`;
     } else {
-      ckCell = `<div style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--accent)">${r.srcDisc}%</div>`;
+      ckCell = `<div style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--accent)">${r.srcDisc}%</div>`;
     }
     
     const statusCell = matched
