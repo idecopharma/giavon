@@ -474,6 +474,92 @@
       width:110px !important;min-width:110px !important;max-width:110px !important
     }
   }
+
+  /* ===== CHẾ ĐỘ XEM THẺ (MOBILE CARD VIEW) ===== */
+  .card-list{display:none}
+  .view-toggle{display:none}
+  @media (max-width:768px){
+    .view-toggle{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;padding:10px 14px;font-size:13.5px;font-weight:700;
+      background:var(--accent);color:#fff;border-radius:6px;letter-spacing:.02em
+    }
+    .view-toggle svg{width:16px;height:16px}
+    /* Chế độ THẺ: ẩn bảng, hiện danh sách thẻ */
+    body.card-mode .table-scroll{display:none}
+    body.card-mode .card-list{display:block;padding:10px 10px 90px;background:var(--bg-alt)}
+
+    .pcard{
+      background:#fff;border:1px solid var(--line);border-radius:10px;
+      margin-bottom:10px;box-shadow:var(--shadow-sm);overflow:hidden
+    }
+    .pcard.dirty{border-color:var(--amber);box-shadow:0 0 0 2px rgba(179,89,0,.15)}
+    .pc-head{display:flex;align-items:center;gap:10px;padding:11px 12px 9px}
+    .pc-head .ph{
+      width:44px;height:44px;flex:0 0 44px;border:1px solid var(--line-soft);
+      border-radius:8px;display:flex;align-items:center;justify-content:center;
+      overflow:hidden;background:var(--bg-alt);color:var(--muted)
+    }
+    .pc-head .ph img{width:100%;height:100%;object-fit:cover}
+    .pc-head .ph svg{width:20px;height:20px}
+    .pc-title{flex:1;min-width:0}
+    .pc-title .nm{font-weight:700;font-size:15px;line-height:1.3;color:var(--ink);word-break:break-word}
+    .pc-title .meta{font-size:11.5px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .pc-head .margin-badge{font-size:13px;padding:4px 9px;flex:0 0 auto}
+
+    /* Lưới số lớn */
+    .pc-grid{
+      display:grid;grid-template-columns:1fr 1fr 1fr;
+      border-top:1px solid var(--line-soft)
+    }
+    .pc-cell{padding:9px 10px 10px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);min-width:0}
+    .pc-cell:nth-child(3n){border-right:none}
+    .pc-cell .lb{font-size:9.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin-bottom:3px;white-space:nowrap}
+    .pc-cell .vl,.pc-cell input{
+      font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:18px;
+      letter-spacing:-.02em;color:var(--ink);
+      font-feature-settings:"zero" 1;font-variant-numeric:slashed-zero tabular-nums;
+      line-height:1.2
+    }
+    .pc-cell input{
+      width:100%;border:none;outline:none;background:#F2F7FF;
+      border-bottom:2px solid rgba(21,101,192,.35);border-radius:4px 4px 0 0;
+      padding:2px 4px;color:var(--accent)
+    }
+    .pc-cell input:focus{background:#E4EFFF;border-bottom-color:var(--accent)}
+    .pc-cell .vl{display:block;padding:2px 0}
+    .pc-cell .vl.pos{color:var(--green)}
+    .pc-cell .vl.neg{color:#CC1A1A}
+    .pc-cell .vl.acc{color:var(--accent)}
+
+    /* Chi tiết mở rộng */
+    .pc-more{display:none;border-top:1px solid var(--line-soft);padding:8px 12px 10px;background:#FAFAFA}
+    .pcard.open .pc-more{display:block}
+    .pc-more .fr{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line-soft)}
+    .pc-more .fr:last-child{border-bottom:none}
+    .pc-more .fr label{flex:0 0 108px;font-size:11px;color:var(--muted);font-weight:600}
+    .pc-more .fr input{
+      flex:1;min-width:0;border:none;outline:none;background:transparent;
+      font-size:13.5px;padding:3px 4px;border-bottom:1px solid transparent
+    }
+    .pc-more .fr input:focus{border-bottom-color:var(--accent);background:#F2F7FF}
+
+    /* Thanh hành động */
+    .pc-actions{display:flex;border-top:1px solid var(--line-soft)}
+    .pc-actions button{
+      flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+      padding:11px 6px;font-size:12.5px;font-weight:600;color:var(--ink-soft)
+    }
+    .pc-actions button + button{border-left:1px solid var(--line-soft)}
+    .pc-actions button svg{width:15px;height:15px}
+    .pc-actions .pc-save{color:var(--green)}
+    .pcard.dirty .pc-actions .pc-save{background:#E6F1EA;font-weight:700}
+    .pc-actions .pc-del{color:#CC1A1A}
+    .pc-actions .pc-detail .chev{transition:transform .2s}
+    .pcard.open .pc-actions .pc-detail .chev{transform:rotate(180deg)}
+    .card-empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:13px}
+  }
+
 </style>
 </head>
 <body>
@@ -610,6 +696,10 @@
       <button type="button" id="mfrClearBtn" class="mfr-clear" title="Xóa lọc Cơ sở SX" style="display:none">×</button>
       <div class="suggestions" id="mfrSuggestions"></div>
     </div>
+    <button type="button" class="view-toggle" id="viewToggle" onclick="toggleViewMode()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span id="viewToggleTxt">Chuyển sang xem BẢNG</span>
+    </button>
   </div>
 
   <!-- TABLE -->
@@ -653,6 +743,7 @@
         <button class="btn primary" onclick="document.getElementById('btnImport').click()">Nạp file Excel ngay</button>
       </div>
     </div>
+    <div class="card-list" id="cardList"></div>
   </div>
 
   <!-- FOOTER -->
@@ -1596,6 +1687,8 @@ function render(){
   
   if(products.length === 0){
     tbody.innerHTML = '';
+    const cl = document.getElementById('cardList');
+    if(cl) cl.innerHTML = '<div class="card-empty">Chưa có dữ liệu sản phẩm. Nạp Excel hoặc tải từ Firebase.</div>';
     empty.style.display = 'block';
     updateStats();
     return;
@@ -1702,6 +1795,7 @@ function render(){
     });
   });
   
+  if(document.body.classList.contains('card-mode')) renderCards();
   document.getElementById('footRows').textContent = `${filtered.length}/${products.length} dòng`;
   updateStats();
   applyHiddenColumns();
@@ -1795,6 +1889,8 @@ function saveRow(id){
     if(err){ toast('Lỗi lưu: ' + err.message, 'error'); setSync('ok','Đã kết nối Firebase'); return; }
     const row = document.querySelector(`tr[data-id="${id}"]`);
     if(row) row.classList.remove('dirty');
+    const card = document.querySelector(`.pcard[data-id="${id}"]`);
+    if(card) card.classList.remove('dirty');
     toast('Đã lưu "' + (p.name||'sản phẩm') + '" lên Firebase', 'success');
     setSync('ok', 'Đã kết nối Firebase');
     updateFooterTime();
@@ -3316,6 +3412,163 @@ setTimeout(applyHiddenColumns, 0);
     }
   });
 })();
+
+/* ==================== CHẾ ĐỘ XEM THẺ TRÊN DI ĐỘNG ==================== */
+function isMobileScreen(){ return window.matchMedia('(max-width:768px)').matches; }
+let gvViewMode = localStorage.getItem('gv_viewMode') || 'card'; // 'card' | 'table' (chỉ áp dụng mobile)
+
+function applyViewMode(){
+  const mobile = isMobileScreen();
+  const cardOn = mobile && gvViewMode === 'card';
+  document.body.classList.toggle('card-mode', cardOn);
+  const txt = document.getElementById('viewToggleTxt');
+  if(txt) txt.textContent = gvViewMode === 'card' ? 'Chuyển sang xem BẢNG' : 'Chuyển sang xem THẺ';
+  if(cardOn) renderCards();
+  else { const cl = document.getElementById('cardList'); if(cl) cl.innerHTML = ''; }
+}
+function toggleViewMode(){
+  gvViewMode = gvViewMode === 'card' ? 'table' : 'card';
+  localStorage.setItem('gv_viewMode', gvViewMode);
+  applyViewMode();
+}
+window.addEventListener('resize', () => applyViewMode());
+
+function cardMoneyCell(label, field, val){
+  return `<div class="pc-cell"><div class="lb">${label}</div>
+    <input class="editable" data-field="${field}" data-num="1" inputmode="decimal" value="${fmt(val)}" /></div>`;
+}
+function renderCards(){
+  const list = document.getElementById('cardList');
+  if(!list || !document.body.classList.contains('card-mode')) return;
+  if(!filtered.length){
+    list.innerHTML = '<div class="card-empty">Không có sản phẩm phù hợp.</div>';
+    return;
+  }
+  let html = '';
+  filtered.forEach((p, i) => {
+    const c = computeRow(p);
+    const marginClass = c.margin >= 15 ? 'good' : c.margin >= 10 ? 'warn' : 'low';
+    const imgPart = p.image
+      ? `<img src="${p.image}" alt="">`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+    const meta = [p.code, p.spec, p.manufacturer].filter(Boolean).map(escapeHtml).join(' · ');
+    html += `<div class="pcard" data-id="${p.id}">
+      <div class="pc-head">
+        <div class="ph" onclick="openImage('${p.id}')">${imgPart}</div>
+        <div class="pc-title">
+          <div class="nm">${escapeHtml(p.name || '(chưa có tên)')}</div>
+          <div class="meta">${meta || '&nbsp;'}</div>
+        </div>
+        <span class="margin-badge ${marginClass} calc-margin">${c.margin.toFixed(1)}%</span>
+      </div>
+      <div class="pc-grid">
+        ${cardMoneyCell('Giá vốn','cost',p.cost)}
+        ${cardMoneyCell('Giá bán lẻ','retail',p.retail)}
+        <div class="pc-cell"><div class="lb">CK KH (%)</div>
+          <input class="editable" data-field="discCust" data-num="1" inputmode="decimal" value="${parseNum(p.discCust).toFixed(2)}" /></div>
+        <div class="pc-cell"><div class="lb">Giá bán buôn ƒ</div><span class="vl acc calc-wholesale">${fmt(Math.round(c.wholesale))}</span></div>
+        <div class="pc-cell"><div class="lb">Lợi nhuận ƒ</div><span class="vl ${c.profit>=0?'pos':'neg'} calc-profit">${fmt(Math.round(c.profit))}</span></div>
+        <div class="pc-cell"><div class="lb">CK IDECO ƒ</div><span class="vl calc-ideco">${c.idecoDisc.toFixed(2)}%</span></div>
+      </div>
+      <div class="pc-more">
+        <div class="fr"><label>Mã hàng</label><input class="editable" data-field="code" value="${escapeHtml(p.code||'')}" /></div>
+        <div class="fr"><label>Hoạt chất</label><input class="editable" data-field="ingredient" value="${escapeHtml(p.ingredient||'')}" /></div>
+        <div class="fr"><label>Nồng độ/HL</label><input class="editable" data-field="concentration" value="${escapeHtml(p.concentration||'')}" /></div>
+        <div class="fr"><label>Công dụng</label><input class="editable" data-field="usage" value="${escapeHtml(p.usage||'')}" /></div>
+        <div class="fr"><label>Quy cách</label><input class="editable" data-field="spec" value="${escapeHtml(p.spec||'')}" /></div>
+        <div class="fr"><label>SL ĐVT nhỏ nhất</label><input class="editable" data-field="smallestQty" data-num="1" inputmode="decimal" value="${parseNum(p.smallestQty)===0?'':fmt(p.smallestQty)}" /></div>
+        <div class="fr"><label>Hạn dùng (tháng)</label><input class="editable" data-field="expiry" data-num="1" inputmode="decimal" value="${parseNum(p.expiry)===0?'':fmt(p.expiry)}" /></div>
+        <div class="fr"><label>Số ĐK</label><input class="editable" data-field="regNo" value="${escapeHtml(p.regNo||'')}" /></div>
+        <div class="fr"><label>Cơ sở SX</label><input class="editable" data-field="manufacturer" value="${escapeHtml(p.manufacturer||'')}" /></div>
+        <div class="fr"><label>Nước SX</label><input class="editable" data-field="country" value="${escapeHtml(p.country||'')}" /></div>
+        <div class="fr"><label>Đơn giá BL</label><input class="editable" data-field="unitPrice" data-num="1" inputmode="decimal" value="${parseNum(p.unitPrice)===0?'':fmt(p.unitPrice)}" /></div>
+      </div>
+      <div class="pc-actions">
+        <button type="button" class="pc-detail" onclick="toggleCardDetail('${p.id}')">
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Chi tiết
+        </button>
+        <button type="button" class="pc-save" onclick="saveRow('${p.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Lưu
+        </button>
+        <button type="button" class="pc-del" onclick="deleteRow('${p.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg> Xóa
+        </button>
+      </div>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+function toggleCardDetail(id){
+  const card = document.querySelector(`.pcard[data-id="${id}"]`);
+  if(card) card.classList.toggle('open');
+}
+/* Cập nhật ô tự tính trong 1 thẻ */
+function refreshCardComputed(card, p){
+  const c = computeRow(p);
+  const marginClass = c.margin >= 15 ? 'good' : c.margin >= 10 ? 'warn' : 'low';
+  const mb = card.querySelector('.calc-margin');
+  if(mb){ mb.textContent = c.margin.toFixed(1) + '%'; mb.className = 'margin-badge ' + marginClass + ' calc-margin'; }
+  const we = card.querySelector('.calc-wholesale');
+  if(we) we.textContent = fmt(Math.round(c.wholesale));
+  const pe = card.querySelector('.calc-profit');
+  if(pe){ pe.textContent = fmt(Math.round(c.profit)); pe.className = 'vl ' + (c.profit>=0?'pos':'neg') + ' calc-profit'; }
+  const ie = card.querySelector('.calc-ideco');
+  if(ie) ie.textContent = c.idecoDisc.toFixed(2) + '%';
+}
+/* Ủy quyền sự kiện cho toàn bộ thẻ — nhẹ, không gắn listener từng input */
+(function initCardEvents(){
+  const list = document.getElementById('cardList');
+  if(!list) return;
+  const findP = (el) => {
+    const card = el.closest('.pcard');
+    if(!card) return {};
+    return { card, p: products.find(x => x.id === card.dataset.id) };
+  };
+  list.addEventListener('input', e => {
+    const inp = e.target;
+    if(!inp.classList || !inp.classList.contains('editable')) return;
+    const { card, p } = findP(inp);
+    if(!p) return;
+    const field = inp.dataset.field;
+    const isNum = inp.dataset.num === '1';
+    p[field] = isNum ? parseNum(inp.value) : inp.value;
+    if(field === 'cost' || field === 'retail' || field === 'discCust') refreshCardComputed(card, p);
+    card.classList.add('dirty');
+  });
+  list.addEventListener('focusin', e => {
+    const inp = e.target;
+    if(inp.dataset && inp.dataset.num === '1'){
+      const v = parseNum(inp.value);
+      inp.value = v === 0 ? '' : v;
+      inp.select && inp.select();
+    }
+  });
+  list.addEventListener('focusout', e => {
+    const inp = e.target;
+    if(!inp.classList || !inp.classList.contains('editable')) return;
+    const { card, p } = findP(inp);
+    if(!p) return;
+    const field = inp.dataset.field;
+    const isNum = inp.dataset.num === '1';
+    const newVal = isNum ? parseNum(inp.value) : inp.value.trim();
+    if(isNum){
+      if(field === 'discCust') inp.value = newVal.toFixed(2);
+      else inp.value = fmt(newVal);
+    }
+    if(p[field] !== newVal){
+      p[field] = newVal;
+      if(field === 'cost' || field === 'retail' || field === 'discCust'){ refreshCardComputed(card, p); updateStats(); }
+      card.classList.add('dirty');
+    }
+  });
+  list.addEventListener('keydown', e => {
+    if(e.target.classList && e.target.classList.contains('editable')){
+      if(e.key === 'Enter'){ e.preventDefault(); e.target.blur(); }
+    }
+  });
+})();
+applyViewMode();
+
 </script>
 </body>
 </html>
