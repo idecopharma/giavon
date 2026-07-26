@@ -560,6 +560,115 @@
     .card-empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:13px}
   }
 
+
+  /* ============ MODULE: CẬP NHẬT GIÁ VỐN MỚI (soi chiếu Excel) ============ */
+  .modal.cu-modal{max-width:1280px;width:100%;max-height:92vh;display:flex;flex-direction:column}
+  .modal.cu-modal .modal-body{overflow-y:auto;flex:1}
+  .cu-file{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#F0F7FF;border:1px solid #BBDEFB;border-radius:6px;margin-bottom:14px;font-size:12.5px}
+  .cu-file b{font-weight:600}
+  .cu-file .chg{margin-left:auto;background:#fff;border:1px solid var(--line);border-radius:5px;padding:5px 10px;cursor:pointer;font-size:12px;font-family:inherit}
+  .cu-file .chg:hover{border-color:var(--accent);color:var(--accent)}
+  .cu-secline{display:flex;align-items:center;gap:8px;margin:16px 0 10px}
+  .cu-secline span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .cu-secline i{flex:1;height:1px;background:var(--line-soft)}
+  .cu-src{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:6px}
+  .cu-src label{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-bottom:4px}
+  .cu-src select,.cu-src input{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:5px;font-size:12.5px;outline:none;font-family:inherit;background:#fff}
+  .cu-src select:focus,.cu-src input:focus{border-color:var(--accent)}
+  .cu-valid{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
+  .cu-vchip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid}
+  .cu-vchip.ok{background:var(--green-soft);border-color:#A8CDB9;color:var(--green)}
+  .cu-vchip.bad{background:#FFEBEE;border-color:#F1B0B7;color:#B3261E}
+  .cu-vmsg{font-size:12.5px;padding:9px 12px;border-radius:6px;margin-top:8px;line-height:1.5}
+  .cu-vmsg.ok{background:var(--green-soft);color:#1F5C42;border:1px solid #A8CDB9}
+  .cu-vmsg.bad{background:#FFEBEE;color:#8C1D18;border:1px solid #F1B0B7}
+  .cu-map{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:9px}
+  .cu-mrow{display:flex;align-items:center;gap:9px;padding:7px 10px;border:1px solid var(--line-soft);border-radius:6px;background:#FAFAFA}
+  .cu-mrow.req{background:#FFFDF5;border-color:#E8D9A8}
+  .cu-mrow .lbl{flex:0 0 148px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+  .cu-mrow .lbl em{font-style:normal;color:#B3261E;font-weight:700;margin-left:2px}
+  .cu-mrow select{flex:1;min-width:0;padding:6px 8px;border:1px solid var(--line);border-radius:5px;font-size:12px;outline:none;font-family:inherit;background:#fff}
+  .cu-mrow select.empty{color:var(--muted);border-style:dashed}
+  .cu-opts{display:flex;flex-direction:column;gap:9px;padding:12px 14px;background:#FAFAFA;border:1px solid var(--line-soft);border-radius:6px}
+  .cu-opt{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;line-height:1.45;cursor:pointer}
+  .cu-opt input{margin-top:2px;flex:0 0 auto;accent-color:var(--accent)}
+  .cu-opt .d{display:block;color:var(--muted);font-size:11.5px}
+  .cu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+  .cu-card{padding:11px 13px;border-radius:7px;border:1px solid var(--line);background:#fff;display:flex;flex-direction:column;gap:2px}
+  .cu-card .l{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .cu-card .n{font-family:'Fraunces',serif;font-size:26px;font-weight:600;line-height:1.1}
+  .cu-card .d{font-size:11px;color:var(--muted)}
+  .cu-card.chg{background:#EAF3FF;border-color:#BBDEFB}.cu-card.chg .n{color:var(--accent)}
+  .cu-card.new{background:var(--green-soft);border-color:#A8CDB9}.cu-card.new .n{color:var(--green)}
+  .cu-card.fz{background:var(--amber-soft);border-color:#E8C48F}.cu-card.fz .n{color:var(--amber)}
+  .cu-card.same{background:#F5F5F5}.cu-card.same .n{color:var(--ink-soft)}
+  .cu-card.abs{background:#FFF5F5;border-color:#F1C9C9}.cu-card.abs .n{color:#B3261E}
+  .cu-bar{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px}
+  .cu-chip{padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink-soft)}
+  .cu-chip:hover{border-color:var(--accent)}
+  .cu-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .cu-bar input.s{flex:1;min-width:160px;padding:7px 11px;border:1px solid var(--line);border-radius:20px;font-size:12.5px;outline:none;font-family:inherit}
+  .cu-bar input.s:focus{border-color:var(--accent)}
+  .cu-mini{padding:6px 11px;border:1px solid var(--line);background:#fff;border-radius:5px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;color:var(--ink-soft)}
+  .cu-mini:hover{border-color:var(--accent);color:var(--accent)}
+  .cu-tblwrap{border:1px solid var(--line);border-radius:7px;overflow:auto;max-height:46vh}
+  table.cu-tbl{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+  table.cu-tbl th{position:sticky;top:0;background:#F5F5F5;border-bottom:1px solid var(--line);padding:8px 9px;text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);z-index:2}
+  table.cu-tbl td{border-bottom:1px solid var(--line-soft);padding:7px 9px;vertical-align:middle}
+  table.cu-tbl tr:hover td{background:#FAFCFF}
+  table.cu-tbl td.num{text-align:right;font-variant-numeric:tabular-nums}
+  table.cu-tbl td.nm{white-space:normal;min-width:190px;font-weight:600}
+  table.cu-tbl td.ing{white-space:normal;min-width:170px;color:var(--ink-soft)}
+  .cu-st{display:inline-block;padding:3px 8px;border-radius:4px;font-size:10.5px;font-weight:700;letter-spacing:.02em}
+  .cu-st.chg{background:#EAF3FF;color:var(--accent)}
+  .cu-st.new{background:var(--green-soft);color:var(--green)}
+  .cu-st.same{background:#EEE;color:#666}
+  .cu-st.abs{background:#FFEBEE;color:#B3261E}
+  .cu-old{color:var(--muted);text-decoration:line-through;font-size:11px;display:block}
+  .cu-up{color:#B3261E;font-weight:700}
+  .cu-dn{color:var(--green);font-weight:700}
+  .cu-d{font-size:10.5px;font-weight:600;display:block}
+  .cu-how{font-size:10.5px;color:var(--muted)}
+  .cu-how.fz{color:var(--amber);font-weight:700}
+  .cu-blank{color:#CCC}
+  .cu-more{padding:10px;text-align:center;font-size:12px;color:var(--muted);background:#FAFAFA}
+  .cu-warn{margin-top:10px;padding:10px 12px;border-radius:6px;background:var(--amber-soft);border:1px solid #E8C48F;color:#7A4A00;font-size:12.5px;line-height:1.5}
+  table.cu-tbl tr.risk td{background:#FFFBF2}
+  table.cu-tbl tr.risk:hover td{background:#FFF6E5}
+  .cu-flag{display:block;font-size:10.5px;font-weight:600;color:#B35900;white-space:normal;margin-top:2px}
+  .cu-st.dup{background:#F3E5F5;color:#6A1B9A}
+  .cu-legend{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.55}
+  .cu-chgnote{display:block;font-size:10.5px;font-weight:600;color:#1565C0;white-space:normal;margin-top:2px}
+  /* --- Thanh thông báo kết quả nạp dữ liệu --- */
+  .cu-notice{display:flex;align-items:center;gap:10px;margin:0 0 10px;padding:11px 14px;border-radius:7px;
+    background:linear-gradient(90deg,#E6F1EA,#F4FAF6);border:1px solid #A8CDB9;font-size:13px;color:#1F5C42;flex-wrap:wrap}
+  .cu-notice .ic{width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;
+    align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:0 0 auto}
+  .cu-notice .tx{flex:1;min-width:200px;line-height:1.55}
+  .cu-notice .tx b{color:#14432F}
+  .cu-notice .stt-range{background:#fff;border:1px solid #A8CDB9;border-radius:5px;padding:1px 7px;font-weight:700;
+    font-variant-numeric:tabular-nums;color:#14432F}
+  .cu-notice .ac{display:flex;gap:6px;flex:0 0 auto}
+  .cu-notice .nb{padding:6px 11px;border:1px solid #A8CDB9;background:#fff;border-radius:5px;font-size:12px;
+    font-weight:600;cursor:pointer;font-family:inherit;color:#1F5C42;white-space:nowrap}
+  .cu-notice .nb:hover{background:#1F5C42;color:#fff;border-color:#1F5C42}
+  .cu-notice .nb.view.on{background:#1F5C42;color:#fff;border-color:#1F5C42}
+  .cu-notice .nb.close{padding:6px 9px}
+  tr.just-new td{background:#F1FBF5!important}
+  tr.just-new td.stt{position:relative}
+  .new-dot{display:block;margin-top:2px;font-size:8.5px;font-weight:800;letter-spacing:.04em;color:#fff;
+    background:var(--green);border-radius:3px;padding:1px 3px;line-height:1.3}
+  .pcard.just-new{border-color:#A8CDB9;box-shadow:0 0 0 2px #E6F1EA}
+  table.cu-tbl td.stt-cell{font-weight:700;font-variant-numeric:tabular-nums;text-align:right;color:var(--ink)}
+  table.cu-tbl td.stt-cell small{display:block;font-size:9.5px;font-weight:700;color:var(--green)}
+  @media(max-width:640px){ .cu-notice{margin:0 10px 10px} }
+  @media(max-width:640px){
+    .cu-src{grid-template-columns:1fr}
+    .cu-map{grid-template-columns:1fr}
+    .cu-mrow .lbl{flex:0 0 120px}
+    .modal.cu-modal{max-height:96vh}
+    .cu-tblwrap{max-height:52vh}
+  }
 </style>
 </head>
 <body>
@@ -652,6 +761,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 13v6M9 16h6"/></svg>
       Cập nhật danh sách
     </button>
+    <button class="btn" id="btnCostUpdate" style="border-color:#B8893C;color:#8A6428;background:#FFF9EE;font-weight:700" title="Tải bảng giá vốn mới → soi chiếu &amp; kiểm tra số liệu → cập nhật chính xác, báo STT tiếp nối">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Cập nhật giá vốn mới
+    </button>
     <button class="btn" id="btnAdd">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       Thêm sản phẩm
@@ -700,6 +813,17 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span id="viewToggleTxt">Chuyển sang xem BẢNG</span>
     </button>
+  </div>
+
+  <!-- THÔNG BÁO KẾT QUẢ NẠP DỮ LIỆU -->
+  <div class="cu-notice" id="cuNotice" style="display:none">
+    <span class="ic">✓</span>
+    <span class="tx" id="cuNoticeTx"></span>
+    <span class="ac">
+      <button type="button" class="nb view" id="cuNoticeView">Xem dòng mới</button>
+      <button type="button" class="nb" id="cuNoticeExport">Xuất Excel dòng mới</button>
+      <button type="button" class="nb close" id="cuNoticeClose" title="Đóng thông báo">✕</button>
+    </span>
   </div>
 
   <!-- TABLE -->
@@ -1022,6 +1146,124 @@
 </div>
 
 <!-- ========== LOADING ========== -->
+
+<!-- ========== MODAL: CẬP NHẬT GIÁ VỐN MỚI ========== -->
+<input type="file" id="cuInput" accept=".xlsx,.xls,.csv" style="display:none" />
+<div class="modal-bg" id="cuModal">
+  <div class="modal cu-modal">
+    <div class="modal-head">
+      <h3 id="cuTitle">Cập nhật bảng giá vốn mới</h3>
+      <p id="cuDesc">Tải file Excel giá vốn mới — hệ thống soi chiếu với danh mục hiện có và tạo dữ liệu cập nhật chính xác.</p>
+    </div>
+    <div class="modal-body">
+
+      <!-- BƯỚC 1: CHỌN FILE -->
+      <div id="cuStep1">
+        <div class="upload-zone" id="cuDrop">
+          <div class="ico">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h4>Kéo thả hoặc bấm để chọn file bảng giá vốn mới</h4>
+          <p>Định dạng .xlsx, .xls, .csv</p>
+        </div>
+        <div class="cu-vmsg ok" style="margin-top:14px">
+          <b>Bắt buộc file Excel phải có đủ 5 cột:</b> Mã hàng · Tên sản phẩm · Hoạt chất · Giá vốn · Giá bán lẻ.<br>
+          Các cột khác (quy cách, cơ sở SX, số ĐK…) nếu file không có sẽ để trống, không làm hỏng dữ liệu đang phân tích.
+        </div>
+      </div>
+
+      <!-- BƯỚC 2: SOI CHIẾU CỘT -->
+      <div id="cuStep2" style="display:none">
+        <div class="cu-file">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>File: <b id="cuFileName">—</b></span>
+          <button type="button" class="chg" id="cuChangeFile">Đổi file khác</button>
+        </div>
+
+        <div class="cu-src">
+          <div><label>Sheet dữ liệu</label><select id="cuSheet"></select></div>
+          <div><label>Dòng tiêu đề</label><input type="number" id="cuHeaderRow" min="1" value="1" /></div>
+          <div><label>Dữ liệu bắt đầu từ dòng</label><input type="number" id="cuDataRow" min="2" value="2" /></div>
+        </div>
+
+        <div class="cu-secline"><span>Kiểm tra 5 cột bắt buộc</span><i></i></div>
+        <div class="cu-valid" id="cuValid"></div>
+        <div id="cuValidMsg"></div>
+
+        <div class="cu-secline"><span>Soi chiếu cột Excel → trường dữ liệu</span><i></i></div>
+        <div class="cu-map" id="cuMapGrid"></div>
+
+        <div class="cu-secline"><span>Tuỳ chọn cập nhật</span><i></i></div>
+        <div class="cu-opts">
+          <label class="cu-opt"><input type="radio" name="cuFill" value="keep" checked />
+            <span><b>Giữ nguyên dữ liệu cũ</b> ở những cột file Excel không có <span class="d">Khuyến nghị — chỉ ghi đè đúng những cột có trong file mới, dữ liệu phân tích cũ không bị mất.</span></span></label>
+          <label class="cu-opt"><input type="radio" name="cuFill" value="blank" />
+            <span><b>Để trống</b> những cột file Excel không có <span class="d">Chuẩn hoá tuyệt đối theo file mới — cột nào file không có sẽ bị xoá trắng (ảnh sản phẩm vẫn được giữ).</span></span></label>
+          <label class="cu-opt"><input type="checkbox" id="cuOnlyPrice" />
+            <span><b>Chỉ cập nhật Giá vốn &amp; Giá bán lẻ</b> <span class="d">Tên, hoạt chất và mọi cột khác của sản phẩm đã có sẽ không thay đổi.</span></span></label>
+          <label class="cu-opt"><input type="checkbox" id="cuOptDisc" />
+            <span><b>Cập nhật cả CK Khách hàng</b> nếu file có cột chiết khấu <span class="d">Tự nhận dạng 0.15 → 15%. Bỏ chọn nếu bạn đang quản lý chiết khấu riêng trong ứng dụng.</span></span></label>
+          <label class="cu-opt"><input type="checkbox" id="cuOptAddNew" checked />
+            <span><b>Bổ sung sản phẩm mới</b> có trong file nhưng chưa có trong danh mục</span></label>
+          <label class="cu-opt"><input type="checkbox" id="cuOptFuzzy" checked />
+            <span><b>Bật khớp gần đúng theo tên</b> khi mã hàng không trùng <span class="d">Ngưỡng 90% + bắt buộc trùng khớp mọi con số hàm lượng (500mg ≠ 650mg). Dòng khớp gần đúng luôn tô vàng để kiểm tra.</span></span></label>
+          <label class="cu-opt"><input type="checkbox" id="cuOptRemove" />
+            <span style="color:#B3261E"><b>Xoá sản phẩm không có trong file mới</b> <span class="d" style="color:#C08080">Cẩn trọng — dùng khi file mới là danh mục đầy đủ thay thế hoàn toàn.</span></span></label>
+        </div>
+      </div>
+
+      <!-- BƯỚC 3: KẾT QUẢ SOI CHIẾU -->
+      <div id="cuStep3" style="display:none">
+        <div class="cu-cards" id="cuCards"></div>
+        <div id="cuWarnWrap"></div>
+        <div class="cu-bar">
+          <button type="button" class="cu-chip on" data-f="all">Tất cả</button>
+          <button type="button" class="cu-chip" data-f="chg">Thay đổi</button>
+          <button type="button" class="cu-chip" data-f="risk">⚠ Cần kiểm tra</button>
+          <button type="button" class="cu-chip" data-f="fz">Khớp gần đúng</button>
+          <button type="button" class="cu-chip" data-f="dup">Trùng trong file</button>
+          <button type="button" class="cu-chip" data-f="new">Thêm mới</button>
+          <button type="button" class="cu-chip" data-f="same">Không đổi</button>
+          <button type="button" class="cu-chip" data-f="abs">Không có trong file</button>
+          <input type="text" class="s" id="cuSearch" placeholder="Tìm mã hàng / tên sản phẩm / hoạt chất…" autocomplete="off" />
+          <button type="button" class="cu-mini" id="cuCheckAll">✓ Chọn tất cả</button>
+          <button type="button" class="cu-mini" id="cuUncheckAll">✕ Bỏ chọn</button>
+        </div>
+        <div class="cu-tblwrap">
+          <table class="cu-tbl" id="cuTbl">
+            <thead><tr>
+              <th style="width:34px"><input type="checkbox" id="cuHeadChk" checked /></th>
+              <th style="width:104px">Trạng thái</th>
+              <th style="width:66px;text-align:right" title="Số thứ tự dòng trong bảng sau khi cập nhật">STT</th>
+              <th>Mã hàng</th>
+              <th>Tên sản phẩm</th>
+              <th>Hoạt chất</th>
+              <th style="text-align:right">Giá vốn</th>
+              <th style="text-align:right">Giá bán lẻ</th>
+              <th style="text-align:right">CK IDECO</th>
+              <th style="text-align:right">CK KH</th>
+              <th style="text-align:right">Giá bán buôn</th>
+              <th style="text-align:right">Lợi nhuận</th>
+              <th style="text-align:right">Tỉ suất LN</th>
+              <th>Khớp bằng</th>
+            </tr></thead>
+            <tbody id="cuTbody"></tbody>
+          </table>
+        </div>
+        <div class="cu-legend">Giá bán buôn = Giá bán lẻ × (1 − CK KH) · Lợi nhuận = Giá bán buôn − Giá vốn · Tỉ suất LN = Lợi nhuận / Giá bán buôn · CK IDECO = (Giá bán lẻ − Giá vốn) / Giá bán lẻ — đúng công thức bảng phân tích hiện hành.</div>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" id="cuClose">Đóng</button>
+      <button class="btn" id="cuBack" style="display:none">← Soi chiếu lại</button>
+      <button class="btn" id="cuReport" style="display:none;border-color:#B8893C;color:#B8893C">Xuất báo cáo đối chiếu</button>
+      <button class="btn primary" id="cuAnalyze" style="display:none">Soi chiếu dữ liệu →</button>
+      <button class="btn primary" id="cuApply" style="display:none">Áp dụng cập nhật</button>
+    </div>
+  </div>
+</div>
+
 <div class="full-loader" id="loader">
   <div class="spinner dark"></div>
   <div class="msg" id="loaderMsg">Đang xử lý...</div>
@@ -1618,10 +1860,17 @@ document.getElementById('mapConfirm').onclick = ()=>{
       }
     });
 
+    const __beforeCount = products.length - added;
+    const __newIds = added ? products.slice(products.length - added).map(p => p.id) : [];
     xlsxAppendMode = false;
     xlsxWorkbook = null;
     xlsxCurrentRows = [];
     render();
+    if(window.CUNotice) window.CUNotice({
+      source:'Cập nhật danh sách từ Excel', added:added, updated:updated, removed:0,
+      before:__beforeCount, newIds:__newIds,
+      sttFrom:__beforeCount + 1, sttTo:products.length
+    });
 
     let msg;
     if(added > 0 && updated > 0){
@@ -1657,6 +1906,9 @@ document.getElementById('mapConfirm').onclick = ()=>{
 /* ==================== RENDER ==================== */
 function applyFilter(){
   let base = products;
+  if(window.__cuNewOnly && window.__cuNewIds){
+    base = base.filter(p => window.__cuNewIds[p.id]);
+  }
   // Lọc theo nhiều Cơ sở SX (nhập cách nhau bởi dấu phẩy, logic OR, bỏ dấu)
   const mfrTerms = (mfrSearchTerm||'')
     .split(',')
@@ -1695,7 +1947,9 @@ function render(){
   }
   empty.style.display = 'none';
   
-  // Build rows
+  // Build rows — STT lấy theo vị trí THẬT trong danh mục (không đổi khi lọc/tìm kiếm)
+  const sttMap = window.__sttMap = new Map();
+  products.forEach((pp, ix) => sttMap.set(pp.id, ix + 1));
   let html = '';
   filtered.forEach((p, i) => {
     const c = computeRow(p);
@@ -1704,8 +1958,10 @@ function render(){
       ? `<img src="${p.image}" alt="">`
       : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
     
-    html += `<tr data-id="${p.id}">
-      <td class="stt" data-col="stt">${i + 1}</td>
+    const __isNew = !!(window.__cuNewIds && window.__cuNewIds[p.id]);
+    const __stt = sttMap.get(p.id) || (i + 1);
+    html += `<tr data-id="${p.id}"${__isNew ? ' class="just-new"' : ''}>
+      <td class="stt" data-col="stt">${__stt}${__isNew ? '<span class="new-dot" title="Dòng vừa nạp từ Excel">MỚI</span>' : ''}</td>
       <td class="img-cell" data-col="image"><div class="ph" onclick="openImage('${p.id}')">${imgPart}</div></td>
       <td data-col="code"><input class="editable subtle" data-field="code" value="${escapeHtml(p.code||'')}" /></td>
       <td class="name-cell" data-col="name"><input class="editable" data-field="name" value="${escapeHtml(p.name)}" /></td>
@@ -3451,8 +3707,10 @@ function renderCards(){
     const imgPart = p.image
       ? `<img src="${p.image}" alt="">`
       : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
-    const meta = [p.code, p.spec, p.manufacturer].filter(Boolean).map(escapeHtml).join(' · ');
-    html += `<div class="pcard" data-id="${p.id}">
+    const __stt = (window.__sttMap && window.__sttMap.get(p.id)) || (i + 1);
+    const __isNew = !!(window.__cuNewIds && window.__cuNewIds[p.id]);
+    const meta = ['STT ' + __stt].concat([p.code, p.spec, p.manufacturer].filter(Boolean).map(escapeHtml)).join(' · ');
+    html += `<div class="pcard${__isNew ? ' just-new' : ''}" data-id="${p.id}">
       <div class="pc-head">
         <div class="ph" onclick="openImage('${p.id}')">${imgPart}</div>
         <div class="pc-title">
@@ -3569,6 +3827,995 @@ function refreshCardComputed(card, p){
 })();
 applyViewMode();
 
+
+/* =====================================================================
+   MODULE: CẬP NHẬT BẢNG GIÁ VỐN MỚI — soi chiếu Excel → dữ liệu chuẩn
+   Bắt buộc: Mã hàng · Tên sản phẩm · Hoạt chất · Giá vốn · Giá bán lẻ
+   Nguyên tắc an toàn số liệu:
+     - Ô Excel để trống KHÔNG ghi đè giá cũ (tránh xoá trắng giá vốn)
+     - Khớp gần đúng phải trùng mọi con số hàm lượng (500mg ≠ 650mg)
+     - Trùng mã trong cùng file bị chặn, không tạo bản ghi nhân đôi
+     - Mọi dòng bất thường (lỗ, biến động >30%) đều được cảnh báo
+   ===================================================================== */
+(function(){
+'use strict';
+
+/* ---------- Định nghĩa trường ---------- */
+var CU_FIELDS = [
+  { key:'code',          label:'Mã hàng',            type:'text',  req:true,
+    kw:['ma hang','ma san pham','ma sp','ma thuoc','ma vach','sku','product code','item code','ma'] },
+  { key:'name',          label:'Tên sản phẩm',        type:'text',  req:true,
+    kw:['ten san pham','ten sp','ten hang','ten thuoc','ten biet duoc','product name','san pham','ten'] },
+  { key:'ingredient',    label:'Hoạt chất',           type:'text',  req:true,
+    kw:['ten hoat chat','hoat chat','active ingredient','ingredient','thanh phan'] },
+  { key:'cost',          label:'Giá vốn',             type:'money', req:true,
+    kw:['gia von','gia nhap','gia goc','cost'], avoid:['ban le','ban buon','loi nhuan'] },
+  { key:'retail',        label:'Giá bán lẻ',          type:'money', req:true,
+    kw:['gia ban le','gia le','gia ban','retail price','retail'], avoid:['gia von','don gia','buon','loi nhuan'] },
+  { key:'concentration', label:'Nồng độ, hàm lượng',  type:'text',
+    kw:['nong do, ham luong','nong do','ham luong','concentration','strength'] },
+  { key:'spec',          label:'Quy cách đóng gói',   type:'text',
+    kw:['quy cach dong goi','quy cach','dong goi','packaging','quy cach dg'] },
+  { key:'usage',         label:'Công dụng chính',     type:'text',
+    kw:['cong dung chinh','cong dung','chi dinh','tac dung','indication'] },
+  { key:'smallestQty',   label:'SL ĐVT nhỏ nhất',     type:'num',
+    kw:['so luong dvt nho nhat','so luong dvt','sl dvt','dvt nho nhat'] },
+  { key:'expiry',        label:'Hạn dùng (tháng)',    type:'num',
+    kw:['han dung','han su dung','expiry','shelf life'] },
+  { key:'regNo',         label:'Số ĐK',               type:'text',
+    kw:['so dang ky','so dk','sdk','so visa','reg no','registration'] },
+  { key:'manufacturer',  label:'Cơ sở SX',            type:'text',
+    kw:['co so san xuat','co so sx','nha san xuat','nsx','manufacturer','hang sx'] },
+  { key:'country',       label:'Nước SX',             type:'text',
+    kw:['nuoc san xuat','nuoc sx','xuat xu','country','origin'] },
+  { key:'unitPrice',     label:'Đơn giá BL (ĐVT nhỏ nhất)', type:'money',
+    kw:['don gia bl','don gia ban le','don gia'], avoid:['gia von'] },
+  { key:'discCust',      label:'CK Khách hàng (%)',   type:'pct',
+    kw:['chiet khau khach hang','ck khach hang','chiet khau kh','chiet khau'] }
+];
+var CU_REQ = ['code','name','ingredient','cost','retail'];
+var TEXT_FIELDS = {}, MONEY_FIELDS = {};
+CU_FIELDS.forEach(function(f){
+  if(f.type === 'text') TEXT_FIELDS[f.key] = 1;
+  if(f.type === 'money') MONEY_FIELDS[f.key] = 1;
+});
+
+/* ---------- Chuẩn hoá tiếng Việt (chống lỗi NFD/NFC) ---------- */
+function fold(s){
+  return String(s == null ? '' : s)
+    .normalize('NFC').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/đ/g,'d')
+    .replace(/\s+/g,' ').trim();
+}
+function keyOf(s){ return fold(s).replace(/[^a-z0-9]+/g,''); }
+
+/* ---------- Đọc số kiểu Việt Nam: 50,000 · 1.234.567 · 0,15 ---------- */
+function cuNum(v){
+  if(v === null || v === undefined || v === '') return 0;
+  if(typeof v === 'number') return isFinite(v) ? Math.round(v * 100) / 100 : 0;
+  var s = String(v).replace(/\u00a0/g,' ').trim().replace(/[^\d.,\-]/g,'');
+  if(!s || s === '-') return 0;
+  var neg = s.charAt(0) === '-';
+  s = s.replace(/-/g,'');
+  var lc = s.lastIndexOf(','), ld = s.lastIndexOf('.');
+  if(lc > -1 && ld > -1){
+    if(lc > ld) s = s.replace(/\./g,'').replace(/,/g,'.');
+    else        s = s.replace(/,/g,'');
+  } else if(lc > -1){
+    var pc = s.split(',');
+    if(pc.length > 2 || pc[pc.length-1].length === 3) s = s.replace(/,/g,'');
+    else s = s.replace(/,/g,'.');
+  } else if(ld > -1){
+    var pd = s.split('.');
+    if(pd.length > 2 || pd[pd.length-1].length === 3) s = s.replace(/\./g,'');
+  }
+  var n = parseFloat(s);
+  if(!isFinite(n)) return 0;
+  n = Math.round(n * 100) / 100;
+  return neg ? -n : n;
+}
+function cuPct(v){
+  var n = cuNum(v);
+  if(n > 0 && n <= 1 && String(v).indexOf('%') < 0) n = n * 100;   /* 0.15 → 15% */
+  return Math.round(n * 100) / 100;
+}
+function isEmptyCell(v){ return v === null || v === undefined || String(v).trim() === ''; }
+
+/* ---------- Công thức phân tích (giống hệt bảng hiện hành) ---------- */
+function calcRow(cost, retail, disc){
+  var idecoDisc = retail > 0 ? ((retail - cost) / retail * 100) : 0;
+  var wholesale = retail * (1 - (disc || 0) / 100);
+  var profit    = wholesale - cost;
+  var margin    = wholesale > 0 ? (profit / wholesale * 100) : 0;
+  return { ideco:idecoDisc, wholesale:wholesale, profit:profit, margin:margin };
+}
+
+/* ---------- Độ tương đồng tên (Dice bigram) + khoá an toàn hàm lượng ---------- */
+function dice(a, b){
+  a = fold(a).replace(/[^a-z0-9 ]/g,''); b = fold(b).replace(/[^a-z0-9 ]/g,'');
+  if(!a || !b) return 0;
+  if(a === b) return 1;
+  if(a.length < 2 || b.length < 2) return a === b ? 1 : 0;
+  var m = {}, i, g, hit = 0, tot = 0;
+  for(i = 0; i < a.length - 1; i++){ g = a.substr(i,2); m[g] = (m[g]||0) + 1; }
+  for(i = 0; i < b.length - 1; i++){ g = b.substr(i,2); if(m[g] > 0){ m[g]--; hit++; } tot++; }
+  return (2 * hit) / ((a.length - 1) + tot);
+}
+/* Lấy toàn bộ con số trong tên: 500mg, 0.05%, 140 … */
+function numSig(s){
+  var m = fold(s).replace(/,/g,'.').match(/\d+(?:\.\d+)?/g);
+  if(!m) return '';
+  return m.map(Number).sort(function(x,y){ return x - y; }).join('|');
+}
+var FUZZY_MIN = 0.90;
+/* Chỉ chấp nhận khớp gần đúng khi TRÙNG TUYỆT ĐỐI mọi con số hàm lượng */
+function safeSim(a, b){
+  if(numSig(a) !== numSig(b)) return 0;
+  return dice(a, b);
+}
+
+/* ---------- Trạng thái module ---------- */
+var wb = null, rows = [], fileName = '', mapping = {}, results = [], absent = [], opt = {};
+var filterMode = 'all', searchQ = '';
+
+function readOptions(){
+  return {
+    fillBlank: document.querySelector('input[name=cuFill]:checked').value === 'blank',
+    onlyPrice: document.getElementById('cuOnlyPrice').checked,
+    useDisc:   document.getElementById('cuOptDisc').checked,
+    addNew:    document.getElementById('cuOptAddNew').checked,
+    fuzzy:     document.getElementById('cuOptFuzzy').checked,
+    remove:    document.getElementById('cuOptRemove').checked
+  };
+}
+
+/* ---------- Mở / đóng ---------- */
+function open(){
+  wb = null; rows = []; results = []; absent = []; fileName = '';
+  filterMode = 'all'; searchQ = '';
+  document.getElementById('cuSearch').value = '';
+  step(1);
+  document.getElementById('cuModal').classList.add('active');
+}
+function close(){
+  document.getElementById('cuModal').classList.remove('active');
+  wb = null; rows = []; results = []; absent = [];
+}
+function step(n){
+  document.getElementById('cuStep1').style.display = n === 1 ? '' : 'none';
+  document.getElementById('cuStep2').style.display = n === 2 ? '' : 'none';
+  document.getElementById('cuStep3').style.display = n === 3 ? '' : 'none';
+  document.getElementById('cuAnalyze').style.display = n === 2 ? '' : 'none';
+  document.getElementById('cuApply').style.display   = n === 3 ? '' : 'none';
+  document.getElementById('cuBack').style.display    = n === 3 ? '' : 'none';
+  document.getElementById('cuReport').style.display  = n === 3 ? '' : 'none';
+  var t = document.getElementById('cuTitle'), d = document.getElementById('cuDesc');
+  if(n === 3){
+    t.textContent = 'Kết quả soi chiếu & kiểm tra số liệu';
+    d.textContent = 'Toàn bộ chuỗi phân tích (giá vốn → bán buôn → lợi nhuận) được tính trước. Kiểm tra rồi mới áp dụng.';
+  } else {
+    t.textContent = 'Cập nhật bảng giá vốn mới';
+    d.textContent = 'Tải file Excel giá vốn mới — hệ thống soi chiếu với danh mục hiện có và tạo dữ liệu cập nhật chính xác.';
+  }
+}
+
+/* ---------- Đọc file ---------- */
+function readFile(file){
+  if(!file) return;
+  fileName = file.name;
+  showLoader('Đang đọc file giá vốn mới…');
+  var fr = new FileReader();
+  fr.onload = function(e){
+    try {
+      wb = XLSX.read(new Uint8Array(e.target.result), { type:'array', cellDates:false });
+      if(!wb.SheetNames.length) throw new Error('File không có sheet nào');
+      hideLoader();
+      document.getElementById('cuFileName').textContent = fileName;
+      var ss = document.getElementById('cuSheet');
+      ss.innerHTML = wb.SheetNames.map(function(n){
+        return '<option value="' + escapeHtml(n) + '">' + escapeHtml(n) + '</option>';
+      }).join('');
+      ss.value = wb.SheetNames[0];
+      step(2);
+      loadSheet();
+    } catch(err){
+      hideLoader();
+      toast('Lỗi đọc file: ' + err.message, 'error', 5000);
+    }
+  };
+  fr.onerror = function(){ hideLoader(); toast('Không đọc được file', 'error'); };
+  fr.readAsArrayBuffer(file);
+}
+
+/* ---------- Nạp sheet + tự dò dòng tiêu đề ---------- */
+function loadSheet(){
+  var sh = wb.Sheets[document.getElementById('cuSheet').value];
+  rows = XLSX.utils.sheet_to_json(sh, { header:1, defval:'', raw:false });
+  var best = 0, bestScore = -1;
+  for(var i = 0; i < Math.min(rows.length, 25); i++){
+    var r = rows[i] || [], sc = 0;
+    for(var f = 0; f < CU_FIELDS.length; f++){
+      var fd = CU_FIELDS[f], hit = 0;
+      for(var c = 0; c < r.length; c++){ if(scoreHeader(r[c], fd) > 0){ hit = 1; break; } }
+      if(hit) sc += fd.req ? 5 : 1;
+    }
+    if(sc > bestScore){ bestScore = sc; best = i; }
+  }
+  document.getElementById('cuHeaderRow').value = best + 1;
+  document.getElementById('cuDataRow').value   = best + 2;
+  buildMapping();
+}
+
+/* ---------- Chấm điểm tiêu đề cột ---------- */
+function scoreHeader(h, f){
+  var H = fold(h);
+  if(!H) return 0;
+  if(f.avoid){
+    for(var a = 0; a < f.avoid.length; a++) if(H.indexOf(f.avoid[a]) > -1) return 0;
+  }
+  var best = 0;
+  for(var i = 0; i < f.kw.length; i++){
+    var k = f.kw[i];
+    if(H === k){ best = Math.max(best, 200 + k.length); continue; }
+    if(k.length < 4) continue;                       /* từ khoá ngắn chỉ chấp nhận khớp tuyệt đối */
+    if(H.indexOf(k) === 0) best = Math.max(best, 120 + k.length);
+    else if(H.indexOf(k) > -1) best = Math.max(best, 60 + k.length);
+  }
+  return best;
+}
+
+/* ---------- Dựng bảng soi chiếu cột ---------- */
+function buildMapping(){
+  var hr = parseInt(document.getElementById('cuHeaderRow').value, 10) - 1;
+  var grid = document.getElementById('cuMapGrid');
+  if(isNaN(hr) || hr < 0 || hr >= rows.length){
+    grid.innerHTML = '<div class="cu-vmsg bad">Dòng tiêu đề không hợp lệ.</div>';
+    validate({});
+    return;
+  }
+  var headers = (rows[hr] || []).map(function(h){ return String(h == null ? '' : h).replace(/\s+/g,' ').trim(); });
+  var maxCol = headers.length;
+  for(var i = 0; i < Math.min(rows.length, 80); i++) maxCol = Math.max(maxCol, (rows[i]||[]).length);
+
+  var pairs = [];
+  CU_FIELDS.forEach(function(f){
+    for(var c = 0; c < maxCol; c++){
+      var s = scoreHeader(headers[c], f);
+      if(s > 0) pairs.push({ f:f.key, c:c, s:s + (f.req ? 30 : 0) });
+    }
+  });
+  pairs.sort(function(a,b){ return b.s - a.s; });
+  var usedF = {}, usedC = {}, sug = {};
+  CU_FIELDS.forEach(function(f){ sug[f.key] = -1; });
+  pairs.forEach(function(p){
+    if(usedF[p.f] || usedC[p.c]) return;
+    usedF[p.f] = 1; usedC[p.c] = 1; sug[p.f] = p.c;
+  });
+
+  grid.innerHTML = CU_FIELDS.map(function(f){
+    var opts = ['<option value="-1">— Không có trong file (để trống) —</option>'];
+    for(var c = 0; c < maxCol; c++){
+      var lbl = 'Cột ' + colLetter(c) + ' · ' + (headers[c] ? headers[c].slice(0,40) : '(trống)');
+      opts.push('<option value="' + c + '"' + (sug[f.key] === c ? ' selected' : '') + '>' + escapeHtml(lbl) + '</option>');
+    }
+    return '<div class="cu-mrow' + (f.req ? ' req' : '') + '">' +
+      '<span class="lbl">' + f.label + (f.req ? '<em>*</em>' : '') + '</span>' +
+      '<select data-f="' + f.key + '" class="' + (sug[f.key] < 0 ? 'empty' : '') + '">' + opts.join('') + '</select></div>';
+  }).join('');
+
+  grid.querySelectorAll('select').forEach(function(s){
+    s.addEventListener('change', function(){
+      s.className = s.value === '-1' ? 'empty' : '';
+      validate(readMapping());
+    });
+  });
+  validate(readMapping());
+}
+
+function readMapping(){
+  var m = {};
+  document.querySelectorAll('#cuMapGrid select').forEach(function(s){
+    m[s.dataset.f] = parseInt(s.value, 10);
+  });
+  return m;
+}
+
+/* ---------- Kiểm tra 5 cột bắt buộc ---------- */
+function validate(m){
+  var box = document.getElementById('cuValid'), msg = document.getElementById('cuValidMsg');
+  var missing = [];
+  box.innerHTML = CU_REQ.map(function(k){
+    var f = CU_FIELDS.filter(function(x){ return x.key === k; })[0];
+    var ok = m[k] !== undefined && m[k] >= 0;
+    if(!ok) missing.push(f.label);
+    return '<span class="cu-vchip ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '✓' : '✕') + ' ' + f.label +
+      (ok ? ' <b style="opacity:.7;font-weight:500">(cột ' + colLetter(m[k]) + ')</b>' : '') + '</span>';
+  }).join('');
+  if(missing.length){
+    msg.innerHTML = '<div class="cu-vmsg bad"><b>Thiếu ' + missing.length + ' cột bắt buộc:</b> ' +
+      missing.join(' · ') + '. Hãy chọn đúng cột tương ứng ở bảng soi chiếu bên dưới, hoặc bổ sung cột này vào file Excel rồi tải lại — nếu thiếu, dữ liệu phân tích sẽ không chính xác.</div>';
+  } else {
+    msg.innerHTML = '<div class="cu-vmsg ok">✓ Đủ 5 cột bắt buộc. Hệ thống sẽ soi chiếu theo <b>Mã hàng</b> trước, sau đó đến <b>Tên sản phẩm + Hoạt chất</b>.</div>';
+  }
+  document.getElementById('cuAnalyze').disabled = missing.length > 0;
+  document.getElementById('cuAnalyze').style.opacity = missing.length > 0 ? .45 : 1;
+  mapping = m;
+  return missing.length === 0;
+}
+
+/* ---------- Chỉ mục danh mục hiện có ---------- */
+function buildIndex(){
+  var byCode = {}, byNameConc = {}, byNameIng = {}, byName = {}, list = [];
+  (products || []).forEach(function(p, i){
+    var ck = keyOf(p.code);
+    if(ck && byCode[ck] === undefined) byCode[ck] = i;
+    var n = keyOf(p.name);
+    if(n){
+      var k1 = n + '|' + keyOf(p.concentration);
+      var k2 = n + '|' + keyOf(p.ingredient);
+      if(byNameConc[k1] === undefined) byNameConc[k1] = i;
+      if(byNameIng[k2]  === undefined) byNameIng[k2]  = i;
+      if(byName[n]      === undefined) byName[n]      = i;
+      list.push({ i:i, n:String(p.name || '') });
+    }
+  });
+  return { byCode:byCode, byNameConc:byNameConc, byNameIng:byNameIng, byName:byName, list:list };
+}
+
+/* ---------- Soi chiếu ---------- */
+function analyze(){
+  if(!validate(readMapping())){ toast('File thiếu cột bắt buộc — chưa thể soi chiếu', 'warn', 4000); return; }
+  var m = mapping;
+  var ds = parseInt(document.getElementById('cuDataRow').value, 10) - 1;
+  if(isNaN(ds) || ds < 0){ toast('Dòng bắt đầu dữ liệu không hợp lệ', 'warn'); return; }
+  opt = readOptions();
+  showLoader('Đang soi chiếu & kiểm tra số liệu…');
+
+  setTimeout(function(){
+    try {
+      var idx = buildIndex(), taken = {}, seen = {};
+      results = [];
+
+      var raw = function(r, k){
+        if(m[k] === undefined || m[k] < 0) return null;         /* null = file KHÔNG có cột này */
+        var v = r[m[k]];
+        return v === undefined || v === null ? '' : v;
+      };
+
+      for(var i = ds; i < rows.length; i++){
+        var r = rows[i] || [];
+        var rawName = raw(r,'name'), rawCode = raw(r,'code');
+        var name = String(rawName == null ? '' : rawName).replace(/\s+/g,' ').trim();
+        var code = String(rawCode == null ? '' : rawCode).replace(/\s+/g,' ').trim();
+        if(!name && !code) continue;
+        var fn = fold(name);
+        if(!name || fn === 'ten san pham' || fn.indexOf('luon chon') > -1 || fn === 'tong cong' || fn === 'tong') continue;
+
+        /* ---- đọc dữ liệu từng cột ---- */
+        var d = { code:code, name:name, _row:i + 1 }, flags = [];
+        CU_FIELDS.forEach(function(f){
+          if(f.key === 'code' || f.key === 'name') return;
+          var v = raw(r, f.key);
+          if(v === null){ d[f.key] = null; return; }
+          if(f.type === 'money' || f.type === 'num'){
+            d[f.key] = cuNum(v);
+            if(f.key === 'cost' || f.key === 'retail'){
+              d[f.key + 'Empty'] = isEmptyCell(v);                        /* ô trống ≠ giá 0 */
+              if(!isEmptyCell(v) && cuNum(v) !== Math.round(cuNum(v))) flags.push('Giá lẻ số thập phân');
+            }
+          }
+          else if(f.type === 'pct') d[f.key] = cuPct(v);
+          else d[f.key] = String(v).replace(/\s+/g,' ').trim();
+        });
+        if(!code)                flags.push('Thiếu Mã hàng');
+        if(d.ingredient === '')  flags.push('Trống Hoạt chất');
+
+        /* ---- chặn trùng trong chính file Excel ---- */
+        var selfKey = keyOf(code) || (keyOf(name) + '#' + keyOf(d.ingredient || ''));
+        var isDup = false;
+        if(seen[selfKey]) isDup = true; else seen[selfKey] = i + 1;
+
+        /* ---- tìm sản phẩm tương ứng trong danh mục ---- */
+        var mi = -1, how = '', sim = 0;
+        var ck = keyOf(code);
+        if(ck && idx.byCode[ck] !== undefined){ mi = idx.byCode[ck]; how = 'Mã hàng'; sim = 1; }
+        if(mi < 0){
+          var nk = keyOf(name);
+          var k1 = nk + '|' + keyOf(d.concentration || '');
+          var k2 = nk + '|' + keyOf(d.ingredient || '');
+          if(d.concentration != null && d.concentration !== '' && idx.byNameConc[k1] !== undefined){ mi = idx.byNameConc[k1]; how = 'Tên + hàm lượng'; sim = 1; }
+          else if(d.ingredient && idx.byNameIng[k2] !== undefined){ mi = idx.byNameIng[k2]; how = 'Tên + hoạt chất'; sim = 1; }
+          else if(idx.byName[nk] !== undefined){ mi = idx.byName[nk]; how = 'Tên sản phẩm'; sim = 1; }
+        }
+        if(mi < 0 && opt.fuzzy){
+          var bi = -1, bs = 0;
+          for(var j = 0; j < idx.list.length; j++){
+            var s = safeSim(name, idx.list[j].n);
+            if(s > bs){ bs = s; bi = idx.list[j].i; }
+          }
+          if(bs >= FUZZY_MIN){ mi = bi; how = 'Gần đúng ' + Math.round(bs*100) + '%'; sim = bs; }
+        }
+        if(mi >= 0 && taken[mi]){ isDup = true; }
+        if(mi >= 0 && !isDup) taken[mi] = 1;
+
+        var old = (mi >= 0 && !isDup) ? products[mi] : null;
+
+        /* ---- giá trị sẽ ghi thực tế (tôn trọng ô trống & tuỳ chọn) ---- */
+        var oCost   = old ? parseNum(old.cost)   : 0;
+        var oRetail = old ? parseNum(old.retail) : 0;
+        var oDisc   = old ? parseNum(old.discCust) : 0;
+        var nCost   = (d.costEmpty   && old && !opt.fillBlank) ? oCost   : d.cost;
+        var nRetail = (d.retailEmpty && old && !opt.fillBlank) ? oRetail : d.retail;
+        var nDisc   = (opt.useDisc && d.discCust !== null && d.discCust !== undefined) ? d.discCust : oDisc;
+        d.finalCost = nCost; d.finalRetail = nRetail; d.finalDisc = nDisc;
+        if(d.costEmpty)   flags.push(old ? 'Trống Giá vốn — giữ giá cũ' : 'Trống Giá vốn');
+        if(d.retailEmpty) flags.push(old ? 'Trống Giá bán lẻ — giữ giá cũ' : 'Trống Giá bán lẻ');
+
+        /* ---- phân loại thay đổi ---- */
+        var st, chgs = [];
+        if(isDup){
+          st = 'dup';
+          how = 'Trùng dòng ' + (seen[selfKey] || '') + ' trong file';
+        } else if(old){
+          if(Math.round(nCost)   !== Math.round(oCost))   chgs.push('cost');
+          if(Math.round(nRetail) !== Math.round(oRetail)) chgs.push('retail');
+          if(opt.useDisc && Math.abs(nDisc - oDisc) > 0.001) chgs.push('discCust');
+          if(!opt.onlyPrice){
+            CU_FIELDS.forEach(function(f){
+              if(f.key === 'cost' || f.key === 'retail' || f.key === 'discCust') return;
+              var v = d[f.key];
+              if(v === null || v === undefined || v === ''){
+                if(opt.fillBlank){
+                  var ov = old[f.key];
+                  if(ov !== '' && ov !== 0 && ov !== null && ov !== undefined) chgs.push('blank:' + f.key);
+                }
+                return;
+              }
+              if(String(old[f.key] == null ? '' : old[f.key]).trim() !== String(v).trim()) chgs.push(f.key);
+            });
+          }
+          st = chgs.length ? 'chg' : 'same';
+        } else st = 'new';
+
+        /* ---- kiểm tra nghiệp vụ ---- */
+        var cal = calcRow(nCost, nRetail, nDisc);
+        if(nCost > 0 && nRetail > 0 && nCost >= nRetail) flags.push('Giá vốn ≥ Giá bán lẻ');
+        else if(cal.profit < 0 && nRetail > 0)           flags.push('Bán buôn thấp hơn giá vốn (lỗ)');
+        else if(nRetail > 0 && cal.margin < 10)          flags.push('Tỉ suất LN < 10%');
+        if(!nCost || !nRetail)                            flags.push('Thiếu giá — không tính được tỉ suất');
+        if(old && oCost > 0 && Math.abs(nCost - oCost) / oCost > 0.30)     flags.push('Giá vốn biến động ' + (nCost > oCost ? '+' : '') + Math.round((nCost - oCost)/oCost*100) + '%');
+        if(old && oRetail > 0 && Math.abs(nRetail - oRetail) / oRetail > 0.30) flags.push('Giá bán lẻ biến động ' + (nRetail > oRetail ? '+' : '') + Math.round((nRetail - oRetail)/oRetail*100) + '%');
+
+        results.push({
+          d:d, mi:(isDup ? -1 : mi), how:how, sim:sim, st:st, chgs:chgs, flags:flags,
+          fuzzy: !isDup && sim > 0 && sim < 1,
+          old: old ? { code:old.code, name:old.name, ingredient:old.ingredient,
+                       cost:oCost, retail:oRetail, disc:oDisc, id:old.id } : null,
+          on: (st !== 'dup' && st !== 'same')
+        });
+      }
+
+      absent = [];
+      (products || []).forEach(function(p, i){ if(!taken[i]) absent.push({ i:i, p:p }); });
+
+      hideLoader();
+      if(!results.length){
+        toast('Không tìm thấy dòng dữ liệu hợp lệ — kiểm tra lại dòng tiêu đề / dòng bắt đầu', 'warn', 5000);
+        return;
+      }
+      step(3);
+      renderResults();
+    } catch(err){
+      hideLoader();
+      console.error(err);
+      toast('Lỗi soi chiếu: ' + err.message, 'error', 5000);
+    }
+  }, 40);
+}
+
+/* ---------- Thống kê ---------- */
+function counts(){
+  var c = { chg:0, same:0, nw:0, fz:0, dup:0, risk:0 };
+  results.forEach(function(r){
+    if(r.st === 'chg') c.chg++;
+    else if(r.st === 'same') c.same++;
+    else if(r.st === 'dup') c.dup++;
+    else c.nw++;
+    if(r.fuzzy) c.fz++;
+    if(r.flags.length) c.risk++;
+  });
+  return c;
+}
+
+/* Tính STT thật sau khi cập nhật: xoá trước → giữ số liền mạch → dòng mới nối tiếp */
+function sttPlan(){
+  var removedIds = {};
+  if(opt.remove) absent.forEach(function(a){ removedIds[a.p.id] = 1; });
+  var map = {}, k = 0;
+  (products || []).forEach(function(p){ if(!removedIds[p.id]) map[p.id] = ++k; });
+  var kept = k, proj = {};
+  results.forEach(function(r, i){
+    if(r.st === 'new' && r.on && opt.addNew) proj[i] = ++k;
+  });
+  return { map:map, proj:proj, kept:kept, total:k, removed:removedIds };
+}
+function sttCellHtml(r, i, plan){
+  if(r.st === 'new'){
+    return plan.proj[i] ? plan.proj[i] + '<small>MỚI</small>' : '<span class="cu-blank">–</span>';
+  }
+  if(r.st === 'dup') return '<span class="cu-blank">–</span>';
+  var v = r.old ? plan.map[r.old.id] : null;
+  return v ? String(v) : '<span class="cu-blank">–</span>';
+}
+function refreshStt(){
+  var plan = sttPlan();
+  document.querySelectorAll('#cuTbody tr[data-ri]').forEach(function(tr){
+    var i = parseInt(tr.getAttribute('data-ri'), 10);
+    var c = tr.querySelector('.stt-cell');
+    if(c && results[i]) c.innerHTML = sttCellHtml(results[i], i, plan);
+  });
+  var el = document.getElementById('cuSttInfo');
+  if(el) el.innerHTML = sttSummary(plan);
+}
+function sttSummary(plan){
+  var n = Object.keys(plan.proj).length;
+  if(!n) return opt.addNew ? 'chưa chọn dòng mới nào' : 'đang TẮT bổ sung';
+  var nums = Object.keys(plan.proj).map(function(k){ return plan.proj[k]; });
+  var lo = Math.min.apply(null, nums), hi = Math.max.apply(null, nums);
+  return 'STT <b>' + lo + (n > 1 ? ' → ' + hi : '') + '</b> · tổng ' + plan.total + ' dòng';
+}
+
+function renderResults(){
+  var c = counts();
+  document.getElementById('cuCards').innerHTML =
+    '<div class="cu-card chg"><span class="l">Thay đổi giá / dữ liệu</span><span class="n">' + c.chg + '</span><span class="d">sẽ được cập nhật</span></div>' +
+    '<div class="cu-card new"><span class="l">Sản phẩm mới</span><span class="n">' + c.nw + '</span><span class="d" id="cuSttInfo">' + sttSummary(sttPlan()) + '</span></div>' +
+    '<div class="cu-card fz"><span class="l">Cần kiểm tra</span><span class="n">' + c.risk + '</span><span class="d">' + c.fz + ' khớp gần đúng · ' + c.dup + ' trùng trong file</span></div>' +
+    '<div class="cu-card same"><span class="l">Trùng khớp, không đổi</span><span class="n">' + c.same + '</span><span class="d">giữ nguyên</span></div>' +
+    '<div class="cu-card abs"><span class="l">Không có trong file</span><span class="n">' + absent.length + '</span><span class="d">' +
+      (opt.remove ? 'SẼ BỊ XOÁ' : 'giữ nguyên trong bảng') + '</span></div>';
+
+  /* tổng hợp cảnh báo */
+  var cnt = {};
+  results.forEach(function(r){ r.flags.forEach(function(f){
+    var k = f.replace(/biến động [+\-]?\d+%$/,'biến động trên 30%');
+    cnt[k] = (cnt[k] || 0) + 1;
+  }); });
+  var keys = Object.keys(cnt).sort(function(a,b){ return cnt[b] - cnt[a]; });
+  var crit = { 'Giá vốn ≥ Giá bán lẻ':1, 'Bán buôn thấp hơn giá vốn (lỗ)':1, 'Trống Giá vốn — giữ giá cũ':1, 'Trống Giá bán lẻ — giữ giá cũ':1 };
+  document.getElementById('cuWarnWrap').innerHTML = keys.length
+    ? '<div class="cu-warn"><b>Kết quả kiểm tra số liệu:</b><br>' + keys.map(function(k){
+        return (crit[k] ? '<b style="color:#B3261E">⛔ ' : '⚠ ') + cnt[k] + ' dòng · ' + k + (crit[k] ? '</b>' : '');
+      }).join('<br>') + '</div>'
+    : '<div class="cu-vmsg ok" style="margin-bottom:12px">✓ Không phát hiện bất thường trong toàn bộ số liệu của file.</div>';
+
+  renderRows();
+  syncApplyBtn();
+}
+
+function visibleRows(){
+  var q = fold(searchQ), out = [];
+  if(filterMode !== 'abs'){
+    results.forEach(function(r, i){
+      if(filterMode === 'chg'  && r.st !== 'chg') return;
+      if(filterMode === 'new'  && r.st !== 'new') return;
+      if(filterMode === 'same' && r.st !== 'same') return;
+      if(filterMode === 'dup'  && r.st !== 'dup') return;
+      if(filterMode === 'fz'   && !r.fuzzy) return;
+      if(filterMode === 'risk' && !r.flags.length) return;
+      if(q){
+        var hay = fold((r.d.code||'') + ' ' + (r.d.name||'') + ' ' + (r.d.ingredient||''));
+        if(hay.indexOf(q) < 0) return;
+      }
+      out.push({ kind:'r', i:i, r:r });
+    });
+  }
+  if(filterMode === 'all' || filterMode === 'abs'){
+    absent.forEach(function(a){
+      if(q){
+        var hay = fold((a.p.code||'') + ' ' + (a.p.name||'') + ' ' + (a.p.ingredient||''));
+        if(hay.indexOf(q) < 0) return;
+      }
+      out.push({ kind:'a', a:a });
+    });
+  }
+  return out;
+}
+
+function moneyCell(oldV, newV, isEmpty){
+  var shown = newV ? fmt(Math.round(newV)) : '<span class="cu-blank">–</span>';
+  var tag = isEmpty ? '<span class="cu-d" style="color:#B35900">' +
+    ((oldV === null || oldV === undefined) ? 'ô trống' : 'ô trống — giữ giá cũ') + '</span>' : '';
+  if(oldV === null || oldV === undefined) return '<td class="num">' + shown + tag + '</td>';
+  if(Math.round(oldV) === Math.round(newV)) return '<td class="num">' + shown + tag + '</td>';
+  var dv = newV - oldV, pct = oldV > 0 ? (dv / oldV * 100) : 0;
+  var cls = dv > 0 ? 'cu-up' : 'cu-dn';
+  return '<td class="num"><span class="cu-old">' + fmt(Math.round(oldV)) + '</span><b class="' + cls + '">' + fmt(Math.round(newV)) + '</b>' +
+    '<span class="cu-d ' + cls + '">' + (dv > 0 ? '▲ +' : '▼ ') + fmt(Math.round(dv)) +
+    (oldV > 0 ? ' (' + (dv > 0 ? '+' : '') + pct.toFixed(1) + '%)' : '') + '</span>' + tag + '</td>';
+}
+function pctCell(oldV, newV, suffix){
+  suffix = suffix || '%';
+  var s = newV.toFixed(1) + suffix;
+  if(oldV === null || oldV === undefined || Math.abs(oldV - newV) < 0.05) return '<td class="num">' + s + '</td>';
+  var dv = newV - oldV, cls = dv > 0 ? 'cu-dn' : 'cu-up';
+  return '<td class="num"><span class="cu-old">' + oldV.toFixed(1) + suffix + '</span><b>' + s + '</b>' +
+    '<span class="cu-d ' + cls + '">' + (dv > 0 ? '+' : '') + dv.toFixed(1) + ' điểm</span></td>';
+}
+
+function renderRows(){
+  var list = visibleRows(), MAX = 400, tb = document.getElementById('cuTbody'), plan = sttPlan();
+  if(!list.length){
+    tb.innerHTML = '<tr><td colspan="14" class="cu-more">Không có dòng nào khớp bộ lọc.</td></tr>';
+    return;
+  }
+  var html = '';
+  list.slice(0, MAX).forEach(function(it){
+    if(it.kind === 'a'){
+      var p = it.a.p, pc = parseNum(p.cost), pr = parseNum(p.retail), pd = parseNum(p.discCust);
+      var k = calcRow(pc, pr, pd);
+      var aStt = opt.remove ? '<span class="cu-blank">xoá</span>' : (plan.map[p.id] || '–');
+      html += '<tr data-ai="1">' +
+        '<td><input type="checkbox" disabled /></td>' +
+        '<td><span class="cu-st abs">Không có</span></td>' +
+        '<td class="stt-cell">' + aStt + '</td>' +
+        '<td>' + escapeHtml(p.code || '') + '</td>' +
+        '<td class="nm">' + escapeHtml(p.name || '') + '</td>' +
+        '<td class="ing">' + (p.ingredient ? escapeHtml(p.ingredient) : '<span class="cu-blank">–</span>') + '</td>' +
+        '<td class="num">' + fmt(Math.round(pc)) + '</td>' +
+        '<td class="num">' + fmt(Math.round(pr)) + '</td>' +
+        '<td class="num">' + k.ideco.toFixed(1) + '%</td>' +
+        '<td class="num">' + pd.toFixed(1) + '%</td>' +
+        '<td class="num">' + fmt(Math.round(k.wholesale)) + '</td>' +
+        '<td class="num">' + fmt(Math.round(k.profit)) + '</td>' +
+        '<td class="num">' + k.margin.toFixed(1) + '%</td>' +
+        '<td class="cu-how">Chỉ có trong danh mục</td></tr>';
+      return;
+    }
+    var r = it.r, d = r.d, o = r.old;
+    var stTxt = r.st === 'new' ? 'Thêm mới' : (r.st === 'chg' ? 'Cập nhật' : (r.st === 'dup' ? 'Trùng file' : 'Không đổi'));
+    var nk = calcRow(d.finalCost, d.finalRetail, d.finalDisc);
+    var ok = o ? calcRow(o.cost, o.retail, o.disc) : null;
+    var flagHtml = r.flags.length
+      ? '<span class="cu-flag">⚠ ' + escapeHtml(r.flags.join(' · ')) + '</span>' : '';
+    var others = r.chgs.filter(function(k){ return k !== 'cost' && k !== 'retail' && k !== 'discCust'; })
+      .map(function(k){
+        var blank = k.indexOf('blank:') === 0, kk = blank ? k.slice(6) : k;
+        var fd = CU_FIELDS.filter(function(x){ return x.key === kk; })[0];
+        return (blank ? 'xoá trắng ' : '') + (fd ? fd.label : kk);
+      });
+    if(others.length) flagHtml += '<span class="cu-chgnote">↻ ' + escapeHtml(others.join(' · ')) + '</span>';
+    html += '<tr data-ri="' + it.i + '"' + (r.flags.length ? ' class="risk"' : '') + '>' +
+      '<td><input type="checkbox" data-i="' + it.i + '"' + (r.on ? ' checked' : '') + (r.st === 'same' ? ' disabled' : '') + ' /></td>' +
+      '<td><span class="cu-st ' + r.st + '">' + stTxt + '</span></td>' +
+      '<td class="stt-cell">' + sttCellHtml(r, it.i, plan) + '</td>' +
+      '<td>' + (d.code ? escapeHtml(d.code) : '<span class="cu-blank">–</span>') + '</td>' +
+      '<td class="nm">' + escapeHtml(d.name) +
+        (o && fold(o.name) !== fold(d.name) ? '<span class="cu-old">' + escapeHtml(o.name) + '</span>' : '') + flagHtml + '</td>' +
+      '<td class="ing">' + (d.ingredient ? escapeHtml(d.ingredient) : '<span class="cu-blank">–</span>') + '</td>' +
+      moneyCell(o ? o.cost : null, d.finalCost, d.costEmpty) +
+      moneyCell(o ? o.retail : null, d.finalRetail, d.retailEmpty) +
+      pctCell(ok ? ok.ideco : null, nk.ideco) +
+      pctCell(o ? o.disc : null, d.finalDisc) +
+      moneyCell(ok ? ok.wholesale : null, nk.wholesale, false) +
+      moneyCell(ok ? ok.profit : null, nk.profit, false) +
+      pctCell(ok ? ok.margin : null, nk.margin) +
+      '<td class="cu-how' + (r.fuzzy ? ' fz' : '') + '">' + escapeHtml(r.how || 'Sản phẩm mới') + '</td></tr>';
+  });
+  if(list.length > MAX) html += '<tr><td colspan="14" class="cu-more">… còn ' + (list.length - MAX) + ' dòng nữa (dùng ô tìm kiếm hoặc bộ lọc để xem). Khi áp dụng, <b>toàn bộ</b> dòng đang chọn đều được cập nhật.</td></tr>';
+  tb.innerHTML = html;
+
+  tb.querySelectorAll('input[type=checkbox][data-i]').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      results[parseInt(cb.dataset.i,10)].on = cb.checked;
+      syncApplyBtn(); refreshStt();
+    });
+  });
+}
+
+function syncApplyBtn(){
+  var upd = 0, add = 0;
+  results.forEach(function(r){
+    if(!r.on || r.st === 'dup' || r.st === 'same') return;
+    if(r.st === 'new'){ if(opt.addNew) add++; }
+    else upd++;
+  });
+  var del = opt.remove ? absent.length : 0;
+  var b = document.getElementById('cuApply'), parts = [];
+  if(upd) parts.push('cập nhật ' + upd);
+  if(add) parts.push('thêm ' + add);
+  if(del) parts.push('xoá ' + del);
+  b.textContent = parts.length ? 'Áp dụng (' + parts.join(' · ') + ')' : 'Không có thay đổi';
+  b.disabled = !parts.length;
+  b.style.opacity = parts.length ? 1 : .45;
+}
+
+/* ---------- Áp dụng (dùng đúng tuỳ chọn đã soi chiếu) ---------- */
+function apply(){
+  var run = function(){
+    var before = products.length;
+    var upd = 0, add = 0, del = 0, addedIds = [];
+    var byId = {};
+    products.forEach(function(p){ byId[p.id] = p; });
+
+    /* 1) Cập nhật các dòng đã khớp — tra theo ID nên không lệ thuộc vị trí mảng */
+    results.forEach(function(r){
+      if(!r.on || r.st !== 'chg' || !r.old) return;
+      var p = byId[r.old.id];
+      if(!p) return;
+      var d = r.d;
+      p.cost   = d.finalCost;                      /* ô trống → giữ giá cũ (đã xử lý ở finalCost) */
+      p.retail = d.finalRetail;
+      if(opt.useDisc && d.discCust !== null && d.discCust !== undefined) p.discCust = d.finalDisc;
+      if(!opt.onlyPrice){
+        CU_FIELDS.forEach(function(f){
+          if(f.key === 'cost' || f.key === 'retail' || f.key === 'discCust') return;
+          var v = d[f.key];
+          if(v === null || v === undefined || v === ''){
+            if(opt.fillBlank) p[f.key] = (f.type === 'text') ? '' : 0;   /* file không có → để trống */
+            return;                                                      /* mặc định: giữ dữ liệu cũ */
+          }
+          p[f.key] = v;
+        });
+      }
+      upd++;
+    });
+
+    /* 2) Xoá trước khi thêm để STT của dòng mới nối tiếp đúng bảng sau cập nhật */
+    if(opt.remove && absent.length){
+      var rm = {};
+      absent.forEach(function(a){ rm[a.p.id] = 1; });
+      var kept = products.filter(function(p){ return !rm[p.id]; });
+      del = products.length - kept.length;
+      products.length = 0;
+      kept.forEach(function(p){ products.push(p); });
+    }
+
+    /* 3) Bổ sung dòng mới vào cuối — STT tiếp nối */
+    var sttFrom = products.length + 1;
+    results.forEach(function(r){
+      if(!r.on || r.st !== 'new' || !opt.addNew) return;
+      var d = r.d, np = { id: uid(), image:'' };
+      CU_FIELDS.forEach(function(f){
+        var v = d[f.key];
+        if(f.key === 'cost'){   np.cost   = d.finalCost;   return; }
+        if(f.key === 'retail'){ np.retail = d.finalRetail; return; }
+        if(f.key === 'discCust'){ np.discCust = (opt.useDisc && v != null) ? v : 0; return; }
+        np[f.key] = (v === null || v === undefined) ? (f.type === 'text' ? '' : 0) : v;
+      });
+      products.push(np);
+      addedIds.push(np.id);
+      add++;
+    });
+
+    close();
+    showNotice({
+      source: 'Cập nhật giá vốn · ' + (fileName || 'file Excel'),
+      added: add, updated: upd, removed: del,
+      before: before, sttFrom: sttFrom, sttTo: sttFrom + add - 1, newIds: addedIds
+    });
+    var msg = [];
+    if(upd) msg.push('cập nhật ' + upd + ' sản phẩm');
+    if(add) msg.push('bổ sung ' + add + ' sản phẩm mới (STT ' + sttFrom + (add > 1 ? '→' + (sttFrom + add - 1) : '') + ')');
+    if(del) msg.push('xoá ' + del + ' sản phẩm');
+    toast('✓ Đã ' + (msg.join(' · ') || 'xử lý xong') + ' · Bấm "Lưu lên Firebase" để đồng bộ', 'success', 7000);
+  };
+
+  if(opt.remove && absent.length){
+    showConfirm('Xoá ' + absent.length + ' sản phẩm không có trong file mới?',
+      'Các sản phẩm này sẽ bị loại khỏi danh mục sau khi cập nhật. Hãy chắc chắn file Excel mới là danh mục đầy đủ.',
+      run, 'Cập nhật & xoá');
+  } else run();
+}
+
+/* ---------- Thanh thông báo STT tiếp nối sau khi nạp ---------- */
+function showNotice(o){
+  var bar = document.getElementById('cuNotice');
+  if(!bar) return;
+  window.__cuNewIds = {};
+  (o.newIds || []).forEach(function(id){ window.__cuNewIds[id] = 1; });
+  window.__cuNewOnly = false;
+
+  var parts = [];
+  var from = o.sttFrom || (products.length - (o.added || 0) + 1);
+  var to   = o.sttTo   || products.length;
+  if(o.added) parts.push('thêm mới <b>' + o.added + ' dòng</b> — STT <span class="stt-range">' +
+    from + (o.added > 1 ? ' → ' + to : '') + '</span>');
+  if(o.updated) parts.push('cập nhật <b>' + o.updated + ' dòng</b> đã có');
+  if(o.removed) parts.push('xoá <b>' + o.removed + ' dòng</b>');
+  document.getElementById('cuNoticeTx').innerHTML =
+    escapeHtml(o.source || 'Nạp dữ liệu Excel') + ': ' + (parts.join(' · ') || 'không có thay đổi') +
+    ' · Danh mục <b>' + o.before + '</b> → <b>' + products.length + ' dòng</b>' +
+    (o.added ? ' <span style="opacity:.8">(kiểm tra lại các dòng mới trước khi lưu Firebase)</span>' : '');
+
+  var vb = document.getElementById('cuNoticeView'), xb = document.getElementById('cuNoticeExport');
+  vb.style.display = o.added ? '' : 'none';
+  xb.style.display = o.added ? '' : 'none';
+  vb.textContent = 'Xem ' + o.added + ' dòng mới';
+  vb.classList.remove('on');
+  bar.style.display = 'flex';
+  if(bar.scrollIntoView) bar.scrollIntoView({ block:'nearest' });
+  if(typeof render === 'function') render();                      /* vẽ lại bảng để tô sáng + gắn nhãn MỚI cho các dòng vừa nạp */
+}
+window.CUNotice = showNotice;
+
+function toggleNewOnly(){
+  var vb = document.getElementById('cuNoticeView');
+  window.__cuNewOnly = !window.__cuNewOnly;
+  vb.classList.toggle('on', window.__cuNewOnly);
+  vb.textContent = window.__cuNewOnly ? '← Xem lại toàn bộ danh mục'
+    : 'Xem ' + Object.keys(window.__cuNewIds || {}).length + ' dòng mới';
+  render();
+}
+function closeNotice(){
+  window.__cuNewOnly = false; window.__cuNewIds = null;
+  document.getElementById('cuNotice').style.display = 'none';
+  render();
+}
+/* Xuất riêng các dòng vừa nạp để kiểm tra lại */
+function exportNewRows(){
+  var ids = window.__cuNewIds || {};
+  var list = [], base = {};
+  (products || []).forEach(function(p, i){ base[p.id] = i + 1; });
+  (products || []).forEach(function(p){
+    if(!ids[p.id]) return;
+    var c = calcRow(parseNum(p.cost), parseNum(p.retail), parseNum(p.discCust));
+    list.push([ base[p.id], p.code || '', p.name || '', p.ingredient || '', p.concentration || '', p.spec || '',
+      p.regNo || '', p.manufacturer || '', p.country || '',
+      parseNum(p.cost), parseNum(p.retail), Number(c.ideco.toFixed(2)), parseNum(p.discCust),
+      Math.round(c.wholesale), Math.round(c.profit), Number(c.margin.toFixed(2)) ]);
+  });
+  if(!list.length){ toast('Không có dòng mới nào để xuất', 'warn'); return; }
+  var head = ['STT','Mã hàng','Tên sản phẩm','Hoạt chất','Nồng độ, hàm lượng','Quy cách','Số ĐK','Cơ sở SX','Nước SX',
+              'Giá vốn','Giá bán lẻ','CK IDECO (%)','CK KH (%)','Giá bán buôn','Lợi nhuận','Tỉ suất LN (%)'];
+  var ws = XLSX.utils.aoa_to_sheet([head].concat(list));
+  ws['!cols'] = [{wch:7},{wch:22},{wch:34},{wch:30},{wch:18},{wch:20},{wch:14},{wch:16},{wch:12},
+                 {wch:12},{wch:12},{wch:13},{wch:12},{wch:13},{wch:12},{wch:13}];
+  var out = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(out, ws, 'DONG MOI NAP');
+  var dt = new Date(), pad = function(n){ return n < 10 ? '0' + n : n; };
+  XLSX.writeFile(out, 'DONG_MOI_NAP_' + dt.getFullYear() + pad(dt.getMonth()+1) + pad(dt.getDate()) + '_' + pad(dt.getHours()) + pad(dt.getMinutes()) + '.xlsx');
+  toast('Đã xuất ' + list.length + ' dòng mới (STT ' + list[0][0] + ' → ' + list[list.length-1][0] + ')', 'success', 4500);
+}
+
+/* ---------- Xuất báo cáo đối chiếu ---------- */
+function report(){
+  var head = ['Dòng Excel','Trạng thái','Mã hàng','Tên sản phẩm','Hoạt chất','Quy cách',
+              'Giá vốn cũ','Giá vốn mới','Chênh lệch GV','% GV',
+              'Giá bán lẻ cũ','Giá bán lẻ mới','Chênh lệch GBL','% GBL',
+              'CK IDECO cũ (%)','CK IDECO mới (%)','CK KH cũ (%)','CK KH mới (%)',
+              'Bán buôn cũ','Bán buôn mới','Lợi nhuận cũ','Lợi nhuận mới',
+              'Tỉ suất LN cũ (%)','Tỉ suất LN mới (%)','Khớp bằng','Ghi chú kiểm tra'];
+  var num2 = function(x){ return Number(x.toFixed(2)); };
+  var line = function(r){
+    var d = r.d, o = r.old;
+    var nk = calcRow(d.finalCost, d.finalRetail, d.finalDisc);
+    var ok = o ? calcRow(o.cost, o.retail, o.disc) : null;
+    var dc = o ? d.finalCost - o.cost : '', dr = o ? d.finalRetail - o.retail : '';
+    return [ d._row,
+      r.st === 'new' ? 'Thêm mới' : (r.st === 'chg' ? 'Cập nhật' : (r.st === 'dup' ? 'Trùng trong file' : 'Không đổi')),
+      d.code || '', d.name || '', d.ingredient || '', d.spec || '',
+      o ? o.cost : '', d.finalCost, dc, o && o.cost ? num2(dc / o.cost * 100) : '',
+      o ? o.retail : '', d.finalRetail, dr, o && o.retail ? num2(dr / o.retail * 100) : '',
+      ok ? num2(ok.ideco) : '', num2(nk.ideco),
+      o ? num2(o.disc) : '', num2(d.finalDisc),
+      ok ? Math.round(ok.wholesale) : '', Math.round(nk.wholesale),
+      ok ? Math.round(ok.profit) : '', Math.round(nk.profit),
+      ok ? num2(ok.margin) : '', num2(nk.margin),
+      r.how || 'Sản phẩm mới', r.flags.join(' · ') ];
+  };
+  var body = results.map(line);
+  var risk = results.filter(function(r){ return r.flags.length; }).map(line);
+  var abs  = absent.map(function(a){
+    var p = a.p, pc = parseNum(p.cost), pr = parseNum(p.retail), pd = parseNum(p.discCust);
+    var k = calcRow(pc, pr, pd);
+    return ['', 'Không có trong file mới', p.code || '', p.name || '', p.ingredient || '', p.spec || '',
+      pc, '', '', '', pr, '', '', '', num2(k.ideco), '', num2(pd), '',
+      Math.round(k.wholesale), '', Math.round(k.profit), '', num2(k.margin), '',
+      'Chỉ có trong danh mục', ''];
+  });
+
+  var cols = [{wch:9},{wch:16},{wch:22},{wch:32},{wch:28},{wch:18},{wch:11},{wch:11},{wch:11},{wch:8},
+              {wch:12},{wch:12},{wch:11},{wch:8},{wch:13},{wch:13},{wch:11},{wch:11},
+              {wch:12},{wch:12},{wch:11},{wch:11},{wch:12},{wch:12},{wch:18},{wch:38}];
+  var out = XLSX.utils.book_new();
+  var add = function(name, data){
+    if(!data.length) return;
+    var ws = XLSX.utils.aoa_to_sheet([head].concat(data));
+    ws['!cols'] = cols; ws['!freeze'] = { xSplit:0, ySplit:1 };
+    XLSX.utils.book_append_sheet(out, ws, name);
+  };
+  add('SOI CHIEU GIA VON', body);
+  add('CAN KIEM TRA', risk);
+  add('KHONG CO TRONG FILE', abs);
+  var dt = new Date(), pad = function(n){ return n < 10 ? '0' + n : n; };
+  XLSX.writeFile(out, 'BAOCAO_SOICHIEU_GIAVON_' + dt.getFullYear() + pad(dt.getMonth()+1) + pad(dt.getDate()) + '_' + pad(dt.getHours()) + pad(dt.getMinutes()) + '.xlsx');
+  toast('Đã xuất báo cáo đối chiếu (' + (risk.length ? risk.length + ' dòng cần kiểm tra)' : 'không có bất thường)'), 'success', 4500);
+}
+
+/* ---------- Sự kiện ---------- */
+document.getElementById('btnCostUpdate').onclick = open;
+/* Thanh thông báo là thành phần phụ — thiếu thì module vẫn chạy bình thường */
+(function(){
+  var v = document.getElementById('cuNoticeView'),
+      x = document.getElementById('cuNoticeExport'),
+      c = document.getElementById('cuNoticeClose');
+  if(v) v.onclick = toggleNewOnly;
+  if(x) x.onclick = exportNewRows;
+  if(c) c.onclick = closeNotice;
+})();
+document.getElementById('cuClose').onclick = close;
+document.getElementById('cuModal').addEventListener('click', function(e){ if(e.target.id === 'cuModal') close(); });
+document.getElementById('cuBack').onclick = function(){ step(2); };
+document.getElementById('cuAnalyze').onclick = analyze;
+document.getElementById('cuApply').onclick = apply;
+document.getElementById('cuReport').onclick = report;
+
+document.getElementById('cuDrop').onclick = function(){ document.getElementById('cuInput').click(); };
+document.getElementById('cuChangeFile').onclick = function(){ document.getElementById('cuInput').click(); };
+document.getElementById('cuInput').addEventListener('change', function(e){
+  var f = e.target.files[0]; e.target.value = ''; readFile(f);
+});
+['dragenter','dragover'].forEach(function(ev){
+  document.getElementById('cuDrop').addEventListener(ev, function(e){ e.preventDefault(); this.classList.add('drag'); });
+});
+['dragleave','drop'].forEach(function(ev){
+  document.getElementById('cuDrop').addEventListener(ev, function(e){ e.preventDefault(); this.classList.remove('drag'); });
+});
+document.getElementById('cuDrop').addEventListener('drop', function(e){
+  if(e.dataTransfer.files && e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]);
+});
+
+document.getElementById('cuSheet').addEventListener('change', loadSheet);
+document.getElementById('cuHeaderRow').addEventListener('input', function(){
+  var v = parseInt(this.value, 10);
+  if(v >= 1){
+    var dr = document.getElementById('cuDataRow');
+    if(parseInt(dr.value, 10) <= v) dr.value = v + 1;
+    buildMapping();
+  }
+});
+/* Tuỳ chọn ảnh hưởng tới cách phân loại → soi chiếu lại để số liệu preview luôn khớp kết quả áp dụng */
+['cuOnlyPrice','cuOptDisc','cuOptFuzzy'].forEach(function(id){
+  document.getElementById(id).addEventListener('change', function(){ if(results.length) analyze(); });
+});
+document.querySelectorAll('input[name=cuFill]').forEach(function(el){
+  el.addEventListener('change', function(){ if(results.length) analyze(); });
+});
+['cuOptAddNew','cuOptRemove'].forEach(function(id){
+  document.getElementById(id).addEventListener('change', function(){
+    if(results.length){ opt = readOptions(); renderResults(); }
+  });
+});
+document.getElementById('cuSearch').addEventListener('input', function(){ searchQ = this.value; renderRows(); });
+document.querySelectorAll('#cuStep3 .cu-chip').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('#cuStep3 .cu-chip').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    filterMode = b.dataset.f;
+    renderRows();
+  });
+});
+document.getElementById('cuCheckAll').onclick = function(){
+  results.forEach(function(r){ if(r.st !== 'same' && r.st !== 'dup') r.on = true; });
+  renderRows(); syncApplyBtn(); refreshStt();
+};
+document.getElementById('cuUncheckAll').onclick = function(){
+  results.forEach(function(r){ r.on = false; });
+  renderRows(); syncApplyBtn();
+};
+document.getElementById('cuHeadChk').addEventListener('change', function(){
+  var v = this.checked;
+  results.forEach(function(r){ if(r.st !== 'same' && r.st !== 'dup') r.on = v; });
+  renderRows(); syncApplyBtn();
+});
+
+/* Cho phép kiểm thử độc lập bằng Node (không ảnh hưởng trình duyệt) */
+window.__CU_TEST__ = { fold:fold, keyOf:keyOf, cuNum:cuNum, cuPct:cuPct, dice:dice, safeSim:safeSim,
+                       numSig:numSig, calcRow:calcRow, scoreHeader:scoreHeader, CU_FIELDS:CU_FIELDS, FUZZY_MIN:FUZZY_MIN };
+
+})();
 </script>
 </body>
 </html>
