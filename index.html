@@ -4817,5 +4817,777 @@ window.__CU_TEST__ = { fold:fold, keyOf:keyOf, cuNum:cuNum, cuPct:cuPct, dice:di
 
 })();
 </script>
+
+<!-- ===== MODULE BẢO VỆ DỮ LIỆU v5 ===== -->
+<script>
+/* ==========================================================================
+   MODULE BẢO VỆ DỮ LIỆU v5  —  chống mất dữ liệu khi cập nhật giá vốn
+   - Theo dõi mọi thay đổi trong bộ nhớ (Excel / soi chiếu / sửa tay / CK)
+   - Tự động lưu lên Firebase (ghi theo lô + XÁC MINH lại trên máy chủ)
+   - Sao lưu bản nháp trong máy (IndexedDB) + cảnh báo khi đóng trang
+   - Bảng 🩺 Kiểm tra lưu: đối chiếu số liệu trên máy với Firebase
+   Không sửa mã cũ — chỉ bổ sung.
+   ========================================================================== */
+(function(){
+'use strict';
+if(window.__SG5__) return; window.__SG5__ = true;
+
+var DB_URL     = 'https://giavon-4defe-default-rtdb.firebaseio.com';
+var LS_AUTO    = 'gv_autosave_v1';
+var LS_WHO     = 'gv_may_ten_v1';
+var IDB_NAME   = 'ideco_giavon_guard', IDB_STORE = 'draft', IDB_KEY = 'current';
+var MAX_ENTRY  = 120;        /* số bản ghi tối đa mỗi lô ghi */
+var MAX_CHARS  = 350000;     /* dung lượng tối đa mỗi lô (ký tự JSON) */
+var WRITE_TO   = 30000;      /* thời gian chờ máy chủ xác nhận mỗi lô */
+var IDLE_SAVE  = 4000;       /* tự lưu sau khi ngừng thay đổi */
+
+/* ---------------- truy cập trạng thái của app gốc ---------------- */
+function P(){ try { return (typeof products !== 'undefined' && Array.isArray(products)) ? products : []; } catch(e){ return []; } }
+function DB(){ try { return (typeof db !== 'undefined') ? db : null; } catch(e){ return null; } }
+function ONLINE(){ try { return (typeof dbConnected !== 'undefined') ? !!dbConnected : false; } catch(e){ return false; } }
+function say(m, t, ms){ try { toast(m, t || 'info', ms || 3200); } catch(e){ console.log(m); } }
+function redraw(){ try { if(typeof render === 'function') render(); } catch(e){} }
+
+/* ---------------- chữ ký & mã băm dữ liệu ---------------- */
+var SIG_FIELDS = ['code','name','ingredient','concentration','usage','spec','smallestQty',
+                  'expiry','regNo','manufacturer','country','unitPrice','cost','retail','discCust'];
+function rowSig(p){
+  var s = String(p && p.id || '');
+  for(var i = 0; i < SIG_FIELDS.length; i++){
+    var v = p ? p[SIG_FIELDS[i]] : '';
+    s += '|' + (v === null || v === undefined ? '' : String(v));
+  }
+  s += '|' + String((p && p.image ? p.image.length : 0));
+  return s;
+}
+function hashOf(list){
+  var h = 0x811c9dc5;
+  for(var i = 0; i < list.length; i++){
+    var s = rowSig(list[i]);
+    for(var j = 0; j < s.length; j++){ h ^= s.charCodeAt(j); h = (h * 0x01000193) >>> 0; }
+  }
+  return list.length + '-' + h.toString(16);
+}
+function diffLists(localList, serverList){
+  var byId = {}, out = { changed: [], added: [], missing: [] };
+  (serverList || []).forEach(function(p){ if(p && p.id) byId[p.id] = p; });
+  (localList || []).forEach(function(p){
+    var s = byId[p.id];
+    if(!s){ out.added.push(p); return; }
+    if(rowSig(p) !== rowSig(s)) out.changed.push({ local: p, server: s });
+    delete byId[p.id];
+  });
+  Object.keys(byId).forEach(function(k){ out.missing.push(byId[k]); });
+  return out;
+}
+
+/* ---------------- REST tiện ích (nhẹ, không tải ảnh) ---------------- */
+function jget(path){
+  return fetch(DB_URL + path, { cache: 'no-store' }).then(function(r){
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  });
+}
+function serverKeys(){ return jget('/products.json?shallow=true').then(function(o){ return o ? Object.keys(o) : []; }); }
+function serverMeta(){ return jget('/products_meta/lastSave.json').catch(function(){ return null; }); }
+function serverAll(){ return jget('/products.json').then(function(o){ return o ? Object.keys(o).map(function(k){ var v = o[k] || {}; if(!v.id) v.id = k; return v; }) : []; }); }
+
+/* ---------------- bản nháp trong máy (IndexedDB) ---------------- */
+function idb(){
+  return new Promise(function(res, rej){
+    if(!window.indexedDB) return rej(new Error('Trình duyệt không hỗ trợ IndexedDB'));
+    var rq = indexedDB.open(IDB_NAME, 1);
+    rq.onupgradeneeded = function(){ if(!rq.result.objectStoreNames.contains(IDB_STORE)) rq.result.createObjectStore(IDB_STORE); };
+    rq.onsuccess = function(){ res(rq.result); };
+    rq.onerror   = function(){ rej(rq.error || new Error('Không mở được IndexedDB')); };
+  });
+}
+function draftPut(obj){
+  return idb().then(function(d){
+    return new Promise(function(res, rej){
+      var tx = d.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).put(obj, IDB_KEY);
+      tx.oncomplete = function(){ res(true); };
+      tx.onerror = function(){ rej(tx.error); };
+    });
+  });
+}
+function draftGet(){
+  return idb().then(function(d){
+    return new Promise(function(res, rej){
+      var tx = d.transaction(IDB_STORE, 'readonly');
+      var rq = tx.objectStore(IDB_STORE).get(IDB_KEY);
+      rq.onsuccess = function(){ res(rq.result || null); };
+      rq.onerror   = function(){ rej(rq.error); };
+    });
+  });
+}
+
+/* ---------------- trạng thái module ---------------- */
+var S = {
+  baseHash: null,     /* mã băm của dữ liệu ĐÃ chắc chắn nằm trên Firebase */
+  loading: true,      /* đang tải lần đầu từ Firebase */
+  saving: false,
+  lastChangeAt: 0,
+  timer: null,
+  pendingDelete: 0,   /* số bản ghi cần xoá trên máy chủ, chờ xác nhận tay */
+  lastSaveAt: null,
+  lastError: ''
+};
+function autoOn(){ try { return localStorage.getItem(LS_AUTO) !== '0'; } catch(e){ return true; } }
+function setAuto(v){ try { localStorage.setItem(LS_AUTO, v ? '1' : '0'); } catch(e){} paint(); }
+function whoAmI(){
+  var v = '';
+  try { v = localStorage.getItem(LS_WHO) || ''; } catch(e){}
+  return v;
+}
+function isDirty(){ return S.baseHash !== null && hashOf(P()) !== S.baseHash; }
+
+/* ---------------- giao diện ---------------- */
+var css = document.createElement('style');
+css.textContent = [
+'#sgBar{position:fixed;left:0;right:0;bottom:0;z-index:9500;display:none;align-items:center;gap:10px;flex-wrap:wrap;',
+'  padding:9px 14px;background:#7A2E00;color:#fff;font-size:13.5px;box-shadow:0 -3px 14px rgba(0,0,0,.25)}',
+'#sgBar.saving{background:#0B4A2F}',
+'#sgBar .sg-t{flex:1;min-width:190px;line-height:1.35}',
+'#sgBar button{border:0;border-radius:7px;padding:7px 13px;font-weight:700;font-size:13px;cursor:pointer}',
+'#sgBar .sg-go{background:#fff;color:#7A2E00}',
+'#sgBar .sg-ghost{background:rgba(255,255,255,.18);color:#fff}',
+'#sgBar label{display:flex;align-items:center;gap:6px;font-size:12.5px;opacity:.95;cursor:pointer}',
+'#sgProg{height:4px;background:rgba(255,255,255,.25);border-radius:3px;overflow:hidden;width:150px}',
+'#sgProg i{display:block;height:100%;width:0;background:#fff;transition:width .2s}',
+'.sg-mask{position:fixed;inset:0;background:rgba(15,20,28,.55);z-index:9600;display:none;align-items:center;justify-content:center;padding:14px}',
+'.sg-mask.on{display:flex}',
+'.sg-box{background:#fff;border-radius:14px;max-width:840px;width:100%;max-height:88vh;overflow:auto;padding:20px 22px;box-shadow:0 18px 50px rgba(0,0,0,.3)}',
+'.sg-box h3{margin:0 0 6px;font-size:18px;color:#0F2540}',
+'.sg-box p{margin:6px 0;font-size:13.5px;color:#3b4658;line-height:1.5}',
+'.sg-box table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}',
+'.sg-box th,.sg-box td{border:1px solid #e3e8ef;padding:5px 7px;text-align:left}',
+'.sg-box th{background:#F2F6FB;font-weight:700}',
+'.sg-act{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}',
+'.sg-act button{border:0;border-radius:8px;padding:9px 15px;font-weight:700;font-size:13.5px;cursor:pointer}',
+'.sg-b1{background:#0B6B3A;color:#fff}.sg-b2{background:#1565C0;color:#fff}.sg-b3{background:#EEF1F5;color:#33405a}.sg-b4{background:#B3261E;color:#fff}',
+'.sg-kv{display:grid;grid-template-columns:1fr auto;gap:4px 14px;font-size:13.5px;margin-top:10px}',
+'.sg-kv b{font-variant-numeric:tabular-nums}',
+'.sg-ok{color:#0B6B3A;font-weight:700}.sg-bad{color:#B3261E;font-weight:700}.sg-wr{color:#8a5000;font-weight:700}'
+].join('\n');
+document.head.appendChild(css);
+
+var bar = document.createElement('div');
+bar.id = 'sgBar';
+bar.innerHTML =
+  '<div class="sg-t" id="sgTxt"></div>' +
+  '<div id="sgProg" style="display:none"><i></i></div>' +
+  '<label><input type="checkbox" id="sgAuto"> Tự động lưu</label>' +
+  '<button class="sg-go" id="sgSave">Lưu ngay lên Firebase</button>' +
+  '<button class="sg-ghost" id="sgCheck">🩺 Kiểm tra</button>';
+document.body.appendChild(bar);
+
+var mask = document.createElement('div');
+mask.className = 'sg-mask';
+mask.innerHTML = '<div class="sg-box" id="sgBox"></div>';
+document.body.appendChild(mask);
+mask.addEventListener('click', function(e){ if(e.target === mask) mask.classList.remove('on'); });
+function modal(html){ document.getElementById('sgBox').innerHTML = html; mask.classList.add('on'); }
+function closeModal(){ mask.classList.remove('on'); }
+window.SGclose = closeModal;
+
+document.getElementById('sgAuto').checked = autoOn();
+document.getElementById('sgAuto').onchange = function(){ setAuto(this.checked); };
+document.getElementById('sgSave').onclick  = function(){ saveAll(false); };
+document.getElementById('sgCheck').onclick = function(){ openCheck(); };
+
+/* nút 🩺 cạnh nút Lưu lên Firebase */
+(function(){
+  var b = document.getElementById('btnSync');
+  if(!b || !b.parentNode) return;
+  var n = document.createElement('button');
+  n.className = 'btn';
+  n.id = 'btnSgCheck';
+  n.style.cssText = 'border-color:#0B6B3A;color:#0B6B3A;background:#EAF7F0';
+  n.title = 'Đối chiếu dữ liệu trên máy với dữ liệu thật trên Firebase';
+  n.textContent = '🩺 Kiểm tra lưu';
+  n.onclick = function(){ openCheck(); };
+  b.parentNode.insertBefore(n, b.nextSibling);
+})();
+
+function paint(){
+  var dirty = isDirty(), t = document.getElementById('sgTxt');
+  document.getElementById('sgAuto').checked = autoOn();
+  if(S.saving) return;                                  /* đang lưu: giữ nguyên thông báo tiến độ */
+  if(!dirty){ bar.style.display = 'none'; return; }
+  var n = P().length;
+  var msg = '⚠ <b>Có thay đổi CHƯA được lưu lên Firebase</b> — ' + n + ' dòng trên màn hình. ';
+  if(S.pendingDelete) msg += 'Trong đó cần xoá ' + S.pendingDelete + ' dòng trên máy chủ (phải bấm Lưu ngay để xác nhận). ';
+  msg += autoOn() ? 'Tự động lưu sẽ chạy sau vài giây.' : '<b>Tự động lưu đang TẮT</b> — hãy bấm Lưu ngay, nếu đóng trang sẽ mất dữ liệu.';
+  if(!ONLINE()) msg += ' <b>Đang mất kết nối Firebase</b> — dữ liệu mới chỉ nằm trong máy này.';
+  t.innerHTML = msg;
+  bar.classList.remove('saving');
+  bar.style.display = 'flex';
+}
+function busy(txt, pct){
+  S.saving = true;
+  bar.classList.add('saving');
+  bar.style.display = 'flex';
+  document.getElementById('sgTxt').innerHTML = txt;
+  var pr = document.getElementById('sgProg');
+  if(pct === null || pct === undefined){ pr.style.display = 'none'; }
+  else { pr.style.display = 'block'; pr.firstChild.style.width = Math.max(2, Math.min(100, pct)) + '%'; }
+}
+function unbusy(){ S.saving = false; document.getElementById('sgProg').style.display = 'none'; paint(); }
+
+/* ---------------- ghi theo lô + xác minh ---------------- */
+function chunkUpdates(updates){
+  var keys = Object.keys(updates), out = [], cur = {}, n = 0, sz = 0;
+  keys.forEach(function(k){
+    var v = updates[k];
+    var s = v === null ? 8 : JSON.stringify(v).length;
+    if(n && (n + 1 > MAX_ENTRY || sz + s > MAX_CHARS)){ out.push(cur); cur = {}; n = 0; sz = 0; }
+    cur[k] = v; n++; sz += s;
+  });
+  if(n) out.push(cur);
+  return out;
+}
+function delay(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function writeBatch(obj, attempt){
+  attempt = attempt || 1;
+  return new Promise(function(res, rej){
+    var done = false;
+    var t = setTimeout(function(){
+      if(done) return; done = true;
+      rej(new Error('Máy chủ không xác nhận sau ' + (WRITE_TO / 1000) + ' giây (mạng chậm hoặc mất kết nối)'));
+    }, WRITE_TO);
+    try {
+      DB().ref('products').update(obj, function(err){
+        if(done) return; done = true; clearTimeout(t);
+        if(err) rej(err); else res(true);
+      });
+    } catch(e){ done = true; clearTimeout(t); rej(e); }
+  }).catch(function(e){
+    if(attempt < 3) return delay(900 * attempt).then(function(){ return writeBatch(obj, attempt + 1); });
+    throw e;
+  });
+}
+
+/* auto = true khi do hệ thống tự chạy (không hỏi, không xoá dữ liệu máy chủ) */
+function saveAll(auto){
+  if(S.saving) return Promise.resolve(false);
+  var list = P().slice();
+  if(!list.length){ if(!auto) say('Không có dữ liệu để lưu', 'warn'); return Promise.resolve(false); }
+  if(!DB() || !ONLINE()){
+    say('Chưa kết nối được Firebase — dữ liệu vẫn được giữ trong bản nháp của máy này. Hãy kiểm tra mạng rồi bấm Lưu ngay.', 'error', 6500);
+    return Promise.resolve(false);
+  }
+  var hash = hashOf(list);
+  busy('Đang chuẩn bị lưu ' + list.length + ' sản phẩm...', 2);
+
+  return serverKeys().catch(function(){ return null; }).then(function(keys){
+    var updates = {}, have = {}, dels = [];
+    list.forEach(function(p){ have[p.id] = 1; updates[p.id] = p; });
+    if(keys) keys.forEach(function(k){ if(!have[k]) dels.push(k); });
+
+    S.pendingDelete = 0;
+    if(dels.length){
+      if(auto){
+        S.pendingDelete = dels.length;   /* tự động KHÔNG bao giờ xoá — chờ người xác nhận */
+      } else {
+        var okDel = window.confirm('Trên Firebase có ' + dels.length + ' sản phẩm KHÔNG còn trong danh mục của máy này.\n\n' +
+          'Bấm OK để xoá luôn (đồng bộ đúng danh mục hiện tại).\n' +
+          'Bấm Cancel để CHỈ cập nhật/bổ sung, giữ nguyên các dòng đó trên máy chủ.');
+        if(okDel) dels.forEach(function(k){ updates[k] = null; });
+      }
+    }
+    var batches = chunkUpdates(updates), i = 0;
+    var step = function(){
+      if(i >= batches.length) return Promise.resolve();
+      busy('Đang lưu lô ' + (i + 1) + '/' + batches.length + ' lên Firebase...', (i / batches.length) * 90 + 5);
+      return writeBatch(batches[i]).then(function(){ i++; return step(); });
+    };
+    return step();
+  }).then(function(){
+    busy('Đang xác minh dữ liệu trên máy chủ...', 95);
+    return verify(list);
+  }).then(function(v){
+    return writeMeta(list.length, hash).catch(function(){ return null; }).then(function(){ return v; });
+  }).then(function(v){
+    S.baseHash = hash;
+    S.lastSaveAt = new Date();
+    S.lastError = '';
+    unbusy();
+    try { document.querySelectorAll('tr.dirty,.pcard.dirty').forEach(function(el){ el.classList.remove('dirty'); }); } catch(e){}
+    try { if(typeof updateFooterTime === 'function') updateFooterTime(); } catch(e){}
+    saveDraft(true);
+    var extra = S.pendingDelete ? ' · còn ' + S.pendingDelete + ' dòng thừa trên máy chủ (bấm Lưu ngay để xử lý)' : '';
+    say('✓ ĐÃ LƯU & XÁC MINH ' + v.count + ' sản phẩm trên Firebase' + extra, 'success', 5200);
+    paint();
+    return true;
+  }).catch(function(e){
+    S.lastError = e && e.message ? e.message : String(e);
+    unbusy();
+    saveDraft(false);
+    say('✖ LƯU THẤT BẠI: ' + S.lastError + ' — dữ liệu vẫn còn trong bản nháp của máy này, ĐỪNG đóng trang, hãy thử lại.', 'error', 9000);
+    paint();
+    return false;
+  });
+}
+
+function verify(list){
+  return serverKeys().then(function(keys){
+    var set = {}; keys.forEach(function(k){ set[k] = 1; });
+    var miss = list.filter(function(p){ return !set[p.id]; });
+    if(miss.length) throw new Error('Máy chủ thiếu ' + miss.length + ' bản ghi sau khi ghi (ví dụ: ' + (miss[0].name || miss[0].id) + ')');
+    /* đọc lại một số bản ghi rải đều (luôn gồm dòng đầu và dòng cuối) để chắc giá đã đúng */
+    var pick = [], N = list.length, want = Math.min(10, N), seen = {};
+    for(var k = 0; k < want; k++){
+      var i = (want === 1) ? 0 : Math.round(k * (N - 1) / (want - 1));
+      if(!seen[i]){ seen[i] = 1; pick.push(list[i]); }
+    }
+    return Promise.all(pick.map(function(p){
+      return jget('/products/' + encodeURIComponent(p.id) + '.json').then(function(sv){
+        if(!sv) throw new Error('Không đọc lại được sản phẩm ' + (p.name || p.id));
+        var a = Math.round(Number(p.cost) || 0), b = Math.round(Number(sv.cost) || 0);
+        if(a !== b) throw new Error('Giá vốn trên máy chủ chưa đúng ở "' + (p.name || p.id) + '" (' + b + ' ≠ ' + a + ')');
+        return true;
+      });
+    })).then(function(){ return { count: keys.length }; });
+  });
+}
+function writeMeta(count, hash){
+  return new Promise(function(res, rej){
+    var rec = { at: new Date().toISOString(), count: count, hash: hash, may: whoAmI() || (navigator.userAgent || '').slice(0, 90) };
+    DB().ref('products_meta/lastSave').set(rec, function(err){ err ? rej(err) : res(true); });
+    try { DB().ref('products_meta/log').push(rec); } catch(e){}
+  });
+}
+
+/* ---------------- bản nháp ---------------- */
+function saveDraft(saved){
+  var list = P();
+  if(!list.length) return;
+  draftPut({ ts: Date.now(), saved: !!saved, hash: hashOf(list), count: list.length, products: JSON.parse(JSON.stringify(list)) })
+    .catch(function(e){ console.warn('Không lưu được bản nháp:', e); });
+}
+
+/* ---------------- theo dõi thay đổi ---------------- */
+var lastSeen = null, stableTicks = 0;
+setInterval(function(){
+  var list = P(), h = hashOf(list);
+
+  if(S.loading){
+    /* trong lúc nạp dữ liệu từ Firebase: luôn coi là "đã đồng bộ" */
+    S.baseHash = h;
+    if(list.length && h === lastSeen){ stableTicks++; if(stableTicks >= 2) S.loading = false; }
+    else stableTicks = 0;
+    lastSeen = h;
+    return;
+  }
+  if(h !== lastSeen){ lastSeen = h; S.lastChangeAt = Date.now(); paint(); saveDraft(false); return; }
+  if(!isDirty() || S.saving) return;
+
+  paint();
+  if(autoOn() && ONLINE() && Date.now() - S.lastChangeAt > IDLE_SAVE) saveAll(true);
+}, 1200);
+
+window.addEventListener('beforeunload', function(e){
+  if(isDirty() && !S.saving){
+    e.preventDefault();
+    e.returnValue = 'Còn thay đổi chưa lưu lên Firebase. Rời trang bây giờ sẽ mất dữ liệu vừa cập nhật.';
+    return e.returnValue;
+  }
+});
+
+/* ---------------- khôi phục bản nháp khi mở lại ---------------- */
+function checkDraftOnStart(){
+  draftGet().then(function(d){
+    if(!d || !d.products || !d.products.length) return;
+    var cur = P(), h = hashOf(cur);
+    if(d.hash === h) return;                     /* trùng dữ liệu đang có → không cần hỏi */
+    if(d.saved && d.hash === S.baseHash) return; /* bản nháp đã lưu và khớp máy chủ */
+    var df = diffLists(d.products, cur);
+    if(!df.changed.length && !df.added.length && !df.missing.length) return;
+    var when = new Date(d.ts);
+    modal(
+      '<h3>⚠ Phát hiện dữ liệu chưa được lưu lên Firebase</h3>' +
+      '<p>Máy này còn một bản nháp lúc <b>' + when.toLocaleString('vi-VN') + '</b> (' + d.count + ' dòng)' +
+      (d.saved ? '' : ' <b class="sg-bad">chưa lưu xong lên Firebase</b>') + '.</p>' +
+      '<div class="sg-kv">' +
+        '<span>Dòng khác nội dung so với dữ liệu vừa tải về</span><b>' + df.changed.length + '</b>' +
+        '<span>Dòng có trong bản nháp nhưng Firebase chưa có</span><b>' + df.added.length + '</b>' +
+        '<span>Dòng Firebase có nhưng bản nháp không có</span><b>' + df.missing.length + '</b>' +
+      '</div>' +
+      '<p>Khôi phục sẽ đưa bản nháp lên màn hình rồi lưu lên Firebase (dữ liệu Firebase hiện tại sẽ bị ghi đè bằng bản nháp).</p>' +
+      '<div class="sg-act">' +
+        '<button class="sg-b1" onclick="SGrestore()">Khôi phục bản nháp &amp; lưu lên Firebase</button>' +
+        '<button class="sg-b2" onclick="SGdraftXls()">Xuất bản nháp ra Excel để xem</button>' +
+        '<button class="sg-b3" onclick="SGclose()">Giữ dữ liệu Firebase, bỏ qua</button>' +
+      '</div>'
+    );
+    window.__sgDraft = d;
+  }).catch(function(){});
+}
+window.SGrestore = function(){
+  var d = window.__sgDraft;
+  if(!d) return;
+  var list = P();
+  list.length = 0;
+  d.products.forEach(function(p){ list.push(p); });
+  closeModal(); redraw();
+  say('Đã khôi phục ' + d.products.length + ' dòng từ bản nháp — đang lưu lên Firebase...', 'info', 4000);
+  saveAll(false);
+};
+window.SGdraftXls = function(){
+  var d = window.__sgDraft; if(!d || typeof XLSX === 'undefined') return;
+  var head = ['STT','Mã hàng','Tên sản phẩm','Hoạt chất','Quy cách','Giá vốn','Giá bán lẻ','CK KH (%)'];
+  var rows = d.products.map(function(p, i){
+    return [i + 1, p.code || '', p.name || '', p.ingredient || '', p.spec || '',
+            Number(p.cost) || 0, Number(p.retail) || 0, Number(p.discCust) || 0];
+  });
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([head].concat(rows)), 'BAN NHAP');
+  XLSX.writeFile(wb, 'BAN_NHAP_CHUA_LUU.xlsx');
+};
+
+/* ---------------- bảng 🩺 kiểm tra lưu ---------------- */
+function openCheck(){
+  var list = P(), h = hashOf(list);
+  modal('<h3>🩺 Kiểm tra tính năng lưu Firebase</h3><p>Đang đọc dữ liệu thật trên máy chủ...</p>');
+  Promise.all([ serverKeys().catch(function(e){ return { err: e }; }), serverMeta() ]).then(function(r){
+    var keys = r[0], meta = r[1] || null;
+    var kerr = keys && keys.err;
+    var scount = kerr ? '—' : keys.length;
+    var dirty = isDirty();
+    var html =
+      '<h3>🩺 Kiểm tra tính năng lưu Firebase</h3>' +
+      '<div class="sg-kv">' +
+        '<span>Số dòng đang hiển thị trên máy này</span><b>' + list.length + '</b>' +
+        '<span>Số dòng thật trên Firebase (products)</span><b>' + scount + '</b>' +
+        '<span>Trạng thái</span><b class="' + (dirty ? 'sg-bad' : 'sg-ok') + '">' + (dirty ? 'CÓ thay đổi chưa lưu' : 'Đã đồng bộ') + '</b>' +
+        '<span>Kết nối Firebase</span><b class="' + (ONLINE() ? 'sg-ok' : 'sg-bad') + '">' + (ONLINE() ? 'Đang kết nối' : 'Mất kết nối') + '</b>' +
+        '<span>Tự động lưu</span><b class="' + (autoOn() ? 'sg-ok' : 'sg-wr') + '">' + (autoOn() ? 'BẬT' : 'TẮT') + '</b>' +
+        '<span>Lần lưu gần nhất ghi nhận trên máy chủ</span><b>' + (meta && meta.at ? new Date(meta.at).toLocaleString('vi-VN') + ' · ' + (meta.count || '?') + ' dòng' : 'chưa có (bản cũ không ghi nhật ký)') + '</b>' +
+        (S.lastError ? '<span>Lỗi lưu gần nhất</span><b class="sg-bad">' + S.lastError + '</b>' : '') +
+      '</div>' +
+      (kerr ? '<p class="sg-bad">Không đọc được danh sách khoá qua REST: ' + (kerr.message || kerr) + '</p>' : '') +
+      '<p>Bấm <b>So sánh chi tiết</b> để tải toàn bộ dữ liệu máy chủ và liệt kê từng dòng lệch (giá vốn, giá bán lẻ, CK...).</p>' +
+      '<div class="sg-act">' +
+        '<button class="sg-b2" onclick="SGcompare()">So sánh chi tiết với Firebase</button>' +
+        '<button class="sg-b1" onclick="SGclose();SGsaveNow()">Lưu ngay lên Firebase</button>' +
+        '<button class="sg-b3" onclick="SGclose()">Đóng</button>' +
+      '</div>';
+    modal(html);
+  });
+}
+window.SGsaveNow = function(){ saveAll(false); };
+window.SGcompare = function(){
+  modal('<h3>So sánh chi tiết</h3><p>Đang tải toàn bộ dữ liệu từ Firebase (có thể mất vài giây)...</p>');
+  serverAll().then(function(sv){
+    var list = P(), df = diffLists(list, sv);
+    window.__sgDiff = df;
+    var rows = '';
+    df.changed.slice(0, 100).forEach(function(c){
+      rows += '<tr><td>Lệch</td><td>' + esc(c.local.code || '') + '</td><td>' + esc(c.local.name || '') + '</td>' +
+              '<td>' + fnum(c.server.cost) + '</td><td>' + fnum(c.local.cost) + '</td>' +
+              '<td>' + fnum(c.server.retail) + '</td><td>' + fnum(c.local.retail) + '</td></tr>';
+    });
+    df.added.slice(0, 60).forEach(function(p){
+      rows += '<tr><td>Máy chủ CHƯA có</td><td>' + esc(p.code || '') + '</td><td>' + esc(p.name || '') + '</td><td>—</td><td>' + fnum(p.cost) + '</td><td>—</td><td>' + fnum(p.retail) + '</td></tr>';
+    });
+    df.missing.slice(0, 60).forEach(function(p){
+      rows += '<tr><td>Chỉ có trên máy chủ</td><td>' + esc(p.code || '') + '</td><td>' + esc(p.name || '') + '</td><td>' + fnum(p.cost) + '</td><td>—</td><td>' + fnum(p.retail) + '</td><td>—</td></tr>';
+    });
+    var same = !df.changed.length && !df.added.length && !df.missing.length;
+    modal(
+      '<h3>So sánh máy này ↔ Firebase</h3>' +
+      '<div class="sg-kv">' +
+        '<span>Dòng lệch nội dung</span><b class="' + (df.changed.length ? 'sg-bad' : 'sg-ok') + '">' + df.changed.length + '</b>' +
+        '<span>Máy chủ chưa có (chưa được lưu lên)</span><b class="' + (df.added.length ? 'sg-bad' : 'sg-ok') + '">' + df.added.length + '</b>' +
+        '<span>Chỉ có trên máy chủ (máy này không có)</span><b class="' + (df.missing.length ? 'sg-wr' : 'sg-ok') + '">' + df.missing.length + '</b>' +
+      '</div>' +
+      (same ? '<p class="sg-ok">Hai bên khớp hoàn toàn — dữ liệu đã nằm an toàn trên Firebase.</p>' :
+        '<table><thead><tr><th>Loại</th><th>Mã</th><th>Tên sản phẩm</th><th>GV máy chủ</th><th>GV máy này</th><th>GBL máy chủ</th><th>GBL máy này</th></tr></thead><tbody>' + rows + '</tbody></table>') +
+      '<div class="sg-act">' +
+        (same ? '' : '<button class="sg-b2" onclick="SGdiffXls()">Xuất Excel toàn bộ chênh lệch</button>' +
+                     '<button class="sg-b1" onclick="SGclose();SGsaveNow()">Lưu dữ liệu máy này lên Firebase</button>') +
+        '<button class="sg-b3" onclick="SGclose()">Đóng</button>' +
+      '</div>'
+    );
+  }).catch(function(e){
+    modal('<h3>So sánh chi tiết</h3><p class="sg-bad">Không tải được dữ liệu máy chủ: ' + esc(e.message || String(e)) + '</p>' +
+          '<div class="sg-act"><button class="sg-b3" onclick="SGclose()">Đóng</button></div>');
+  });
+};
+window.SGdiffXls = function(){
+  var df = window.__sgDiff; if(!df || typeof XLSX === 'undefined') return;
+  var head = ['Loại','Mã hàng','Tên sản phẩm','Giá vốn máy chủ','Giá vốn máy này','Giá bán lẻ máy chủ','Giá bán lẻ máy này','CK KH máy chủ','CK KH máy này'];
+  var rows = [];
+  df.changed.forEach(function(c){ rows.push(['Lệch', c.local.code || '', c.local.name || '', num(c.server.cost), num(c.local.cost), num(c.server.retail), num(c.local.retail), num(c.server.discCust), num(c.local.discCust)]); });
+  df.added.forEach(function(p){ rows.push(['Máy chủ chưa có', p.code || '', p.name || '', '', num(p.cost), '', num(p.retail), '', num(p.discCust)]); });
+  df.missing.forEach(function(p){ rows.push(['Chỉ có trên máy chủ', p.code || '', p.name || '', num(p.cost), '', num(p.retail), '', num(p.discCust), '']); });
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([head].concat(rows)), 'CHENH LECH');
+  XLSX.writeFile(wb, 'DOI_CHIEU_FIREBASE.xlsx');
+};
+function num(v){ return Number(v) || 0; }
+function fnum(v){ return (Number(v) || 0).toLocaleString('vi-VN'); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]; }); }
+
+/* ---------------- gắn vào luồng tải dữ liệu của app ---------------- */
+(function(){
+  var orig = window.loadFromFirebase;
+  if(typeof orig === 'function'){
+    window.loadFromFirebase = function(){
+      S.loading = true; stableTicks = 0;
+      var r = orig.apply(this, arguments);
+      setTimeout(function(){ S.loading = false; S.baseHash = hashOf(P()); checkDraftOnStart(); }, 6000);
+      return r;
+    };
+  } else {
+    setTimeout(function(){ S.loading = false; S.baseHash = hashOf(P()); checkDraftOnStart(); }, 8000);
+  }
+})();
+
+/* nhắc lại mỗi 90 giây nếu vẫn còn dữ liệu chưa lưu và tự động lưu đang tắt */
+setInterval(function(){
+  if(isDirty() && !S.saving && !autoOn()) say('Vẫn còn thay đổi CHƯA lưu lên Firebase — bấm "Lưu ngay" ở thanh dưới màn hình.', 'warn', 5000);
+}, 90000);
+
+/* xuất API để kiểm thử độc lập */
+window.__SG_TEST__ = { hashOf: hashOf, rowSig: rowSig, diffLists: diffLists, chunkUpdates: chunkUpdates,
+                       saveAll: saveAll, verify: verify, state: S, isDirty: isDirty };
+})();
+</script>
+
+<!-- ===== MODULE CK IDECO NHẬP TAY v6 ===== -->
+<script>
+/* ==========================================================================
+   MODULE CK IDECO NHẬP TAY (hai chiều)  —  v6
+   CK IDECO = (Giá bán lẻ − Giá vốn) / Giá bán lẻ × 100%  → là giá trị DẪN XUẤT.
+   Bản cũ render bằng <span> nên không gõ vào được. Module này đổi thành ô nhập:
+     • Gõ CK IDECO → suy ngược ra Giá vốn (mặc định) hoặc Giá bán lẻ (tuỳ chọn)
+     • Sửa Giá vốn / Giá bán lẻ → CK IDECO vẫn tự chạy lại như cũ
+   KHÔNG lưu trường idecoDisc vào Firebase (một nguồn sự thật: cost & retail).
+   ========================================================================== */
+(function(){
+'use strict';
+if(window.__IDECO6__) return; window.__IDECO6__ = true;
+
+var KEY = 'gv_ideco_target_v1';
+function tgt(){ try { return localStorage.getItem(KEY) === 'retail' ? 'retail' : 'cost'; } catch(e){ return 'cost'; } }
+function setTgt(v){ try { localStorage.setItem(KEY, v === 'retail' ? 'retail' : 'cost'); } catch(e){} paintHint(); }
+function say(m, t, ms){ try { toast(m, t || 'info', ms || 3000); } catch(e){} }
+function P(){ try { return (typeof products !== 'undefined' && Array.isArray(products)) ? products : []; } catch(e){ return []; } }
+function findP(id){ var l = P(); for(var i = 0; i < l.length; i++) if(l[i].id === id) return l[i]; return null; }
+
+/* ---- đọc % kiểu Việt: "12,5" · "12.5" · "12,5%" · " 15 % " ---- */
+function parsePctVN(s){
+  s = String(s == null ? '' : s).replace(/%/g, '').replace(/\s/g, '').replace(/,/g, '.');
+  s = s.replace(/[^0-9.\-]/g, '');
+  if(s === '' || s === '.' || s === '-') return NaN;
+  var parts = s.split('.');
+  if(parts.length > 2) s = parts.shift() + '.' + parts.join('');   /* "12.5.3" → 12.53 */
+  var v = parseFloat(s);
+  return isFinite(v) ? v : NaN;
+}
+function idecoOf(p){
+  var r = Number(p.retail) || 0, c = Number(p.cost) || 0;
+  return r > 0 ? (r - c) / r * 100 : 0;
+}
+
+/* ---- dọn trường rác nếu bản cũ từng ghi nhầm ---- */
+(function(){
+  var n = 0;
+  P().forEach(function(p){
+    if('idecoDisc' in p){ delete p.idecoDisc; n++; }
+    if('discIdeco' in p){ delete p.discIdeco; n++; }
+  });
+  if(n) console.log('Đã dọn ' + n + ' trường CK IDECO thừa trong bộ nhớ');
+})();
+
+/* ---------------- giao diện ---------------- */
+var st = document.createElement('style');
+st.textContent = [
+'input.ideco-in{width:62px;text-align:right;font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11.5px;',
+'  padding:3px 6px;border:1px solid rgba(204,26,26,.35);border-radius:9px;background:rgba(204,26,26,.06);color:var(--accent);',
+'  font-variant-numeric:tabular-nums;outline:none}',
+'input.ideco-in:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 2px rgba(204,26,26,.15)}',
+'input.ideco-in.bad{border-color:#B3261E;background:#FDECEA;color:#B3261E}',
+'.pcard input.ideco-in{width:88px;font-size:14px;padding:6px 8px}',
+'#idecoTgtWrap{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px dashed rgba(204,26,26,.45);',
+'  border-radius:9px;background:rgba(204,26,26,.05);font-size:12.5px;color:var(--accent);font-weight:600}',
+'#idecoTgtWrap select{border:1px solid rgba(204,26,26,.35);border-radius:7px;padding:3px 6px;font-size:12.5px;font-weight:700;color:var(--accent);background:#fff}'
+].join('\n');
+document.head.appendChild(st);
+
+(function(){
+  var anchor = document.getElementById('btnSgCheck') || document.getElementById('btnSync');
+  if(!anchor || !anchor.parentNode) return;
+  var w = document.createElement('span');
+  w.id = 'idecoTgtWrap';
+  w.title = 'Khi anh gõ vào ô CK IDECO, ứng dụng sẽ tính ngược lại con số nào?';
+  w.innerHTML = 'Gõ CK IDECO → suy ra <select id="idecoTgt"><option value="cost">Giá vốn</option><option value="retail">Giá bán lẻ</option></select>';
+  anchor.parentNode.insertBefore(w, anchor.nextSibling);
+  var sel = w.querySelector('#idecoTgt');
+  sel.value = tgt();
+  sel.onchange = function(){
+    setTgt(this.value);
+    say('Từ giờ gõ CK IDECO sẽ tính ngược ra ' + (this.value === 'retail' ? 'Giá bán lẻ' : 'Giá vốn'), 'info');
+  };
+})();
+function paintHint(){
+  var th = document.querySelector('th[data-col="idecoDisc"]');
+  if(th) th.title = 'Nhập tay được. CK IDECO = (Giá bán lẻ − Giá vốn)/Giá bán lẻ × 100%. ' +
+                    'Gõ CK IDECO sẽ tính ngược ra ' + (tgt() === 'retail' ? 'Giá bán lẻ' : 'Giá vốn') + '.';
+}
+paintHint();
+
+/* ---------------- đổi <span> thành ô nhập ---------------- */
+function mkInput(val){
+  var i = document.createElement('input');
+  i.className = 'ideco-in calc-ideco';
+  i.setAttribute('inputmode', 'decimal');
+  i.value = val;
+  i.title = 'Gõ CK IDECO (ví dụ 15 hoặc 12,5) rồi Enter — ứng dụng tính ngược ra ' + (tgt() === 'retail' ? 'Giá bán lẻ' : 'Giá vốn');
+  return i;
+}
+function patchAll(){
+  /* bảng */
+  document.querySelectorAll('#tbody td[data-col="idecoDisc"]').forEach(function(td){
+    if(td.querySelector('input.ideco-in')) return;
+    var row = td.closest('tr'), p = row ? findP(row.dataset.id) : null;
+    var v = p ? idecoOf(p).toFixed(2) : (td.textContent || '0').replace('%', '').trim();
+    td.textContent = '';
+    td.appendChild(mkInput(v));
+    td.appendChild(document.createTextNode('%'));
+  });
+  /* thẻ mobile */
+  document.querySelectorAll('.pcard span.calc-ideco').forEach(function(sp){
+    var card = sp.closest('.pcard'), p = card ? findP(card.dataset.id) : null;
+    var v = p ? idecoOf(p).toFixed(2) : (sp.textContent || '0').replace('%', '').trim();
+    var cell = sp.parentNode;
+    var inp = mkInput(v);
+    cell.replaceChild(inp, sp);
+    cell.appendChild(document.createTextNode(' %'));
+  });
+}
+
+/* ---------------- áp dụng giá trị người dùng gõ ---------------- */
+function applyIdeco(inp){
+  var row  = inp.closest('tr');
+  var card = inp.closest('.pcard');
+  var host = row || card;
+  if(!host) return;
+  var p = findP(host.dataset.id);
+  if(!p) return;
+
+  var cur = idecoOf(p);
+  var v = parsePctVN(inp.value);
+  var revert = function(msg){
+    inp.classList.add('bad');
+    if(msg) say(msg, 'warn', 4200);
+    setTimeout(function(){ inp.classList.remove('bad'); inp.value = idecoOf(p).toFixed(2); }, 900);
+  };
+
+  if(isNaN(v)){ revert('CK IDECO không hợp lệ — hãy nhập số, ví dụ 15 hoặc 12,5'); return; }
+  if(Math.abs(v - cur) < 0.005){ inp.value = cur.toFixed(2); return; }   /* không đổi */
+  if(v >= 100){ revert('CK IDECO phải nhỏ hơn 100% (100% nghĩa là giá vốn bằng 0)'); return; }
+  if(v <= -1000){ revert('CK IDECO quá nhỏ, không hợp lý'); return; }
+
+  var to = tgt(), cost = Number(p.cost) || 0, retail = Number(p.retail) || 0;
+  if(to === 'cost'){
+    if(retail <= 0){ revert('Chưa có Giá bán lẻ nên không suy ra được Giá vốn — hãy nhập Giá bán lẻ trước'); return; }
+    p.cost = Math.round(retail * (1 - v / 100));
+  } else {
+    if(cost <= 0){ revert('Chưa có Giá vốn nên không suy ra được Giá bán lẻ — hãy nhập Giá vốn trước'); return; }
+    p.retail = Math.round(cost / (1 - v / 100));
+  }
+
+  /* cập nhật lại ô Giá vốn / Giá bán lẻ đang hiển thị */
+  syncMoneyInputs(host, p);
+  try {
+    if(row && typeof refreshComputedCells === 'function') refreshComputedCells(row, p);
+    if(card && typeof refreshCardComputed === 'function') refreshCardComputed(card, p);
+    if(typeof updateStats === 'function') updateStats();
+  } catch(e){}
+  host.classList.add('dirty');
+  inp.value = idecoOf(p).toFixed(2);
+
+  /* đồng bộ hiển thị ở chế độ còn lại (bảng ⇄ thẻ) nếu đang mở */
+  var twin = row ? document.querySelector('.pcard[data-id="' + p.id + '"]')
+                 : document.querySelector('#tbody tr[data-id="' + p.id + '"]');
+  if(twin){
+    syncMoneyInputs(twin, p);
+    var ti = twin.querySelector('input.ideco-in');
+    if(ti && ti !== inp) ti.value = idecoOf(p).toFixed(2);
+    try {
+      if(twin.tagName === 'TR' && typeof refreshComputedCells === 'function') refreshComputedCells(twin, p);
+      if(twin.classList.contains('pcard') && typeof refreshCardComputed === 'function') refreshCardComputed(twin, p);
+    } catch(e){}
+    twin.classList.add('dirty');
+  }
+
+  say((to === 'cost' ? 'Giá vốn' : 'Giá bán lẻ') + ' đã tính lại theo CK IDECO ' + idecoOf(p).toFixed(2) + '% · ' +
+      'GV ' + fmtVN(p.cost) + ' — GBL ' + fmtVN(p.retail), 'success', 3600);
+}
+function fmtVN(n){ try { return (typeof fmt === 'function') ? fmt(Math.round(n)) : Math.round(n).toLocaleString('vi-VN'); } catch(e){ return String(n); } }
+function syncMoneyInputs(host, p){
+  ['cost', 'retail'].forEach(function(f){
+    var el = host.querySelector('input[data-field="' + f + '"]');
+    if(el && document.activeElement !== el) el.value = fmtVN(p[f]);
+  });
+}
+
+/* ---------------- sự kiện ---------------- */
+document.addEventListener('focusin', function(e){
+  var t = e.target;
+  if(t && t.classList && t.classList.contains('ideco-in')){
+    t.value = String(t.value).replace('%', '').trim();
+    setTimeout(function(){ try { t.select(); } catch(err){} }, 0);
+  }
+});
+document.addEventListener('blur', function(e){
+  var t = e.target;
+  if(t && t.classList && t.classList.contains('ideco-in')) applyIdeco(t);
+}, true);
+document.addEventListener('keydown', function(e){
+  var t = e.target;
+  if(!t || !t.classList || !t.classList.contains('ideco-in')) return;
+  if(e.key === 'Enter'){ e.preventDefault(); applyIdeco(t); t.blur(); }
+  if(e.key === 'Escape'){
+    var host = t.closest('tr') || t.closest('.pcard');
+    var p = host ? findP(host.dataset.id) : null;
+    if(p) t.value = idecoOf(p).toFixed(2);
+    t.blur();
+  }
+});
+
+/* ---------------- gắn vào luồng vẽ lại của app ---------------- */
+function wrap(name, after){
+  var o = window[name];
+  if(typeof o !== 'function') return;
+  window[name] = function(){
+    var r = o.apply(this, arguments);
+    try { after.apply(this, arguments); } catch(e){ console.warn(name + ' hook:', e); }
+    return r;
+  };
+}
+wrap('render', patchAll);
+wrap('renderCards', patchAll);
+/* các hàm tính lại ô dẫn xuất: ghi giá trị vào ô nhập thay vì textContent */
+wrap('refreshComputedCells', function(row, p){
+  var i = row && row.querySelector('input.ideco-in');
+  if(i && document.activeElement !== i) i.value = idecoOf(p).toFixed(2);
+});
+wrap('refreshCardComputed', function(card, p){
+  var i = card && card.querySelector('input.ideco-in');
+  if(i && document.activeElement !== i) i.value = idecoOf(p).toFixed(2);
+});
+patchAll();
+setTimeout(patchAll, 400);
+setTimeout(patchAll, 2500);
+setInterval(patchAll, 4000);   /* an toàn: bắt các lần vẽ lại không đi qua render() */
+
+window.__IDECO_TEST__ = { parsePctVN: parsePctVN, idecoOf: idecoOf, applyIdeco: applyIdeco, patchAll: patchAll, tgt: tgt, setTgt: setTgt };
+})();
+</script>
 </body>
 </html>
